@@ -1,10 +1,11 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useEffect, useState } from 'react';
 import { CheckCircle2, Download, ExternalLink, Heart } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 
-export default function Sucesso() {
+function SucessoContent() {
   const searchParams = useSearchParams();
   const [mounted, setMounted] = useState(false);
 
@@ -110,7 +111,7 @@ export default function Sucesso() {
 
               {/* Botões */}
               <div className="space-y-3">
-                <a
+                
                   href={template.linkCanva}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -120,7 +121,7 @@ export default function Sucesso() {
                   Editar no Canva
                 </a>
                 
-                <a
+                
                   href={template.linkDownload}
                   download
                   className="flex items-center justify-center gap-2 w-full py-3 bg-beige-100 text-brown-700 rounded-full font-medium hover:bg-beige-200 transition-all"
@@ -136,7 +137,7 @@ export default function Sucesso() {
         {/* Email de Confirmação */}
         <div className="bg-white rounded-2xl p-8 shadow-lg text-center">
           <p className="text-brown-700 mb-4">
-            📧 Um email foi enviado para <strong>{searchParams.get('email') || 'seu email'}</strong> com todos os links
+            📧 Um email foi enviado com todos os links
           </p>
           <p className="text-brown-600/70 text-sm">
             Não encontrou? Verifique a caixa de spam ou entre em contato pelo WhatsApp
@@ -145,7 +146,7 @@ export default function Sucesso() {
 
         {/* Botão Voltar */}
         <div className="text-center mt-12">
-          <a
+          
             href="/"
             className="inline-flex items-center gap-2 px-8 py-4 bg-brown-700 text-white rounded-full font-medium hover:bg-brown-600 transition-all"
           >
@@ -155,5 +156,20 @@ export default function Sucesso() {
 
       </div>
     </main>
+  );
+}
+
+export default function Sucesso() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-beige-300 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-brown-600">Carregando...</p>
+        </div>
+      </div>
+    }>
+      <SucessoContent />
+    </Suspense>
   );
 }
