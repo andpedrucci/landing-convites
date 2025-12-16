@@ -79,7 +79,7 @@ export default function Home() {
 </div>
 
             {/* Headline */}
-            <h1 className="text-6xl md:text-8xl font-serif text-brown-700 mb-8 leading-[1.1] px-4">
+           <h1 className="text-6xl md:text-8xl font-serif text-brown-700 mb-8 leading-[1.1] px-4 mt-16">
               Convites que tocam
               <br />
               <span className="text-beige-300 italic font-light">o coração</span>
