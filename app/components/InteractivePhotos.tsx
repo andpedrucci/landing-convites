@@ -29,7 +29,7 @@ export default function InteractivePhotos() {
   // Inicializar fotos com posições aleatórias
   useEffect(() => {
     const templates = [
-      { title: 'Chá Revelação Delicado', image: '/placeholder-1.jpg' },
+      { title: 'Chá Revelação Delicado', image: 'template-1.jpg' },
       { title: '1º Aninho Floral', image: '/placeholder-2.jpg' },
       { title: 'Batizado Clássico', image: '/placeholder-3.jpg' },
       { title: 'Chá de Bebê Aquarela', image: '/placeholder-4.jpg' },
@@ -223,13 +223,13 @@ export default function InteractivePhotos() {
                 >
                   {/* Foto do Template */}
                   <div className="w-full h-full rounded-2xl overflow-hidden p-4 flex flex-col">
-                    <div className="flex-1 bg-gradient-to-br from-beige-100 to-rose-100 rounded-xl flex items-center justify-center mb-4">
-                      <div className="text-center p-6">
-                        <p className="text-6xl mb-4">
-                          {photo.id === 0 ? '🤱' : photo.id === 1 ? '🎂' : photo.id === 2 ? '✨' : photo.id === 3 ? '🍼' : '🎈'}
-                        </p>
-                        <p className="text-brown-600 font-serif text-lg">{photo.title}</p>
-                      </div>
+                    <div className="flex-1 rounded-xl overflow-hidden mb-4">
+                      <img 
+                        src={photo.image} 
+                        alt={photo.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
                     </div>
                     
                     {/* Label */}
