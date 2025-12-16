@@ -230,7 +230,7 @@ export default function InteractivePhotos() {
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    </div>
+                    
                     
                     {/* Label */}
                     <div className="text-center">
