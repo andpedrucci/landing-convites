@@ -29,7 +29,7 @@ export default function InteractivePhotos() {
   // Inicializar fotos com posições aleatórias
   useEffect(() => {
     const templates = [
-      { title: 'Chá Revelação Delicado', image: 'template-1.jpg' },
+      { title: 'Chá Revelação Delicado', image: '/template-1.jpg' },
       { title: '1º Aninho Floral', image: '/placeholder-2.jpg' },
       { title: 'Batizado Clássico', image: '/placeholder-3.jpg' },
       { title: 'Chá de Bebê Aquarela', image: '/placeholder-4.jpg' },
