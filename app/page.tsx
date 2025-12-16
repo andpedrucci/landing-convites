@@ -342,7 +342,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-16 px-6 bg-brown-700 text-white">
+     <footer className="py-16 px-6 bg-brown-700 text-white mb-20">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
             <h3 className="text-3xl font-serif mb-3">Momentos Únicos</h3>
