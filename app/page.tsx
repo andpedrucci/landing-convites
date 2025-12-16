@@ -391,8 +391,8 @@ export default function Home() {
       <footer className="py-16 px-6 bg-brown-700 text-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
-            <h3 className="text-3xl font-serif mb-3">Momentos Únicos</h3>
-            <p className="text-white/70 font-light">Convites que celebram sua história</p>
+            <h3 className="text-3xl font-serif mb-3">STUDIO INVITARE</h3>
+            <p className="text-white/70 font-light">Designs que celebram sua história</p>
           </div>
           
           <div className="flex justify-center mb-10">
@@ -409,7 +409,7 @@ export default function Home() {
 
           <div className="pt-8 border-t border-white/10 text-center">
             <p className="text-sm text-white/50">
-              © 2024 Momentos Únicos. Feito com <Heart className="w-4 h-4 inline fill-rose-200 text-rose-200" /> para celebrar seus momentos especiais.
+              © 2024 Studio Invitare. Feito com <Heart className="w-4 h-4 inline fill-rose-200 text-rose-200" /> para celebrar seus momentos especiais.
             </p>
           </div>
         </div>
