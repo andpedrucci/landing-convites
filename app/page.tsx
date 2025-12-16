@@ -65,12 +65,18 @@ export default function Home() {
           <div className={`text-center transition-all duration-1000 ease-out ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
             
             {/* Badge */}
-            <div className="mb-8 flex justify-center">
-              <div className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-white/70 backdrop-blur-md rounded-full border border-beige-300/30 shadow-sm">
-                <Sparkles className="w-4 h-4 text-beige-300" strokeWidth={2.5} />
-                <span className="text-xs font-medium text-brown-600 tracking-[0.2em] uppercase">Momentos Únicos</span>
-              </div>
-            </div>
+            <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/70 backdrop-blur-md rounded-full border border-beige-300/30 shadow-sm">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-beige-300">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="m14.31 8 5.74 9.94"/>
+    <path d="M9.69 8h11.48"/>
+    <path d="m7.38 12 5.74-9.94"/>
+    <path d="M9.69 16 3.95 6.06"/>
+    <path d="M14.31 16H2.83"/>
+    <path d="m16.62 12-5.74 9.94"/>
+  </svg>
+  <span className="text-sm font-medium text-brown-600 tracking-[0.25em] uppercase">Studio Invitare</span>
+</div>
 
             {/* Headline */}
             <h1 className="text-6xl md:text-8xl font-serif text-brown-700 mb-8 leading-[1.1] px-4">
