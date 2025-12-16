@@ -80,18 +80,41 @@ export default function InteractivePhotos() {
     return () => canvas.removeEventListener('mousemove', handleMouseMove);
   }, [isInteractionStarted]);
 
-  const startInteraction = () => {
-    if (!isInteractionStarted) {
-      setIsInteractionStarted(true);
+const startInteraction = () => {
+  if (!isInteractionStarted) {
+    setIsInteractionStarted(true);
+    
+    if (audioRef.current) {
+      // Começa com volume 0 (silêncio)
+      audioRef.current.volume = 0;
       
-      if (audioRef.current) {
-        audioRef.current.play().then(() => {
-          setIsPlaying(true);
-          setTimeout(() => setShowPlayer(true), 500);
-        }).catch(err => console.log('Autoplay prevented:', err));
-      }
+      audioRef.current.play().then(() => {
+        setIsPlaying(true);
+        setTimeout(() => setShowPlayer(true), 500);
+        
+        // Fade in: aumenta volume gradualmente em 2 segundos
+        const fadeInDuration = 2000; // 2 segundos
+        const targetVolume = 0.3;
+        const steps = 50; // quantidade de steps
+        const stepDuration = fadeInDuration / steps;
+        const volumeIncrement = targetVolume / steps;
+        
+        let currentStep = 0;
+        const fadeInterval = setInterval(() => {
+          if (currentStep < steps && audioRef.current) {
+            audioRef.current.volume = Math.min(volumeIncrement * currentStep, targetVolume);
+            currentStep++;
+          } else {
+            clearInterval(fadeInterval);
+            if (audioRef.current) {
+              audioRef.current.volume = targetVolume;
+            }
+          }
+        }, stepDuration);
+      }).catch(err => console.log('Autoplay prevented:', err));
     }
-  };
+  }
+};
 
   const handleMouseDown = (e: React.MouseEvent, photoId: number) => {
     startInteraction();
