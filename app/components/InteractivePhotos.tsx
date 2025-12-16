@@ -57,7 +57,7 @@ export default function InteractivePhotos() {
   // Inicializar áudio
   useEffect(() => {
     // Música suave temporária - TROCAR depois por /sunshine.mp3
-    audioRef.current = new Audio('https://assets.mixkit.co/music/preview/mixkit-sleepy-cat-135.mp3');
+    audioRef.current = new Audio('/sunshine.mp3');
     audioRef.current.loop = true;
     audioRef.current.volume = 0.3;
   }, []);
