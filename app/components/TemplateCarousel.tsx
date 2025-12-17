@@ -264,11 +264,11 @@ export default function TemplateCarousel() {
       <section className="py-16 px-6 bg-gradient-to-b from-white to-beige-50">
         <div className="max-w-7xl mx-auto">
           
-          <div className="text-center mb-8">
+          <div className="text-center mb-4">
             <h2 className="text-5xl md:text-6xl font-serif text-brown-700 mb-4">
               Nossos <span className="text-beige-300 italic">Templates</span>
             </h2>
-            <p className="text-lg text-brown-600 font-light mb-6">
+            <p className="text-lg text-brown-600 font-light mb-4">
               Escolha o tema e explore os 5 designs exclusivos
             </p>
 
@@ -292,7 +292,7 @@ export default function TemplateCarousel() {
           </div>
 
           {/* CORREÇÃO CRÍTICA: altura aumentada para 700px e cards centralizados com top-1/2 */}
-          <div className="relative h-[700px] mt-8 mb-12">
+          <div className="relative h-[700px] mt-4 mb-12">
             <div 
               className="relative w-full h-full"
               style={{
