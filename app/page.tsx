@@ -255,7 +255,7 @@ export default function Home() {
                 </div>
 
                 
-                  href={getWhatsAppLink("Personalizado", "R$ 147")}
+                  <a href={getWhatsAppLink("Personalizado", "R$ 147")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 w-full py-4 bg-white text-beige-300 text-center rounded-full font-medium hover:bg-beige-50 transition-all duration-300 shadow-xl hover:shadow-2xl group/btn"
@@ -310,7 +310,7 @@ export default function Home() {
                 </div>
 
                 
-                  href={getWhatsAppLink("Assinatura Mesversário", "R$ 45/mês")}
+                  <a href={getWhatsAppLink("Assinatura Mesversário", "R$ 45/mês")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 w-full py-4 bg-beige-300 text-white text-center rounded-full font-medium hover:bg-beige-400 transition-all duration-300 shadow-md hover:shadow-xl group/btn"
@@ -418,7 +418,7 @@ export default function Home() {
             Celebre seu momento especial com um convite único
           </p>
           
-            href={getWhatsAppLink("Quero conhecer os convites", "")}
+            <a href={getWhatsAppLink("Quero conhecer os convites", "")}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-10 py-5 bg-white text-beige-300 rounded-full font-medium text-lg hover:bg-beige-50 transition-all duration-300 shadow-2xl hover:shadow-3xl hover:scale-105"
@@ -439,7 +439,7 @@ export default function Home() {
           
           <div className="flex justify-center mb-10">
             
-              href={getWhatsAppLink("Olá, gostaria de saber mais!", "")}
+              <a href={getWhatsAppLink("Olá, gostaria de saber mais!", "")}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 transition-all border border-white/20"
