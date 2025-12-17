@@ -274,22 +274,22 @@ export default function TemplateCarousel() {
 
   return (
     <>
-      <section className="py-32 px-6 bg-gradient-to-b from-white to-beige-50 overflow-hidden">
+      <section className="py-20 px-6 bg-gradient-to-b from-white to-beige-50 overflow-hidden">
         <div className="max-w-7xl mx-auto">
           
           {/* Header */}
-          <div className="text-center mb-8">
-            <h2 className="text-5xl md:text-6xl font-serif text-brown-700 mb-6">
+          <div className="text-center mb-6">
+            <h2 className="text-5xl md:text-6xl font-serif text-brown-700 mb-4">
               Nossos
               <br />
               <span className="text-beige-300 italic">Templates</span>
             </h2>
-            <p className="text-lg text-brown-600 font-light mb-8">
+            <p className="text-lg text-brown-600 font-light mb-6">
               Escolha o tema e explore os 5 designs exclusivos
             </p>
 
             {/* Theme Selector */}
-            <div className="flex justify-center mb-12">
+            <div className="flex justify-center mb-8">
               <div className="inline-flex bg-white rounded-full p-2 shadow-lg border border-beige-200/50">
                 {themes.map((theme) => (
                   <button
@@ -309,7 +309,7 @@ export default function TemplateCarousel() {
           </div>
 
           {/* Carousel Container */}
-          <div className="relative h-[520px] mb-16">
+          <div className="relative h-[520px] mb-12">
             
             {/* Perspective wrapper */}
             <div 
@@ -401,7 +401,7 @@ export default function TemplateCarousel() {
           </div>
 
           {/* Dots Navigation */}
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex items-center justify-center gap-3 mb-8">
             {currentTemplates.map((_, index) => (
               <button
                 key={index}
@@ -418,7 +418,7 @@ export default function TemplateCarousel() {
           </div>
 
           {/* Description */}
-          <div className="text-center mt-12">
+          <div className="text-center">
             <p className="text-brown-600/70 text-sm max-w-2xl mx-auto">
               Escolha seu favorito e personalize com suas próprias cores, textos e fotos no Canva.
             </p>
