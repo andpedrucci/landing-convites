@@ -46,7 +46,6 @@ export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [isLoadingCheckout, setIsLoadingCheckout] = useState(false);
   const [temaAtivo, setTemaAtivo] = useState('cha-revelacao');
-  const [rotacao, setRotacao] = useState(0);
   const [imagemDestaque, setImagemDestaque] = useState(0);
   const [secaoAtual, setSecaoAtual] = useState(0);
 
@@ -54,9 +53,8 @@ export default function Home() {
     setMounted(true);
   }, []);
 
-  // Resetar rotação quando mudar de tema
+  // Resetar destaque quando mudar de tema
   useEffect(() => {
-    setRotacao(0);
     setImagemDestaque(0);
   }, [temaAtivo]);
 
@@ -256,30 +254,78 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Carrossel 3D - CENTRALIZADO E COM PROFUNDIDADE */}
-            <div className="relative h-[340px] flex items-center justify-center mb-8" style={{ perspective: '1800px' }}>
+            {/* Carrossel 3D - LÓGICA CORRETA DE MOVIMENTAÇÃO */}
+            <div className="relative h-[340px] flex items-center justify-center mb-8">
               <div 
-                className="relative"
+                className="relative w-full h-full"
                 style={{
-                  transformStyle: 'preserve-3d',
-                  transform: `rotateY(${rotacao}deg)`,
-                  transition: 'transform 0.7s ease-out',
-                  width: '240px',
-                  height: '288px'
+                  perspective: '1800px',
+                  perspectiveOrigin: 'center center',
                 }}
               >
                 {getImagensTema(temaAtivo).map((imagem, index) => {
-                  const totalImagens = getImagensTema(temaAtivo).length;
-                  const angulo = (360 / totalImagens) * index;
-                  const translateZ = 300;
+                  const diff = index - imagemDestaque;
+                  const total = getImagensTema(temaAtivo).length;
+                  
+                  let normalizedDiff = diff;
+                  if (Math.abs(diff) > total / 2) {
+                    normalizedDiff = diff > 0 ? diff - total : diff + total;
+                  }
+
+                  let cardStyle = {};
+                  
+                  if (normalizedDiff === 0) {
+                    // Frente
+                    cardStyle = {
+                      transform: 'translateX(-50%) translateZ(0px) rotateY(0deg) scale(1)',
+                      opacity: 1,
+                      zIndex: 50,
+                    };
+                  } else if (normalizedDiff === 1) {
+                    // Direita próximo
+                    cardStyle = {
+                      transform: 'translateX(20%) translateZ(-150px) rotateY(-35deg) scale(0.85)',
+                      opacity: 0.7,
+                      zIndex: 40,
+                    };
+                  } else if (normalizedDiff === -1) {
+                    // Esquerda próximo
+                    cardStyle = {
+                      transform: 'translateX(-120%) translateZ(-150px) rotateY(35deg) scale(0.85)',
+                      opacity: 0.7,
+                      zIndex: 40,
+                    };
+                  } else if (normalizedDiff === 2) {
+                    // Direita longe
+                    cardStyle = {
+                      transform: 'translateX(50%) translateZ(-280px) rotateY(-45deg) scale(0.7)',
+                      opacity: 0.4,
+                      zIndex: 30,
+                    };
+                  } else if (normalizedDiff === -2) {
+                    // Esquerda longe
+                    cardStyle = {
+                      transform: 'translateX(-150%) translateZ(-280px) rotateY(45deg) scale(0.7)',
+                      opacity: 0.4,
+                      zIndex: 30,
+                    };
+                  } else {
+                    // Muito longe (invisível)
+                    cardStyle = {
+                      transform: 'translateX(-50%) translateZ(-400px) scale(0.5)',
+                      opacity: 0,
+                      zIndex: 20,
+                    };
+                  }
                   
                   return (
                     <div
                       key={index}
-                      className="absolute top-1/2 left-1/2 w-60 h-72 -ml-30 -mt-36 cursor-pointer"
+                      className="absolute left-1/2 top-1/2 -translate-y-1/2 w-60 h-72 cursor-pointer"
                       style={{
-                        transform: `rotateY(${angulo}deg) translateZ(${translateZ}px)`,
-                        backfaceVisibility: 'visible'
+                        ...cardStyle,
+                        transition: 'all 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+                        transformStyle: 'preserve-3d',
                       }}
                       onClick={() => setImagemDestaque(index)}
                     >
@@ -301,7 +347,10 @@ export default function Home() {
             {/* Controles do Carrossel - COMPACTOS */}
             <div className="flex justify-center gap-3">
               <button
-                onClick={() => setRotacao(rotacao + (360 / getImagensTema(temaAtivo).length))}
+                onClick={() => {
+                  const total = getImagensTema(temaAtivo).length;
+                  setImagemDestaque((imagemDestaque - 1 + total) % total);
+                }}
                 className="p-3 bg-white rounded-full shadow-lg hover:bg-beige-50 transition-all hover:scale-110"
                 aria-label="Anterior"
               >
@@ -310,7 +359,10 @@ export default function Home() {
                 </svg>
               </button>
               <button
-                onClick={() => setRotacao(rotacao - (360 / getImagensTema(temaAtivo).length))}
+                onClick={() => {
+                  const total = getImagensTema(temaAtivo).length;
+                  setImagemDestaque((imagemDestaque + 1) % total);
+                }}
                 className="p-3 bg-white rounded-full shadow-lg hover:bg-beige-50 transition-all hover:scale-110"
                 aria-label="Próximo"
               >
