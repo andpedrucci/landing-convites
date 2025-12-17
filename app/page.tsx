@@ -218,7 +218,7 @@ export default function Home() {
         </section>
 
         {/* Seção Carrossel 3D - AJUSTADO COM MELHOR ESPAÇAMENTO */}
-        <section id="carrossel" className="snap-section snap-start py-8 px-6 relative overflow-hidden min-h-screen flex items-center bg-gradient-to-b from-beige-50 via-white to-beige-50">
+        <section id="carrossel" className="snap-section snap-start py-8 px-6 relative overflow-hidden min-h-screen flex items-start bg-gradient-to-b from-beige-50 via-white to-beige-50">
           
           <div className="relative max-w-7xl mx-auto w-full">
             
