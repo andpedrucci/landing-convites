@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Heart, Sparkles, Clock, CheckCircle2, Star, Send } from 'lucide-react';
-import TemplateCarousel from './components/TemplateCarousel';
+import InteractivePhotos from './components/InteractivePhotos';
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -103,7 +103,7 @@ export default function Home() {
       </section>
 
       {/* Seção Interativa de Templates */}
-      <TemplateCarousel />
+      <InteractivePhotos />
 
       {/* Benefícios - CORRIGIDO: py-24 ao invés de pb-24 */}
       <section className="py-24">
