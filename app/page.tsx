@@ -218,12 +218,12 @@ export default function Home() {
         </section>
 
         {/* Seção Carrossel 3D - AJUSTADO COM MELHOR ESPAÇAMENTO */}
-        <section id="carrossel" className="snap-section snap-start py-16 px-6 relative overflow-hidden min-h-screen flex items-center bg-gradient-to-b from-beige-50 via-white to-beige-50">
+        <section id="carrossel" className="snap-section snap-start py-8 px-6 relative overflow-hidden min-h-screen flex items-center bg-gradient-to-b from-beige-50 via-white to-beige-50">
           
           <div className="relative max-w-7xl mx-auto w-full">
             
             {/* Header - COMPACTO E EM UMA LINHA */}
-            <div className="text-center mb-10">
+            <div className="text-center mb-4">
               <h2 className="text-3xl md:text-4xl font-serif text-brown-700 mb-2">
                 Explore nossos <span className="text-beige-300 italic">temas exclusivos</span>
               </h2>
@@ -231,7 +231,7 @@ export default function Home() {
             </div>
 
             {/* Menu de Temas - COMPACTO */}
-            <div className="flex flex-wrap justify-center gap-3 mb-10">
+            <div className="flex flex-wrap justify-center gap-3 mb-4">
               {[
                 { id: 'cha-revelacao', label: 'Chá Revelação', emoji: '🤱' },
                 { id: 'aniversario', label: 'Aniversário', emoji: '🎂' },
@@ -255,7 +255,7 @@ export default function Home() {
             </div>
 
             {/* Carrossel 3D - LÓGICA CORRETA DE MOVIMENTAÇÃO */}
-            <div className="relative h-[340px] flex items-center justify-center mb-8">
+            <div className="relative h-[300px] flex items-center justify-center mb-6">
               <div 
                 className="relative w-full h-full"
                 style={{
