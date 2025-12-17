@@ -256,7 +256,7 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Carrossel 3D - CENTRALIZADO FIXO */}
+            {/* Carrossel 3D - CENTRALIZADO FIXO COM TRANSPARÊNCIA E ESCALA GRADATIVAS */}
             <div className="relative h-[340px] flex items-center justify-center mb-8" style={{ perspective: '1800px' }}>
               <div 
                 className="relative w-full h-full flex items-center justify-center"
@@ -276,18 +276,52 @@ export default function Home() {
                     const angulo = (360 / totalImagens) * index;
                     const translateZ = 300;
                     
+                    // Calcular a posição do card em relação à frente (0 graus)
+                    const anguloNormalizado = ((angulo - rotacao) % 360 + 360) % 360;
+                    
+                    // Calcular opacidade e escala baseada no ângulo
+                    // 0° (frente) = opacity: 1 (100%), scale: 1 (100%)
+                    // 90° e 270° (laterais) = opacity: 0.4 (40%), scale: 0.85 (85%)
+                    // 180° (trás) = opacity: 0.1 (10%), scale: 0.7 (70%)
+                    let opacidade = 1;
+                    let escala = 1;
+                    
+                    if (anguloNormalizado <= 90) {
+                      // Frente → Lateral direita
+                      const progresso = anguloNormalizado / 90;
+                      opacidade = 1 - progresso * 0.6; // 1 → 0.4
+                      escala = 1 - progresso * 0.15; // 1 → 0.85
+                    } else if (anguloNormalizado <= 180) {
+                      // Lateral direita → Trás
+                      const progresso = (anguloNormalizado - 90) / 90;
+                      opacidade = 0.4 - progresso * 0.3; // 0.4 → 0.1
+                      escala = 0.85 - progresso * 0.15; // 0.85 → 0.7
+                    } else if (anguloNormalizado <= 270) {
+                      // Trás → Lateral esquerda
+                      const progresso = (anguloNormalizado - 180) / 90;
+                      opacidade = 0.1 + progresso * 0.3; // 0.1 → 0.4
+                      escala = 0.7 + progresso * 0.15; // 0.7 → 0.85
+                    } else {
+                      // Lateral esquerda → Frente
+                      const progresso = (anguloNormalizado - 270) / 90;
+                      opacidade = 0.4 + progresso * 0.6; // 0.4 → 1
+                      escala = 0.85 + progresso * 0.15; // 0.85 → 1
+                    }
+                    
                     return (
                       <div
                         key={index}
-                        className="absolute top-0 left-0 w-60 h-72 cursor-pointer transition-all duration-500"
+                        className="absolute top-0 left-0 w-60 h-72 cursor-pointer"
                         style={{
-                          transform: `rotateY(${angulo}deg) translateZ(${translateZ}px)`,
+                          transform: `rotateY(${angulo}deg) translateZ(${translateZ}px) scale(${escala})`,
                           backfaceVisibility: 'visible',
-                          transformOrigin: 'center center'
+                          transformOrigin: 'center center',
+                          opacity: opacidade,
+                          transition: 'opacity 0.7s ease-out, transform 0.7s ease-out'
                         }}
                         onClick={() => setImagemDestaque(index)}
                       >
-                        <div className="w-full h-full bg-white rounded-xl shadow-2xl overflow-hidden border-4 border-beige-200 hover:border-beige-300 hover:scale-105 transition-all duration-300">
+                        <div className="w-full h-full bg-white rounded-xl shadow-2xl overflow-hidden border-4 border-beige-200 hover:border-beige-300 transition-all duration-300">
                           <div className="w-full h-full bg-gradient-to-br from-beige-100 to-rose-100 flex items-center justify-center">
                             <div className="text-center p-4">
                               <div className="text-4xl mb-2">{imagem.emoji}</div>
