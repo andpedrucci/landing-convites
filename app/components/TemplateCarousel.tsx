@@ -261,17 +261,19 @@ export default function TemplateCarousel() {
 
   return (
     <>
-      <section className="py-16 px-6 bg-gradient-to-b from-white to-beige-50 -mb-20">
+      <section className="py-16 px-6 bg-gradient-to-b from-white to-beige-50">
         <div className="max-w-7xl mx-auto">
           
-          <div className="text-center mb-8">
+          {/* Header */}
+          <div className="text-center mb-12">
             <h2 className="text-5xl md:text-6xl font-serif text-brown-700 mb-4">
               Nossos <span className="text-beige-300 italic">Templates</span>
             </h2>
-            <p className="text-lg text-brown-600 font-light mb-6">
+            <p className="text-lg text-brown-600 font-light mb-8">
               Escolha o tema e explore os 5 designs exclusivos
             </p>
 
+            {/* Menu de Temas */}
             <div className="flex justify-center">
               <div className="inline-flex bg-white rounded-full p-2 shadow-lg border border-beige-200/50">
                 {themes.map((theme) => (
@@ -291,7 +293,8 @@ export default function TemplateCarousel() {
             </div>
           </div>
 
-          <div className="relative h-[520px] mt-8 mb-20">
+          {/* Carrossel - ESPAÇAMENTO CORRIGIDO AQUI */}
+          <div className="relative h-[520px] mt-16">
             <div 
               className="relative w-full h-full"
               style={{
@@ -353,10 +356,11 @@ export default function TemplateCarousel() {
               ))}
             </div>
 
+            {/* Botões de navegação */}
             <button
               onClick={prev}
               disabled={isAnimating}
-              className="absolute left-4 top-[300px] -translate-y-1/2 z-50 w-14 h-14 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center justify-center text-brown-700 hover:bg-white hover:scale-110 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-50 w-14 h-14 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center justify-center text-brown-700 hover:bg-white hover:scale-110 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
             >
               <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" strokeWidth={2.5} />
             </button>
@@ -364,13 +368,14 @@ export default function TemplateCarousel() {
             <button
               onClick={next}
               disabled={isAnimating}
-              className="absolute right-4 top-[300px] -translate-y-1/2 z-50 w-14 h-14 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center justify-center text-brown-700 hover:bg-white hover:scale-110 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-50 w-14 h-14 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center justify-center text-brown-700 hover:bg-white hover:scale-110 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
             >
               <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" strokeWidth={2.5} />
             </button>
           </div>
 
-          <div className="flex items-center justify-center gap-3 mb-8">
+          {/* Indicadores de slide */}
+          <div className="flex items-center justify-center gap-3 mt-12 mb-8">
             {currentTemplates.map((_, index) => (
               <button
                 key={index}
@@ -385,6 +390,7 @@ export default function TemplateCarousel() {
             ))}
           </div>
 
+          {/* Texto informativo */}
           <div className="text-center">
             <p className="text-brown-600/70 text-sm max-w-2xl mx-auto">
               Escolha seu favorito e personalize com suas próprias cores, textos e fotos no Canva.
@@ -394,6 +400,7 @@ export default function TemplateCarousel() {
         </div>
       </section>
 
+      {/* Player de música */}
       {showPlayer && (
         <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-beige-200 shadow-2xl z-50">
           <div className="max-w-md mx-auto px-6 py-4 flex items-center justify-between">
