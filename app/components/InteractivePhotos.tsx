@@ -26,7 +26,6 @@ export default function InteractivePhotos() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
 
-  // Inicializar fotos com posições aleatórias
   useEffect(() => {
     const templates = [
       { title: 'Chá Revelação Delicado', image: '/template-1.jpg' },
@@ -45,7 +44,7 @@ export default function InteractivePhotos() {
       id: index,
       x: Math.random() * (canvasWidth - cardWidth - 100) + 50,
       y: Math.random() * (canvasHeight - cardHeight - 100) + 50,
-      rotation: Math.random() * 24 - 12, // -12° a +12°
+      rotation: Math.random() * 24 - 12,
       zIndex: index,
       image: template.image,
       title: template.title,
@@ -54,15 +53,12 @@ export default function InteractivePhotos() {
     setPhotos(initialPhotos);
   }, []);
 
-  // Inicializar áudio
   useEffect(() => {
-    // Música suave temporária - TROCAR depois por /sunshine.mp3
     audioRef.current = new Audio('/sunshine.mp3');
     audioRef.current.loop = true;
-    audioRef.current.volume = 0.3;
+    audioRef.current.volume = 0;
   }, []);
 
-  // Efeito Magnetic Repel (antes da interação)
   useEffect(() => {
     if (isInteractionStarted || !canvasRef.current) return;
 
@@ -85,11 +81,31 @@ export default function InteractivePhotos() {
     if (!isInteractionStarted) {
       setIsInteractionStarted(true);
       
-      // Inicia música
       if (audioRef.current) {
+        audioRef.current.volume = 0;
+        
         audioRef.current.play().then(() => {
           setIsPlaying(true);
           setTimeout(() => setShowPlayer(true), 500);
+          
+          const fadeInDuration = 2000;
+          const targetVolume = 0.3;
+          const steps = 50;
+          const stepDuration = fadeInDuration / steps;
+          const volumeIncrement = targetVolume / steps;
+          
+          let currentStep = 0;
+          const fadeInterval = setInterval(() => {
+            if (currentStep < steps && audioRef.current) {
+              audioRef.current.volume = Math.min(volumeIncrement * currentStep, targetVolume);
+              currentStep++;
+            } else {
+              clearInterval(fadeInterval);
+              if (audioRef.current) {
+                audioRef.current.volume = targetVolume;
+              }
+            }
+          }, stepDuration);
         }).catch(err => console.log('Autoplay prevented:', err));
       }
     }
@@ -111,7 +127,6 @@ export default function InteractivePhotos() {
       y: mouseY - photo.y,
     });
 
-    // Traz para frente
     setPhotos(prev => prev.map(p => 
       p.id === photoId 
         ? { ...p, zIndex: Math.max(...prev.map(ph => ph.zIndex)) + 1 }
@@ -126,7 +141,6 @@ export default function InteractivePhotos() {
     let newX = e.clientX - rect.left - dragOffset.x;
     let newY = e.clientY - rect.top - dragOffset.y;
 
-    // Limites do canvas
     const cardWidth = 280;
     const cardHeight = 380;
     newX = Math.max(0, Math.min(newX, rect.width - cardWidth));
@@ -159,15 +173,13 @@ export default function InteractivePhotos() {
     setIsMuted(!isMuted);
   };
 
-  // Calcula posição com efeito magnetic (antes da interação)
   const getPhotoStyle = (photo: Photo) => {
     let x = photo.x;
     let y = photo.y;
 
-    // Efeito magnetic repel (apenas antes da interação)
     if (!isInteractionStarted && mousePos.x && mousePos.y) {
-      const dx = photo.x + 140 - mousePos.x; // 140 = metade da largura do card
-      const dy = photo.y + 190 - mousePos.y; // 190 = metade da altura
+      const dx = photo.x + 140 - mousePos.x;
+      const dy = photo.y + 190 - mousePos.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
       const repelRadius = 150;
 
@@ -190,7 +202,6 @@ export default function InteractivePhotos() {
       <section className="py-28 px-6 bg-gradient-to-b from-beige-50 to-white overflow-hidden">
         <div className="max-w-7xl mx-auto">
           
-          {/* Header */}
           <div className="text-center mb-16">
             <h2 className="text-5xl md:text-6xl font-serif text-brown-700 mb-6">
               Explore nossos
@@ -204,7 +215,6 @@ export default function InteractivePhotos() {
             </p>
           </div>
 
-          {/* Canvas Interativo */}
           <div className="flex justify-center">
             <div 
               ref={canvasRef}
@@ -221,7 +231,6 @@ export default function InteractivePhotos() {
                   style={getPhotoStyle(photo)}
                   onMouseDown={(e) => handleMouseDown(e, photo.id)}
                 >
-                  {/* Foto do Template */}
                   <div className="w-full h-full rounded-2xl overflow-hidden p-4 flex flex-col">
                     <div className="flex-1 rounded-xl overflow-hidden mb-4">
                       <img 
@@ -232,20 +241,15 @@ export default function InteractivePhotos() {
                         style={{ imageRendering: 'high-quality' }}
                       />
                     </div>
-                    
-                    
-                    {/* Label */}
                     <div className="text-center">
                       <p className="text-sm text-brown-600/70 font-medium">Template {photo.id + 1}</p>
                     </div>
                   </div>
 
-                  {/* Tape effect */}
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-20 h-8 bg-beige-200/60 backdrop-blur-sm rotate-0 shadow-sm" />
                 </div>
               ))}
 
-              {/* Hint de Interação */}
               {!isInteractionStarted && (
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <div className="bg-white/90 backdrop-blur-sm rounded-2xl px-8 py-4 shadow-xl border border-beige-300/50 animate-pulse">
@@ -259,7 +263,6 @@ export default function InteractivePhotos() {
             </div>
           </div>
 
-          {/* Descrição */}
           <div className="text-center mt-12">
             <p className="text-brown-600/70 text-sm max-w-2xl mx-auto">
               Cada template pode ser totalmente personalizado no Canva. 
@@ -269,7 +272,6 @@ export default function InteractivePhotos() {
         </div>
       </section>
 
-      {/* Music Player */}
       {showPlayer && (
         <div 
           className={`fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-beige-200 shadow-2xl z-50 transition-all duration-500 ${
