@@ -278,7 +278,7 @@ export default function TemplateCarousel() {
         <div className="max-w-7xl mx-auto">
           
           {/* Header */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <h2 className="text-5xl md:text-6xl font-serif text-brown-700 mb-6">
               Nossos
               <br />
@@ -289,7 +289,7 @@ export default function TemplateCarousel() {
             </p>
 
             {/* Theme Selector */}
-            <div className="flex justify-center">
+            <div className="flex justify-center mb-12">
               <div className="inline-flex bg-white rounded-full p-2 shadow-lg border border-beige-200/50">
                 {themes.map((theme) => (
                   <button
@@ -309,7 +309,7 @@ export default function TemplateCarousel() {
           </div>
 
           {/* Carousel Container */}
-          <div className="relative h-[600px] mb-16">
+          <div className="relative h-[520px] mb-16">
             
             {/* Perspective wrapper */}
             <div 
@@ -354,13 +354,6 @@ export default function TemplateCarousel() {
                       />
                     </div>
 
-                    {/* Watermark overlay */}
-                    <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                      <div className="text-white/10 text-6xl font-serif rotate-[-45deg] select-none">
-                        Studio Invitare
-                      </div>
-                    </div>
-
                     {/* Overlay gradient */}
                     <div className="absolute inset-0 bg-gradient-to-t from-brown-700/90 via-brown-700/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
@@ -391,7 +384,7 @@ export default function TemplateCarousel() {
             <button
               onClick={prev}
               disabled={isAnimating}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-50 w-14 h-14 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center justify-center text-brown-700 hover:bg-white hover:scale-110 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
+              className="absolute left-4 top-[260px] -translate-y-1/2 z-50 w-14 h-14 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center justify-center text-brown-700 hover:bg-white hover:scale-110 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
               aria-label="Anterior"
             >
               <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" strokeWidth={2.5} />
@@ -400,7 +393,7 @@ export default function TemplateCarousel() {
             <button
               onClick={next}
               disabled={isAnimating}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-50 w-14 h-14 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center justify-center text-brown-700 hover:bg-white hover:scale-110 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
+              className="absolute right-4 top-[260px] -translate-y-1/2 z-50 w-14 h-14 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center justify-center text-brown-700 hover:bg-white hover:scale-110 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
               aria-label="Próximo"
             >
               <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" strokeWidth={2.5} />
