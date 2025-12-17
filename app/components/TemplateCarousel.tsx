@@ -274,7 +274,7 @@ export default function TemplateCarousel() {
 
   return (
     <>
-      <section className="py-20 px-6 bg-gradient-to-b from-white to-beige-50 overflow-hidden">
+      <section className="pt-16 pb-8 px-6 bg-gradient-to-b from-white to-beige-50 overflow-hidden">
         <div className="max-w-7xl mx-auto">
           
           {/* Header */}
