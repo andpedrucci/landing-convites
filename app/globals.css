@@ -26,4 +26,30 @@
   .text-balance {
     text-wrap: balance;
   }
+  
+  /* Utilitários para 3D */
+  .perspective-\[2000px\] {
+    perspective: 2000px;
+  }
+  
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  
+  /* Animação suave para o carrossel */
+  .carousel-3d {
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Estilos adicionais para melhor visual do carrossel */
+@layer components {
+  .carousel-card {
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
+  }
+  
+  .carousel-card:hover {
+    z-index: 10;
+  }
 }
