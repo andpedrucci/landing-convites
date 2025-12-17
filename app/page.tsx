@@ -3,13 +3,61 @@
 import { useState, useEffect } from 'react';
 import { Heart, Sparkles, Clock, CheckCircle2, Star, Send } from 'lucide-react';
 
+// Definição das imagens por tema
+const imagensPorTema = {
+  'cha-revelacao': [
+    { nome: 'Delicado Rosa', descricao: 'Tons suaves e flores', emoji: '🌸' },
+    { nome: 'Azul Clássico', descricao: 'Elegante e atemporal', emoji: '💙' },
+    { nome: 'Neutro Moderno', descricao: 'Minimalista e chic', emoji: '🤍' },
+    { nome: 'Aquarela', descricao: 'Arte fluida e única', emoji: '🎨' },
+    { nome: 'Floral Dourado', descricao: 'Sofisticado com toques de ouro', emoji: '✨' },
+  ],
+  'aniversario': [
+    { nome: 'Festa Jardim', descricao: 'Flores e borboletas', emoji: '🦋' },
+    { nome: 'Circo Colorido', descricao: 'Alegre e divertido', emoji: '🎪' },
+    { nome: 'Unicórnio Mágico', descricao: 'Encanto e fantasia', emoji: '🦄' },
+    { nome: 'Safari Aventura', descricao: 'Animais selvagens', emoji: '🦁' },
+    { nome: 'Princesa Realeza', descricao: 'Elegante e real', emoji: '👑' },
+  ],
+  'batizado': [
+    { nome: 'Clássico Branco', descricao: 'Puro e tradicional', emoji: '🕊️' },
+    { nome: 'Anjo Delicado', descricao: 'Celestial e suave', emoji: '👼' },
+    { nome: 'Cruz Dourada', descricao: 'Religioso elegante', emoji: '✝️' },
+    { nome: 'Floral Divino', descricao: 'Natureza e fé', emoji: '🌿' },
+    { nome: 'Azul Serenidade', descricao: 'Paz e harmonia', emoji: '💫' },
+  ],
+  'cha-bebe': [
+    { nome: 'Nuvens Sonhadoras', descricao: 'Suave como algodão', emoji: '☁️' },
+    { nome: 'Bichinhos Fofos', descricao: 'Animais adoráveis', emoji: '🐻' },
+    { nome: 'Lua e Estrelas', descricao: 'Noite mágica', emoji: '🌙' },
+    { nome: 'Jardim Encantado', descricao: 'Flores delicadas', emoji: '🌺' },
+    { nome: 'Balões Coloridos', descricao: 'Alegria no ar', emoji: '🎈' },
+  ],
+  'mesversario': [
+    { nome: 'Minimalista Mensal', descricao: 'Clean e moderno', emoji: '📅' },
+    { nome: 'Números Divertidos', descricao: 'Cada mês especial', emoji: '🔢' },
+    { nome: 'Foto Destaque', descricao: 'Seu bebê é a estrela', emoji: '📸' },
+    { nome: 'Tema Crescimento', descricao: 'Registrando marcos', emoji: '📏' },
+    { nome: 'Alegria Mensal', descricao: 'Celebrando juntos', emoji: '🎊' },
+  ],
+};
+
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [isLoadingCheckout, setIsLoadingCheckout] = useState(false);
+  const [temaAtivo, setTemaAtivo] = useState('cha-revelacao');
+  const [rotacao, setRotacao] = useState(0);
+  const [imagemDestaque, setImagemDestaque] = useState(0);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Resetar rotação quando mudar de tema
+  useEffect(() => {
+    setRotacao(0);
+    setImagemDestaque(0);
+  }, [temaAtivo]);
 
   const whatsappNumber = "5511999999999";
   
@@ -18,6 +66,10 @@ export default function Home() {
       `Olá! Tenho interesse no *${produto}* (${preco}). Gostaria de mais informações! 💕`
     );
     return `https://wa.me/${whatsappNumber}?text=${message}`;
+  };
+
+  const getImagensTema = (tema: string) => {
+    return imagensPorTema[tema as keyof typeof imagensPorTema] || imagensPorTema['cha-revelacao'];
   };
 
   const handleComprarTemplate = async () => {
@@ -91,7 +143,7 @@ export default function Home() {
 
             {/* CTA Principal */}
             <a 
-              href="#produtos"
+              href="#carrossel"
               className="inline-flex items-center gap-2 px-12 py-5 bg-beige-300 text-white rounded-full font-medium text-lg hover:bg-beige-400 transition-all duration-300 hover:scale-105 shadow-xl hover:shadow-2xl group"
             >
               <span>Ver Convites</span>
@@ -101,9 +153,112 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Seção Interativa de Templates */}
+      {/* Seção Carrossel 3D de Templates */}
+      <section id="carrossel" className="py-32 px-6 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-beige-50 via-white to-beige-50" />
+        
+        <div className="relative max-w-7xl mx-auto">
+          
+          {/* Header */}
+          <div className="text-center mb-16">
+            <h2 className="text-5xl md:text-6xl font-serif text-brown-700 mb-4">
+              Explore nossos
+              <br />
+              <span className="text-beige-300 italic">temas exclusivos</span>
+            </h2>
+            <p className="text-lg text-brown-600 font-light">Escolha o estilo perfeito para o seu momento</p>
+          </div>
 
-      {/* Benefícios - CORRIGIDO: py-24 ao invés de pb-24 */}
+          {/* Menu de Temas */}
+          <div className="flex flex-wrap justify-center gap-4 mb-16">
+            {[
+              { id: 'cha-revelacao', label: 'Chá Revelação', emoji: '🤱' },
+              { id: 'aniversario', label: 'Aniversário', emoji: '🎂' },
+              { id: 'batizado', label: 'Batizado', emoji: '✨' },
+              { id: 'cha-bebe', label: 'Chá de Bebê', emoji: '🍼' },
+              { id: 'mesversario', label: 'Mesversário', emoji: '🎈' },
+            ].map((tema) => (
+              <button
+                key={tema.id}
+                onClick={() => setTemaAtivo(tema.id)}
+                className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
+                  temaAtivo === tema.id
+                    ? 'bg-beige-300 text-white shadow-lg scale-105'
+                    : 'bg-white text-brown-700 hover:bg-beige-50 shadow-md'
+                }`}
+              >
+                <span className="mr-2">{tema.emoji}</span>
+                {tema.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Carrossel 3D */}
+          <div className="relative h-[500px] flex items-center justify-center" style={{ perspective: '2000px' }}>
+            <div 
+              className="relative w-full h-full"
+              style={{
+                transformStyle: 'preserve-3d',
+                transform: `rotateY(${rotacao}deg)`,
+                transition: 'transform 0.7s ease-out'
+              }}
+            >
+              {getImagensTema(temaAtivo).map((imagem, index) => {
+                const totalImagens = getImagensTema(temaAtivo).length;
+                const angulo = (360 / totalImagens) * index;
+                const translateZ = 400;
+                
+                return (
+                  <div
+                    key={index}
+                    className="absolute top-1/2 left-1/2 w-80 h-96 -ml-40 -mt-48 cursor-pointer transition-all duration-500"
+                    style={{
+                      transform: `rotateY(${angulo}deg) translateZ(${translateZ}px)`,
+                      backfaceVisibility: 'visible'
+                    }}
+                    onClick={() => setImagemDestaque(index)}
+                  >
+                    <div className="w-full h-full bg-white rounded-2xl shadow-2xl overflow-hidden border-4 border-beige-200 hover:border-beige-300 hover:scale-105 transition-all duration-300">
+                      <div className="w-full h-full bg-gradient-to-br from-beige-100 to-rose-100 flex items-center justify-center">
+                        <div className="text-center p-6">
+                          <div className="text-6xl mb-4">{imagem.emoji}</div>
+                          <h3 className="text-xl font-serif text-brown-700 mb-2">{imagem.nome}</h3>
+                          <p className="text-sm text-brown-600">{imagem.descricao}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Controles do Carrossel */}
+          <div className="flex justify-center gap-4 mt-12">
+            <button
+              onClick={() => setRotacao(rotacao + (360 / getImagensTema(temaAtivo).length))}
+              className="p-4 bg-white rounded-full shadow-lg hover:bg-beige-50 transition-all hover:scale-110"
+              aria-label="Anterior"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-beige-300">
+                <path d="m15 18-6-6 6-6"/>
+              </svg>
+            </button>
+            <button
+              onClick={() => setRotacao(rotacao - (360 / getImagensTema(temaAtivo).length))}
+              className="p-4 bg-white rounded-full shadow-lg hover:bg-beige-50 transition-all hover:scale-110"
+              aria-label="Próximo"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-beige-300">
+                <path d="m9 18 6-6-6-6"/>
+              </svg>
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Benefícios */}
       <section className="py-24">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid md:grid-cols-3 gap-16">
@@ -252,8 +407,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                
-                  <a href={getWhatsAppLink("Personalizado", "R$ 147")}
+                <a href={getWhatsAppLink("Personalizado", "R$ 147")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 w-full py-4 bg-white text-beige-300 text-center rounded-full font-medium hover:bg-beige-50 transition-all duration-300 shadow-xl hover:shadow-2xl group/btn"
@@ -307,8 +461,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                
-                  <a href={getWhatsAppLink("Assinatura Mesversário", "R$ 45/mês")}
+                <a href={getWhatsAppLink("Assinatura Mesversário", "R$ 45/mês")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 w-full py-4 bg-beige-300 text-white text-center rounded-full font-medium hover:bg-beige-400 transition-all duration-300 shadow-md hover:shadow-xl group/btn"
@@ -416,7 +569,7 @@ export default function Home() {
             Celebre seu momento especial com um convite único
           </p>
           
-            <a href={getWhatsAppLink("Quero conhecer os convites", "")}
+          <a href={getWhatsAppLink("Quero conhecer os convites", "")}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-10 py-5 bg-white text-beige-300 rounded-full font-medium text-lg hover:bg-beige-50 transition-all duration-300 shadow-2xl hover:shadow-3xl hover:scale-105"
@@ -436,8 +589,7 @@ export default function Home() {
           </div>
           
           <div className="flex justify-center mb-10">
-            
-              <a href={getWhatsAppLink("Olá, gostaria de saber mais!", "")}
+            <a href={getWhatsAppLink("Olá, gostaria de saber mais!", "")}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 transition-all border border-white/20"
