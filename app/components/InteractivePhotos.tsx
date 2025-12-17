@@ -228,6 +228,8 @@ export default function InteractivePhotos() {
                         src={photo.image} 
                         alt={photo.title}
                         className="w-full h-full object-cover"
+                        loading="eager"
+                        style={{ imageRendering: 'high-quality' }}
                       />
                     </div>
                     
