@@ -60,29 +60,29 @@ export default function Home() {
     setImagemDestaque(0);
   }, [temaAtivo]);
 
-  // Detectar seção atual baseada no scroll - CORRIGIDO
+  // Detectar seção atual baseada no scroll - CORRIGIDO DINAMICAMENTE
   useEffect(() => {
     const handleScroll = () => {
       const sections = document.querySelectorAll('.snap-section');
-      const scrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
-
+      
       sections.forEach((section, index) => {
         const element = section as HTMLElement;
         const rect = element.getBoundingClientRect();
-        const absoluteTop = scrollY + rect.top;
-        const absoluteBottom = absoluteTop + element.offsetHeight;
-        const scrollCenter = scrollY + (windowHeight / 2);
-
-        // Verifica se o centro da viewport está dentro da seção
-        if (scrollCenter >= absoluteTop && scrollCenter < absoluteBottom) {
+        
+        // Considera a seção atual quando ela está mais próxima do topo da viewport
+        // ou quando ocupa a maior parte da tela visível
+        if (rect.top <= 100 && rect.bottom >= 100) {
           setSecaoAtual(index);
         }
       });
     };
 
     handleScroll(); // Executar imediatamente
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Também executar após um pequeno delay para garantir que pegue o estado inicial
+    setTimeout(handleScroll, 100);
+    
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -219,23 +219,21 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Seção Carrossel 3D - REDUZIDO AINDA MAIS */}
-        <section id="carrossel" className="snap-section snap-start py-12 px-6 relative overflow-hidden min-h-screen flex items-center bg-gradient-to-b from-beige-50 via-white to-beige-50">
+        {/* Seção Carrossel 3D - AJUSTADO COM MELHOR ESPAÇAMENTO */}
+        <section id="carrossel" className="snap-section snap-start py-16 px-6 relative overflow-hidden min-h-screen flex items-center bg-gradient-to-b from-beige-50 via-white to-beige-50">
           
           <div className="relative max-w-7xl mx-auto w-full">
             
-            {/* Header - COMPACTO */}
-            <div className="text-center mb-8">
-              <h2 className="text-4xl md:text-5xl font-serif text-brown-700 mb-2">
-                Explore nossos
-                <br />
-                <span className="text-beige-300 italic">temas exclusivos</span>
+            {/* Header - COMPACTO E EM UMA LINHA */}
+            <div className="text-center mb-10">
+              <h2 className="text-3xl md:text-4xl font-serif text-brown-700 mb-2">
+                Explore nossos <span className="text-beige-300 italic">temas exclusivos</span>
               </h2>
               <p className="text-sm text-brown-600 font-light">Escolha o estilo perfeito para o seu momento</p>
             </div>
 
             {/* Menu de Temas - COMPACTO */}
-            <div className="flex flex-wrap justify-center gap-3 mb-8">
+            <div className="flex flex-wrap justify-center gap-3 mb-10">
               {[
                 { id: 'cha-revelacao', label: 'Chá Revelação', emoji: '🤱' },
                 { id: 'aniversario', label: 'Aniversário', emoji: '🎂' },
@@ -258,8 +256,8 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Carrossel 3D - MENOR */}
-            <div className="relative h-[320px] flex items-center justify-center mb-6" style={{ perspective: '1800px' }}>
+            {/* Carrossel 3D - CENTRALIZADO COM ESPAÇO */}
+            <div className="relative h-[340px] flex items-center justify-center mb-8" style={{ perspective: '1800px' }}>
               <div 
                 className="relative w-full h-full"
                 style={{
