@@ -274,22 +274,22 @@ export default function TemplateCarousel() {
 
   return (
     <>
-      <section className="pt-16 pb-8 px-6 bg-gradient-to-b from-white to-beige-50 overflow-hidden">
+      <section className="pt-16 pb-24 px-6 bg-gradient-to-b from-white to-beige-50 overflow-hidden">
         <div className="max-w-7xl mx-auto">
           
           {/* Header */}
-          <div className="text-center mb-6">
-            <h2 className="text-5xl md:text-6xl font-serif text-brown-700 mb-4">
+          <div className="text-center mb-3">
+            <h2 className="text-5xl md:text-6xl font-serif text-brown-700 mb-2">
               Nossos
               <br />
               <span className="text-beige-300 italic">Templates</span>
             </h2>
-            <p className="text-lg text-brown-600 font-light mb-6">
+            <p className="text-lg text-brown-600 font-light mb-4">
               Escolha o tema e explore os 5 designs exclusivos
             </p>
 
             {/* Theme Selector */}
-            <div className="flex justify-center mb-8">
+            <div className="flex justify-center mb-4">
               <div className="inline-flex bg-white rounded-full p-2 shadow-lg border border-beige-200/50">
                 {themes.map((theme) => (
                   <button
@@ -309,7 +309,7 @@ export default function TemplateCarousel() {
           </div>
 
           {/* Carousel Container */}
-          <div className="relative h-[520px] mb-12">
+          <div className="relative h-[520px] mb-16">
             
             {/* Perspective wrapper */}
             <div 
