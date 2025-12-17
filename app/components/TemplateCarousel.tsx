@@ -261,7 +261,6 @@ export default function TemplateCarousel() {
 
   return (
     <>
-      {/* MUDANÇA CRÍTICA: Removido o -mb-20 daqui! */}
       <section className="py-16 px-6 bg-gradient-to-b from-white to-beige-50">
         <div className="max-w-7xl mx-auto">
           
@@ -292,7 +291,8 @@ export default function TemplateCarousel() {
             </div>
           </div>
 
-          <div className="relative h-[520px] mt-8 mb-20">
+          {/* CORREÇÃO CRÍTICA: altura aumentada para 700px e cards centralizados com top-1/2 */}
+          <div className="relative h-[700px] mt-8 mb-12">
             <div 
               className="relative w-full h-full"
               style={{
@@ -303,7 +303,7 @@ export default function TemplateCarousel() {
               {currentTemplates.map((template, index) => (
                 <div
                   key={template.id}
-                  className="absolute left-1/2 top-[300px] -translate-y-1/2 cursor-pointer select-none"
+                  className="absolute left-1/2 top-1/2 -translate-y-1/2 cursor-pointer select-none"
                   style={{
                     ...getCardStyle(index),
                     transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
@@ -357,7 +357,7 @@ export default function TemplateCarousel() {
             <button
               onClick={prev}
               disabled={isAnimating}
-              className="absolute left-4 top-[300px] -translate-y-1/2 z-50 w-14 h-14 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center justify-center text-brown-700 hover:bg-white hover:scale-110 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-50 w-14 h-14 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center justify-center text-brown-700 hover:bg-white hover:scale-110 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
             >
               <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" strokeWidth={2.5} />
             </button>
@@ -365,7 +365,7 @@ export default function TemplateCarousel() {
             <button
               onClick={next}
               disabled={isAnimating}
-              className="absolute right-4 top-[300px] -translate-y-1/2 z-50 w-14 h-14 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center justify-center text-brown-700 hover:bg-white hover:scale-110 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-50 w-14 h-14 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center justify-center text-brown-700 hover:bg-white hover:scale-110 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
             >
               <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" strokeWidth={2.5} />
             </button>
