@@ -12,7 +12,7 @@ export default function Home() {
     setMounted(true);
   }, []);
 
-  const whatsappNumber = "5511999999999"; // TROCAR DEPOIS
+  const whatsappNumber = "5511999999999";
   
   const getWhatsAppLink = (produto: string, preco: string) => {
     const message = encodeURIComponent(
@@ -31,7 +31,7 @@ export default function Home() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          title: '5 Templates Digitais Premium - Momentos Únicos',
+          title: '5 Templates Digitais Premium',
           price: 47,
         }),
       });
@@ -39,7 +39,6 @@ export default function Home() {
       const data = await response.json();
 
       if (data.init_point) {
-        // Redireciona para o checkout do Mercado Pago
         window.location.href = data.init_point;
       } else {
         alert('Erro ao processar pagamento. Tente novamente.');
@@ -57,7 +56,6 @@ export default function Home() {
       
       {/* Hero Section */}
       <section className="relative overflow-hidden min-h-screen flex items-center">
-        {/* Decorative watercolor blobs */}
         <div className="absolute top-20 right-10 w-[500px] h-[500px] bg-rose-200 opacity-20 blur-[120px] rounded-full animate-pulse" style={{animationDuration: '4s'}} />
         <div className="absolute bottom-20 left-10 w-[400px] h-[400px] bg-beige-300 opacity-20 blur-[100px] rounded-full animate-pulse" style={{animationDuration: '5s'}} />
         
@@ -66,20 +64,20 @@ export default function Home() {
             
             {/* Badge */}
             <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/70 backdrop-blur-md rounded-full border border-beige-300/30 shadow-sm">
-  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-beige-300">
-    <circle cx="12" cy="12" r="10"/>
-    <path d="m14.31 8 5.74 9.94"/>
-    <path d="M9.69 8h11.48"/>
-    <path d="m7.38 12 5.74-9.94"/>
-    <path d="M9.69 16 3.95 6.06"/>
-    <path d="M14.31 16H2.83"/>
-    <path d="m16.62 12-5.74 9.94"/>
-  </svg>
-  <span className="text-sm font-medium text-brown-600 tracking-[0.25em] uppercase">Studio Invitare</span>
-</div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-beige-300">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="m14.31 8 5.74 9.94"/>
+                <path d="M9.69 8h11.48"/>
+                <path d="m7.38 12 5.74-9.94"/>
+                <path d="M9.69 16 3.95 6.06"/>
+                <path d="M14.31 16H2.83"/>
+                <path d="m16.62 12-5.74 9.94"/>
+              </svg>
+              <span className="text-sm font-medium text-brown-600 tracking-[0.25em] uppercase">Studio Invitare</span>
+            </div>
 
             {/* Headline */}
-           <h1 className="text-6xl md:text-8xl font-serif text-brown-700 mb-8 leading-[1.1] px-4 mt-16">
+            <h1 className="text-6xl md:text-8xl font-serif text-brown-700 mb-8 leading-[1.1] px-4 mt-16">
               Convites que tocam
               <br />
               <span className="text-beige-300 italic font-light">o coração</span>
@@ -101,8 +99,6 @@ export default function Home() {
               <Heart className="w-5 h-5 group-hover:fill-white transition-all" />
             </a>
           </div>
-
-          {/* Componente Interativo de Fotos */}
         </div>
       </section>
 
@@ -147,7 +143,7 @@ export default function Home() {
 
       {/* Produtos */}
       <section id="produtos" className="py-28 px-6">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           
           {/* Header */}
           <div className="text-center mb-20">
@@ -160,16 +156,14 @@ export default function Home() {
           </div>
 
           {/* Cards de Produtos */}
-          <div className="grid md:grid-cols-2 gap-10">
+          <div className="grid md:grid-cols-3 gap-8">
             
             {/* Template Pronto */}
             <div className="bg-white rounded-[2rem] p-10 shadow-2xl hover:shadow-3xl transition-all duration-500 relative overflow-hidden group border border-beige-200/50">
               
-              {/* Decoração */}
               <div className="absolute -top-20 -right-20 w-40 h-40 bg-rose-200 opacity-10 blur-3xl group-hover:opacity-20 group-hover:scale-150 transition-all duration-700" />
               
               <div className="relative">
-                {/* Header do Card */}
                 <div className="flex items-start justify-between mb-8">
                   <div>
                     <h3 className="text-3xl font-serif text-brown-700 mb-2">Template Pronto</h3>
@@ -181,13 +175,12 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Features */}
                 <ul className="space-y-4 mb-10">
                   {[
                     "5 modelos lindos para escolher",
                     "Edite você mesma no Canva",
                     "PNG + PDF em alta qualidade",
-                    "Entrega imediata por WhatsApp"
+                    "Entrega imediata"
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3.5 group/item">
                       <CheckCircle2 className="w-5 h-5 text-beige-300 mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform" strokeWidth={2} />
@@ -196,7 +189,6 @@ export default function Home() {
                   ))}
                 </ul>
 
-                {/* CTA */}
                 <button
                   onClick={handleComprarTemplate}
                   disabled={isLoadingCheckout}
@@ -210,7 +202,7 @@ export default function Home() {
                   ) : (
                     <>
                       <span>Comprar Agora!</span>
-                      <Heart className="w-5 h-5 group-hover/btn:fill-current transition-all" />
+                      <Heart className="w-5 h-5 group-hover/btn:fill-white transition-all" />
                     </>
                   )}
                 </button>
@@ -220,7 +212,6 @@ export default function Home() {
             {/* Personalizado */}
             <div className="bg-gradient-to-br from-beige-300 via-beige-400 to-beige-300 rounded-[2rem] p-10 shadow-2xl hover:shadow-3xl transition-all duration-500 relative overflow-hidden group">
               
-              {/* Badge Popular */}
               <div className="absolute top-6 right-6 bg-rose-200 text-white px-5 py-2 rounded-full text-sm font-medium shadow-lg rotate-3 hover:rotate-6 transition-transform">
                 <div className="flex items-center gap-1.5">
                   <Star className="w-4 h-4" fill="white" />
@@ -228,11 +219,9 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Decoração */}
               <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-white opacity-10 blur-3xl group-hover:opacity-20 group-hover:scale-150 transition-all duration-700" />
               
               <div className="relative pt-8">
-                {/* Header do Card */}
                 <div className="flex items-start justify-between mb-8">
                   <div>
                     <h3 className="text-3xl font-serif text-white mb-2">Personalizado</h3>
@@ -244,7 +233,6 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Features */}
                 <ul className="space-y-4 mb-8">
                   {[
                     "Design exclusivo pro seu momento",
@@ -259,7 +247,6 @@ export default function Home() {
                   ))}
                 </ul>
 
-                {/* Urgência */}
                 <div className="bg-white/20 backdrop-blur-md rounded-2xl p-4 mb-6 text-center border border-white/30">
                   <p className="text-white font-medium flex items-center justify-center gap-2">
                     <Sparkles className="w-4 h-4" />
@@ -267,8 +254,7 @@ export default function Home() {
                   </p>
                 </div>
 
-                {/* CTA */}
-                <a
+                
                   href={getWhatsAppLink("Personalizado", "R$ 147")}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -279,11 +265,67 @@ export default function Home() {
                 </a>
               </div>
             </div>
+
+            {/* Assinatura Mesversário */}
+            <div className="bg-white rounded-[2rem] p-10 shadow-2xl hover:shadow-3xl transition-all duration-500 relative overflow-hidden group border-2 border-beige-300">
+              
+              <div className="absolute top-6 right-6 bg-beige-300 text-white px-4 py-2 rounded-full text-xs font-medium shadow-lg">
+                Recorrente
+              </div>
+
+              <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-beige-300 opacity-10 blur-3xl group-hover:opacity-20 group-hover:scale-150 transition-all duration-700" />
+              
+              <div className="relative pt-8">
+                <div className="flex items-start justify-between mb-8">
+                  <div>
+                    <h3 className="text-3xl font-serif text-brown-700 mb-2">Mesversário</h3>
+                    <p className="text-brown-600/70 text-sm">Todo mês um novo convite</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm text-brown-600/60 mb-1">por apenas</div>
+                    <div className="text-4xl font-bold text-beige-300">R$ 45</div>
+                    <div className="text-xs text-brown-600/60">/mês</div>
+                  </div>
+                </div>
+
+                <ul className="space-y-4 mb-8">
+                  {[
+                    "Convite novo todo mês",
+                    "Personalizado com foto do bebê",
+                    "Edite quantas vezes quiser",
+                    "Cancele quando quiser"
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3.5 group/item">
+                      <CheckCircle2 className="w-5 h-5 text-beige-300 mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform" strokeWidth={2} />
+                      <span className="text-brown-700 leading-relaxed">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="bg-beige-50 rounded-2xl p-4 mb-6 text-center border border-beige-200/50">
+                  <p className="text-brown-700 font-medium flex items-center justify-center gap-2 text-sm">
+                    <Heart className="w-4 h-4 text-beige-300" fill="currentColor" />
+                    <span>12 meses = Chá de 1 ano grátis!</span>
+                  </p>
+                </div>
+
+                
+                  href={getWhatsAppLink("Assinatura Mesversário", "R$ 45/mês")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full py-4 bg-beige-300 text-white text-center rounded-full font-medium hover:bg-beige-400 transition-all duration-300 shadow-md hover:shadow-xl group/btn"
+                >
+                  <span>Quero Assinar!</span>
+                  <Heart className="w-5 h-5 group-hover/btn:fill-white transition-all" />
+                </a>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
 
-      {/* Depoimentos / Social Proof */}
+      {/* Depoimentos */}
       <section className="py-24 px-6 bg-white/40 backdrop-blur-sm">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-serif text-brown-700 text-center mb-16">
@@ -340,19 +382,19 @@ export default function Home() {
               },
               {
                 q: "Como funciona a entrega?",
-                a: "Templates prontos: entrega imediata por WhatsApp após confirmação do pagamento. Personalizados: você nos envia o briefing e entregamos em 3-5 dias úteis."
+                a: "Templates prontos: entrega imediata após pagamento. Personalizados: entregamos em 3-5 dias úteis."
               },
               {
                 q: "Posso editar depois de receber?",
-                a: "Sim! Você recebe o link do Canva totalmente editável para fazer ajustes sempre que precisar, além dos arquivos finais em PNG e PDF."
+                a: "Sim! Você recebe o link do Canva totalmente editável para fazer ajustes sempre que precisar."
               },
               {
-                q: "Como faço o pagamento?",
-                a: "Entre em contato pelo WhatsApp escolhendo seu convite. Te enviamos os dados para pagamento por PIX. Simples, rápido e seguro!"
+                q: "Como funciona a assinatura?",
+                a: "Todo mês você recebe um convite de mesversário personalizado com a foto do bebê. Pode cancelar quando quiser!"
               },
               {
-                q: "Quantas revisões posso solicitar no personalizado?",
-                a: "Estão incluídas 2 rodadas de revisão. Queremos que fique perfeito para você!"
+                q: "Quantas revisões posso solicitar?",
+                a: "No personalizado estão incluídas 2 rodadas de revisão. Queremos que fique perfeito!"
               }
             ].map((item, i) => (
               <div key={i} className="bg-white rounded-2xl p-8 shadow-md hover:shadow-lg transition-all duration-300">
@@ -375,7 +417,7 @@ export default function Home() {
           <p className="text-xl mb-10 text-white/90 font-light">
             Celebre seu momento especial com um convite único
           </p>
-          <a
+          
             href={getWhatsAppLink("Quero conhecer os convites", "")}
             target="_blank"
             rel="noopener noreferrer"
@@ -388,15 +430,15 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-16 px-6 bg-brown-700 text-white">
+      <footer className="py-16 px-6 bg-brown-700 text-white mb-20">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
-            <h3 className="text-3xl font-serif mb-3">STUDIO INVITARE</h3>
-            <p className="text-white/70 font-light">Designs que celebram sua história</p>
+            <h3 className="text-3xl font-serif mb-3">Studio Invitare</h3>
+            <p className="text-white/70 font-light">Convites que celebram sua história</p>
           </div>
           
           <div className="flex justify-center mb-10">
-            <a
+            
               href={getWhatsAppLink("Olá, gostaria de saber mais!", "")}
               target="_blank"
               rel="noopener noreferrer"
