@@ -256,43 +256,49 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Carrossel 3D - COM PROFUNDIDADE CORRETA */}
+            {/* Carrossel 3D - FIXO NO CENTRO, GIRA NO PRÓPRIO EIXO */}
             <div className="relative h-[340px] flex items-center justify-center mb-8" style={{ perspective: '1800px' }}>
-              <div 
-                className="relative w-full h-full"
-                style={{
-                  transformStyle: 'preserve-3d',
-                  transform: `rotateY(${rotacao}deg)`,
-                  transition: 'transform 0.7s ease-out'
-                }}
-              >
-                {getImagensTema(temaAtivo).map((imagem, index) => {
-                  const totalImagens = getImagensTema(temaAtivo).length;
-                  const angulo = (360 / totalImagens) * index;
-                  const translateZ = 300;
-                  
-                  return (
-                    <div
-                      key={index}
-                      className="absolute top-1/2 left-1/2 w-60 h-72 -ml-30 -mt-36 cursor-pointer"
-                      style={{
-                        transform: `rotateY(${angulo}deg) translateZ(${translateZ}px)`,
-                        backfaceVisibility: 'visible'
-                      }}
-                      onClick={() => setImagemDestaque(index)}
-                    >
-                      <div className="w-full h-full bg-white rounded-xl shadow-2xl overflow-hidden border-4 border-beige-200 hover:border-beige-300 hover:scale-105 transition-all duration-300">
-                        <div className="w-full h-full bg-gradient-to-br from-beige-100 to-rose-100 flex items-center justify-center">
-                          <div className="text-center p-4">
-                            <div className="text-4xl mb-2">{imagem.emoji}</div>
-                            <h3 className="text-base font-serif text-brown-700 mb-1">{imagem.nome}</h3>
-                            <p className="text-xs text-brown-600">{imagem.descricao}</p>
+              <div className="relative flex items-center justify-center w-full h-full">
+                <div 
+                  className="relative"
+                  style={{
+                    transformStyle: 'preserve-3d',
+                    transform: `rotateY(${rotacao}deg)`,
+                    transition: 'transform 0.7s ease-out',
+                    width: '0px',
+                    height: '0px'
+                  }}
+                >
+                  {getImagensTema(temaAtivo).map((imagem, index) => {
+                    const totalImagens = getImagensTema(temaAtivo).length;
+                    const angulo = (360 / totalImagens) * index;
+                    const translateZ = 300;
+                    
+                    return (
+                      <div
+                        key={index}
+                        className="absolute w-60 h-72 cursor-pointer"
+                        style={{
+                          transform: `rotateY(${angulo}deg) translateZ(${translateZ}px)`,
+                          backfaceVisibility: 'visible',
+                          left: '-120px', // metade da largura (240px / 2)
+                          top: '-144px'   // metade da altura (288px / 2)
+                        }}
+                        onClick={() => setImagemDestaque(index)}
+                      >
+                        <div className="w-full h-full bg-white rounded-xl shadow-2xl overflow-hidden border-4 border-beige-200 hover:border-beige-300 hover:scale-105 transition-all duration-300">
+                          <div className="w-full h-full bg-gradient-to-br from-beige-100 to-rose-100 flex items-center justify-center">
+                            <div className="text-center p-4">
+                              <div className="text-4xl mb-2">{imagem.emoji}</div>
+                              <h3 className="text-base font-serif text-brown-700 mb-1">{imagem.nome}</h3>
+                              <p className="text-xs text-brown-600">{imagem.descricao}</p>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
