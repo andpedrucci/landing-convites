@@ -15,7 +15,7 @@ const raleway = Raleway({
 })
 
 export const metadata: Metadata = {
-  title: 'Momentos Únicos - Convites Digitais Personalizados',
+  title: 'Studio Invitare - Convites Digitais Personalizados',
   description: 'Convites digitais lindos para chá revelação, aniversários e momentos especiais. Personalizados com carinho.',
 }
 
