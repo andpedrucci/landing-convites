@@ -150,7 +150,6 @@ export default function Home() {
       <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-4">
         {secoes.map((secao, index) => (
           <button
-            <button
               key={secao.id}
               onClick={() => {
                 scrollToSection(secao.id);
