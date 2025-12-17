@@ -26,7 +26,6 @@ export default function TemplateCarousel() {
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Temas e seus templates
   const themes: Theme[] = [
     {
       id: 'cha-revelacao',
@@ -87,13 +86,11 @@ export default function TemplateCarousel() {
 
   const currentTemplates = themes.find(t => t.id === currentTheme)?.templates || [];
 
-  // Inicializar áudio
   useEffect(() => {
     audioRef.current = new Audio('/sunshine.mp3');
     audioRef.current.loop = true;
     audioRef.current.volume = 0;
 
-    // Proteção anti-cópia
     const preventContextMenu = (e: MouseEvent) => e.preventDefault();
     const preventPrint = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
@@ -111,7 +108,6 @@ export default function TemplateCarousel() {
     document.addEventListener('keydown', preventPrint);
     document.addEventListener('keydown', preventScreenshot);
 
-    // Desabilita arrastar imagens
     const images = document.querySelectorAll('img');
     images.forEach(img => {
       img.setAttribute('draggable', 'false');
@@ -126,7 +122,6 @@ export default function TemplateCarousel() {
     };
   }, []);
 
-  // Reset index quando muda tema
   useEffect(() => {
     setCurrentIndex(0);
   }, [currentTheme]);
@@ -139,7 +134,6 @@ export default function TemplateCarousel() {
       setIsPlaying(true);
       setTimeout(() => setShowPlayer(true), 500);
       
-      // Fade in
       const fadeInDuration = 2000;
       const targetVolume = 0.3;
       const steps = 50;
@@ -207,13 +201,11 @@ export default function TemplateCarousel() {
     const diff = index - currentIndex;
     const total = currentTemplates.length;
     
-    // Normaliza a diferença para o menor caminho circular
     let normalizedDiff = diff;
     if (Math.abs(diff) > total / 2) {
       normalizedDiff = diff > 0 ? diff - total : diff + total;
     }
 
-    // Centro (card ativo)
     if (normalizedDiff === 0) {
       return {
         transform: 'translateX(-50%) translateZ(0px) rotateY(0deg) scale(1)',
@@ -223,7 +215,6 @@ export default function TemplateCarousel() {
       };
     }
 
-    // Direita
     if (normalizedDiff === 1) {
       return {
         transform: 'translateX(20%) translateZ(-200px) rotateY(-35deg) scale(0.75)',
@@ -233,7 +224,6 @@ export default function TemplateCarousel() {
       };
     }
 
-    // Esquerda
     if (normalizedDiff === -1) {
       return {
         transform: 'translateX(-120%) translateZ(-200px) rotateY(35deg) scale(0.75)',
@@ -243,7 +233,6 @@ export default function TemplateCarousel() {
       };
     }
 
-    // Direita distante
     if (normalizedDiff === 2) {
       return {
         transform: 'translateX(50%) translateZ(-350px) rotateY(-45deg) scale(0.5)',
@@ -253,7 +242,6 @@ export default function TemplateCarousel() {
       };
     }
 
-    // Esquerda distante
     if (normalizedDiff === -2) {
       return {
         transform: 'translateX(-150%) translateZ(-350px) rotateY(45deg) scale(0.5)',
@@ -263,7 +251,6 @@ export default function TemplateCarousel() {
       };
     }
 
-    // Escondidos
     return {
       transform: 'translateX(-50%) translateZ(-500px) scale(0.3)',
       opacity: 0,
@@ -274,22 +261,18 @@ export default function TemplateCarousel() {
 
   return (
     <>
-      <section className="pt-16 pb-24 px-6 bg-gradient-to-b from-white to-beige-50 overflow-hidden">
+      <section className="py-16 px-6 bg-gradient-to-b from-white to-beige-50">
         <div className="max-w-7xl mx-auto">
           
-          {/* Header */}
-          <div className="text-center mb-3">
-            <h2 className="text-5xl md:text-6xl font-serif text-brown-700 mb-2">
-              Nossos
-              <br />
-              <span className="text-beige-300 italic">Templates</span>
+          <div className="text-center mb-8">
+            <h2 className="text-5xl md:text-6xl font-serif text-brown-700 mb-4">
+              Nossos <span className="text-beige-300 italic">Templates</span>
             </h2>
-            <p className="text-lg text-brown-600 font-light mb-4">
+            <p className="text-lg text-brown-600 font-light mb-6">
               Escolha o tema e explore os 5 designs exclusivos
             </p>
 
-            {/* Theme Selector */}
-            <div className="flex justify-center mb-4">
+            <div className="flex justify-center">
               <div className="inline-flex bg-white rounded-full p-2 shadow-lg border border-beige-200/50">
                 {themes.map((theme) => (
                   <button
@@ -308,10 +291,7 @@ export default function TemplateCarousel() {
             </div>
           </div>
 
-          {/* Carousel Container */}
-          <div className="relative h-[520px] mb-16">
-            
-            {/* Perspective wrapper */}
+          <div className="relative h-[600px] mt-12 mb-20">
             <div 
               className="relative w-full h-full"
               style={{
@@ -319,7 +299,6 @@ export default function TemplateCarousel() {
                 perspectiveOrigin: 'center center',
               }}
             >
-              {/* Cards */}
               {currentTemplates.map((template, index) => (
                 <div
                   key={template.id}
@@ -334,10 +313,7 @@ export default function TemplateCarousel() {
                   onClick={() => goToSlide(index)}
                   onContextMenu={(e) => e.preventDefault()}
                 >
-                  {/* Card */}
                   <div className="relative w-full h-full bg-white rounded-3xl shadow-2xl overflow-hidden group">
-                    
-                    {/* Image */}
                     <div className="absolute inset-0 select-none">
                       <img
                         src={template.image}
@@ -354,10 +330,8 @@ export default function TemplateCarousel() {
                       />
                     </div>
 
-                    {/* Overlay gradient */}
                     <div className="absolute inset-0 bg-gradient-to-t from-brown-700/90 via-brown-700/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                    {/* Info overlay */}
                     <div className="absolute bottom-0 left-0 right-0 p-8 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                       <div className="text-white transform transition-all duration-300">
                         <p className="text-sm font-medium tracking-wider uppercase mb-2 opacity-0 group-hover:opacity-70 transition-opacity duration-300">
@@ -369,7 +343,6 @@ export default function TemplateCarousel() {
                       </div>
                     </div>
 
-                    {/* Active indicator */}
                     {index === currentIndex && (
                       <div className="absolute top-6 right-6">
                         <div className="w-3 h-3 bg-beige-300 rounded-full shadow-lg animate-pulse" />
@@ -380,12 +353,10 @@ export default function TemplateCarousel() {
               ))}
             </div>
 
-            {/* Navigation Buttons */}
             <button
               onClick={prev}
               disabled={isAnimating}
-              className="absolute left-4 top-[260px] -translate-y-1/2 z-50 w-14 h-14 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center justify-center text-brown-700 hover:bg-white hover:scale-110 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
-              aria-label="Anterior"
+              className="absolute left-4 top-[300px] -translate-y-1/2 z-50 w-14 h-14 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center justify-center text-brown-700 hover:bg-white hover:scale-110 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
             >
               <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" strokeWidth={2.5} />
             </button>
@@ -393,14 +364,12 @@ export default function TemplateCarousel() {
             <button
               onClick={next}
               disabled={isAnimating}
-              className="absolute right-4 top-[260px] -translate-y-1/2 z-50 w-14 h-14 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center justify-center text-brown-700 hover:bg-white hover:scale-110 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
-              aria-label="Próximo"
+              className="absolute right-4 top-[300px] -translate-y-1/2 z-50 w-14 h-14 bg-white/90 backdrop-blur-md rounded-full shadow-xl flex items-center justify-center text-brown-700 hover:bg-white hover:scale-110 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group"
             >
               <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" strokeWidth={2.5} />
             </button>
           </div>
 
-          {/* Dots Navigation */}
           <div className="flex items-center justify-center gap-3 mb-8">
             {currentTemplates.map((_, index) => (
               <button
@@ -412,12 +381,10 @@ export default function TemplateCarousel() {
                     ? 'w-12 h-3 bg-beige-300'
                     : 'w-3 h-3 bg-beige-200 hover:bg-beige-300/60'
                 }`}
-                aria-label={`Ir para template ${index + 1}`}
               />
             ))}
           </div>
 
-          {/* Description */}
           <div className="text-center">
             <p className="text-brown-600/70 text-sm max-w-2xl mx-auto">
               Escolha seu favorito e personalize com suas próprias cores, textos e fotos no Canva.
@@ -427,13 +394,8 @@ export default function TemplateCarousel() {
         </div>
       </section>
 
-      {/* Music Player */}
       {showPlayer && (
-        <div 
-          className={`fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-beige-200 shadow-2xl z-50 transition-all duration-500 ${
-            showPlayer ? 'translate-y-0' : 'translate-y-full'
-          }`}
-        >
+        <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-beige-200 shadow-2xl z-50">
           <div className="max-w-md mx-auto px-6 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <button
