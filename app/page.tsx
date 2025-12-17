@@ -256,7 +256,7 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Carrossel 3D - CENTRALIZADO FIXO COM ESCALA GRADATIVA */}
+            {/* Carrossel 3D - PURO E SIMPLES */}
             <div className="relative h-[340px] flex items-center justify-center mb-8" style={{ perspective: '1800px' }}>
               <div 
                 className="relative w-full h-full flex items-center justify-center"
@@ -276,42 +276,14 @@ export default function Home() {
                     const angulo = (360 / totalImagens) * index;
                     const translateZ = 300;
                     
-                    // Calcular a posição do card em relação à frente (0 graus)
-                    const anguloNormalizado = ((angulo - rotacao) % 360 + 360) % 360;
-                    
-                    // Calcular apenas escala baseada no ângulo
-                    // 0° (frente) = scale: 1 (100%)
-                    // 90° e 270° (laterais) = scale: 0.85 (85%)
-                    // 180° (trás) = scale: 0.75 (75%)
-                    let escala = 1;
-                    
-                    if (anguloNormalizado <= 90) {
-                      // Frente → Lateral direita
-                      const progresso = anguloNormalizado / 90;
-                      escala = 1 - progresso * 0.15; // 1 → 0.85
-                    } else if (anguloNormalizado <= 180) {
-                      // Lateral direita → Trás
-                      const progresso = (anguloNormalizado - 90) / 90;
-                      escala = 0.85 - progresso * 0.1; // 0.85 → 0.75
-                    } else if (anguloNormalizado <= 270) {
-                      // Trás → Lateral esquerda
-                      const progresso = (anguloNormalizado - 180) / 90;
-                      escala = 0.75 + progresso * 0.1; // 0.75 → 0.85
-                    } else {
-                      // Lateral esquerda → Frente
-                      const progresso = (anguloNormalizado - 270) / 90;
-                      escala = 0.85 + progresso * 0.15; // 0.85 → 1
-                    }
-                    
                     return (
                       <div
                         key={index}
                         className="absolute top-0 left-0 w-60 h-72 cursor-pointer"
                         style={{
-                          transform: `rotateY(${angulo}deg) translateZ(${translateZ}px) scale(${escala})`,
+                          transform: `rotateY(${angulo}deg) translateZ(${translateZ}px)`,
                           backfaceVisibility: 'visible',
-                          transformOrigin: 'center center',
-                          transition: 'transform 0.7s ease-out'
+                          transformOrigin: 'center center'
                         }}
                         onClick={() => setImagemDestaque(index)}
                       >
