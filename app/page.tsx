@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Heart, Sparkles, Clock, CheckCircle2, Star, Send } from 'lucide-react';
-import InteractivePhotos from './components/InteractivePhotos';
+import TemplateCarousel from './components/TemplateCarousel';
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -103,7 +103,7 @@ export default function Home() {
       </section>
 
       {/* Seção Interativa de Templates */}
-      <InteractivePhotos />
+      <TemplateCarousel />
 
       {/* Benefícios */}
       <section className="py-24 bg-white/60 backdrop-blur-sm">
