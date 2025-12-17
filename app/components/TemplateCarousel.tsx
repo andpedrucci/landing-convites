@@ -291,7 +291,7 @@ export default function TemplateCarousel() {
             </div>
           </div>
 
-          <div className="relative h-[520px] mt-8 mb-20">
+          <div className="relative h-[520px] mt-6 mb-12">
             <div 
               className="relative w-full h-full"
               style={{
