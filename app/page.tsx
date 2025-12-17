@@ -60,23 +60,28 @@ export default function Home() {
     setImagemDestaque(0);
   }, [temaAtivo]);
 
-  // Detectar seção atual baseada no scroll
+  // Detectar seção atual baseada no scroll - CORRIGIDO
   useEffect(() => {
     const handleScroll = () => {
       const sections = document.querySelectorAll('.snap-section');
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
 
       sections.forEach((section, index) => {
         const element = section as HTMLElement;
-        const top = element.offsetTop;
-        const bottom = top + element.offsetHeight;
+        const rect = element.getBoundingClientRect();
+        const absoluteTop = scrollY + rect.top;
+        const absoluteBottom = absoluteTop + element.offsetHeight;
+        const scrollCenter = scrollY + (windowHeight / 2);
 
-        if (scrollPosition >= top && scrollPosition < bottom) {
+        // Verifica se o centro da viewport está dentro da seção
+        if (scrollCenter >= absoluteTop && scrollCenter < absoluteBottom) {
           setSecaoAtual(index);
         }
       });
     };
 
+    handleScroll(); // Executar imediatamente
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -143,7 +148,7 @@ export default function Home() {
 
   return (
     <>
-      {/* Indicador de Navegação Lateral - CORRIGIDO */}
+      {/* Indicador de Navegação Lateral - CORRIGIDO DINAMICAMENTE */}
       <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-4">
         {secoes.map((secao, index) => (
           <button
@@ -166,7 +171,7 @@ export default function Home() {
 
       <main className="snap-y snap-mandatory h-screen overflow-y-scroll scroll-smooth">
         
-        {/* Hero Section - SEM SETA */}
+        {/* Hero Section */}
         <section id="hero" className="snap-section snap-start relative overflow-hidden min-h-screen flex items-center">
           <div className="absolute top-20 right-10 w-[500px] h-[500px] bg-rose-200 opacity-20 blur-[120px] rounded-full animate-pulse" style={{animationDuration: '4s'}} />
           <div className="absolute bottom-20 left-10 w-[400px] h-[400px] bg-beige-300 opacity-20 blur-[100px] rounded-full animate-pulse" style={{animationDuration: '5s'}} />
@@ -214,23 +219,23 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Seção Carrossel 3D - ALTURA AJUSTADA */}
-        <section id="carrossel" className="snap-section snap-start py-20 px-6 relative overflow-hidden min-h-screen flex items-center bg-gradient-to-b from-beige-50 via-white to-beige-50">
+        {/* Seção Carrossel 3D - REDUZIDO AINDA MAIS */}
+        <section id="carrossel" className="snap-section snap-start py-12 px-6 relative overflow-hidden min-h-screen flex items-center bg-gradient-to-b from-beige-50 via-white to-beige-50">
           
           <div className="relative max-w-7xl mx-auto w-full">
             
-            {/* Header */}
-            <div className="text-center mb-12">
-              <h2 className="text-5xl md:text-6xl font-serif text-brown-700 mb-4">
+            {/* Header - COMPACTO */}
+            <div className="text-center mb-8">
+              <h2 className="text-4xl md:text-5xl font-serif text-brown-700 mb-2">
                 Explore nossos
                 <br />
                 <span className="text-beige-300 italic">temas exclusivos</span>
               </h2>
-              <p className="text-lg text-brown-600 font-light">Escolha o estilo perfeito para o seu momento</p>
+              <p className="text-sm text-brown-600 font-light">Escolha o estilo perfeito para o seu momento</p>
             </div>
 
-            {/* Menu de Temas */}
-            <div className="flex flex-wrap justify-center gap-4 mb-12">
+            {/* Menu de Temas - COMPACTO */}
+            <div className="flex flex-wrap justify-center gap-3 mb-8">
               {[
                 { id: 'cha-revelacao', label: 'Chá Revelação', emoji: '🤱' },
                 { id: 'aniversario', label: 'Aniversário', emoji: '🎂' },
@@ -241,20 +246,20 @@ export default function Home() {
                 <button
                   key={tema.id}
                   onClick={() => setTemaAtivo(tema.id)}
-                  className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
+                  className={`px-4 py-2 rounded-full font-medium transition-all duration-300 text-sm ${
                     temaAtivo === tema.id
                       ? 'bg-beige-300 text-white shadow-lg scale-105'
                       : 'bg-white text-brown-700 hover:bg-beige-50 shadow-md'
                   }`}
                 >
-                  <span className="mr-2">{tema.emoji}</span>
+                  <span className="mr-1.5">{tema.emoji}</span>
                   {tema.label}
                 </button>
               ))}
             </div>
 
-            {/* Carrossel 3D - ALTURA REDUZIDA */}
-            <div className="relative h-[400px] flex items-center justify-center mb-8" style={{ perspective: '2000px' }}>
+            {/* Carrossel 3D - MENOR */}
+            <div className="relative h-[320px] flex items-center justify-center mb-6" style={{ perspective: '1800px' }}>
               <div 
                 className="relative w-full h-full"
                 style={{
@@ -266,23 +271,23 @@ export default function Home() {
                 {getImagensTema(temaAtivo).map((imagem, index) => {
                   const totalImagens = getImagensTema(temaAtivo).length;
                   const angulo = (360 / totalImagens) * index;
-                  const translateZ = 350;
+                  const translateZ = 300;
                   
                   return (
                     <div
                       key={index}
-                      className="absolute top-1/2 left-1/2 w-72 h-80 -ml-36 -mt-40 cursor-pointer transition-all duration-500"
+                      className="absolute top-1/2 left-1/2 w-60 h-72 -ml-30 -mt-36 cursor-pointer transition-all duration-500"
                       style={{
                         transform: `rotateY(${angulo}deg) translateZ(${translateZ}px)`,
                         backfaceVisibility: 'visible'
                       }}
                       onClick={() => setImagemDestaque(index)}
                     >
-                      <div className="w-full h-full bg-white rounded-2xl shadow-2xl overflow-hidden border-4 border-beige-200 hover:border-beige-300 hover:scale-105 transition-all duration-300">
+                      <div className="w-full h-full bg-white rounded-xl shadow-2xl overflow-hidden border-4 border-beige-200 hover:border-beige-300 hover:scale-105 transition-all duration-300">
                         <div className="w-full h-full bg-gradient-to-br from-beige-100 to-rose-100 flex items-center justify-center">
-                          <div className="text-center p-6">
-                            <div className="text-5xl mb-3">{imagem.emoji}</div>
-                            <h3 className="text-lg font-serif text-brown-700 mb-2">{imagem.nome}</h3>
+                          <div className="text-center p-4">
+                            <div className="text-4xl mb-2">{imagem.emoji}</div>
+                            <h3 className="text-base font-serif text-brown-700 mb-1">{imagem.nome}</h3>
                             <p className="text-xs text-brown-600">{imagem.descricao}</p>
                           </div>
                         </div>
@@ -293,23 +298,23 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Controles do Carrossel */}
-            <div className="flex justify-center gap-4">
+            {/* Controles do Carrossel - COMPACTOS */}
+            <div className="flex justify-center gap-3">
               <button
                 onClick={() => setRotacao(rotacao + (360 / getImagensTema(temaAtivo).length))}
-                className="p-4 bg-white rounded-full shadow-lg hover:bg-beige-50 transition-all hover:scale-110"
+                className="p-3 bg-white rounded-full shadow-lg hover:bg-beige-50 transition-all hover:scale-110"
                 aria-label="Anterior"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-beige-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-beige-300">
                   <path d="m15 18-6-6 6-6"/>
                 </svg>
               </button>
               <button
                 onClick={() => setRotacao(rotacao - (360 / getImagensTema(temaAtivo).length))}
-                className="p-4 bg-white rounded-full shadow-lg hover:bg-beige-50 transition-all hover:scale-110"
+                className="p-3 bg-white rounded-full shadow-lg hover:bg-beige-50 transition-all hover:scale-110"
                 aria-label="Próximo"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-beige-300">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-beige-300">
                   <path d="m9 18 6-6-6-6"/>
                 </svg>
               </button>
@@ -354,22 +359,22 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Produtos - ALTURA AJUSTADA */}
-        <section id="produtos" className="snap-section snap-start py-16 px-6 min-h-screen flex items-center bg-gradient-to-b from-white to-beige-50">
-          <div className="max-w-7xl mx-auto w-full">
+        {/* Produtos - SEM MESVERSÁRIO, MAIS COMPACTO */}
+        <section id="produtos" className="snap-section snap-start py-12 px-6 min-h-screen flex items-center bg-gradient-to-b from-white to-beige-50">
+          <div className="max-w-6xl mx-auto w-full">
             
-            {/* Header */}
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-serif text-brown-700 mb-4 leading-tight">
+            {/* Header - COMPACTO */}
+            <div className="text-center mb-10">
+              <h2 className="text-4xl md:text-5xl font-serif text-brown-700 mb-3 leading-tight">
                 Escolha seu
                 <br />
                 <span className="text-beige-300 italic">convite perfeito</span>
               </h2>
-              <p className="text-lg text-brown-600 font-light">Criado especialmente para o seu momento</p>
+              <p className="text-base text-brown-600 font-light">Criado especialmente para o seu momento</p>
             </div>
 
-            {/* Cards de Produtos */}
-            <div className="grid md:grid-cols-3 gap-6">
+            {/* Cards de Produtos - APENAS 2 CARDS */}
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               
               {/* Template Pronto */}
               <div className="bg-white rounded-[2rem] p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 relative overflow-hidden group border border-beige-200/50">
@@ -382,13 +387,10 @@ export default function Home() {
                       <h3 className="text-2xl font-serif text-brown-700">Template Pronto</h3>
                       <div className="text-3xl font-bold text-beige-300">R$ 47</div>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <p className="text-brown-600/70 text-sm">Personalize você mesma</p>
-                      <div className="text-xs text-brown-600/60">a partir de</div>
-                    </div>
+                    <p className="text-brown-600/70 text-sm">Personalize você mesma</p>
                   </div>
 
-                  <ul className="space-y-3 mb-8">
+                  <ul className="space-y-2.5 mb-8">
                     {[
                       "5 modelos lindos para escolher",
                       "Edite você mesma no Canva",
@@ -446,7 +448,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <ul className="space-y-3 mb-6">
+                  <ul className="space-y-2.5 mb-6">
                     {[
                       "Design exclusivo pro seu momento",
                       "2 revisões incluídas",
@@ -474,60 +476,6 @@ export default function Home() {
                   >
                     <span>Quero Personalizado!</span>
                     <Send className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-                  </a>
-                </div>
-              </div>
-
-              {/* Assinatura Mesversário */}
-              <div className="bg-white rounded-[2rem] p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 relative overflow-hidden group border-2 border-beige-300">
-                
-                <div className="absolute top-6 right-6 bg-beige-300 text-white px-3 py-1.5 rounded-full text-xs font-medium shadow-lg">
-                  Recorrente
-                </div>
-
-                <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-beige-300 opacity-10 blur-3xl group-hover:opacity-20 group-hover:scale-150 transition-all duration-700" />
-                
-                <div className="relative pt-6">
-                  <div className="flex items-start justify-between mb-6">
-                    <div>
-                      <h3 className="text-2xl font-serif text-brown-700 mb-1">Mesversário</h3>
-                      <p className="text-brown-600/70 text-xs">Todo mês um novo convite</p>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-xs text-brown-600/60 mb-1">por apenas</div>
-                      <div className="text-3xl font-bold text-beige-300">R$ 45</div>
-                      <div className="text-xs text-brown-600/60">/mês</div>
-                    </div>
-                  </div>
-
-                  <ul className="space-y-3 mb-6">
-                    {[
-                      "Convite novo todo mês",
-                      "Personalizado com foto do bebê",
-                      "Edite quantas vezes quiser",
-                      "Cancele quando quiser"
-                    ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 group/item">
-                        <CheckCircle2 className="w-4 h-4 text-beige-300 mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform" strokeWidth={2} />
-                        <span className="text-brown-700 leading-relaxed text-sm">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="bg-beige-50 rounded-2xl p-3 mb-6 text-center border border-beige-200/50">
-                    <p className="text-brown-700 font-medium flex items-center justify-center gap-2 text-xs">
-                      <Heart className="w-3 h-3 text-beige-300" fill="currentColor" />
-                      <span>12 meses = Chá de 1 ano grátis!</span>
-                    </p>
-                  </div>
-
-                  <a href={getWhatsAppLink("Assinatura Mesversário", "R$ 45/mês")}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full py-3.5 bg-beige-300 text-white text-center rounded-full font-medium hover:bg-beige-400 transition-all duration-300 shadow-md hover:shadow-xl group/btn"
-                  >
-                    <span>Quero Assinar!</span>
-                    <Heart className="w-5 h-5 group-hover/btn:fill-white transition-all" />
                   </a>
                 </div>
               </div>
@@ -578,38 +526,42 @@ export default function Home() {
           </div>
         </section>
 
-        {/* FAQ - ALTURA AJUSTADA */}
-        <section id="faq" className="snap-section snap-start py-16 px-6 min-h-screen flex items-center bg-beige-50">
-          <div className="max-w-3xl mx-auto w-full">
-            <h2 className="text-4xl md:text-5xl font-serif text-brown-700 text-center mb-12">
+        {/* FAQ - 2 COLUNAS, COMPACTO */}
+        <section id="faq" className="snap-section snap-start py-12 px-6 min-h-screen flex items-center bg-beige-50">
+          <div className="max-w-5xl mx-auto w-full">
+            <h2 className="text-4xl md:text-5xl font-serif text-brown-700 text-center mb-10">
               Dúvidas Frequentes
             </h2>
 
-            <div className="space-y-4">
+            <div className="grid md:grid-cols-2 gap-4">
               {[
                 {
                   q: "Os convites são digitais?",
-                  a: "Sim! Você recebe o arquivo em alta qualidade para compartilhar por WhatsApp, redes sociais ou imprimir se preferir."
+                  a: "Sim! Você recebe o arquivo em alta qualidade para compartilhar por WhatsApp, redes sociais ou imprimir."
                 },
                 {
                   q: "Como funciona a entrega?",
-                  a: "Templates prontos: entrega imediata após pagamento. Personalizados: entregamos em 3-5 dias úteis."
+                  a: "Templates prontos: entrega imediata. Personalizados: 3-5 dias úteis."
                 },
                 {
-                  q: "Posso editar depois de receber?",
-                  a: "Sim! Você recebe o link do Canva totalmente editável para fazer ajustes sempre que precisar."
+                  q: "Posso editar depois?",
+                  a: "Sim! Você recebe o link do Canva editável para ajustes sempre que precisar."
                 },
                 {
                   q: "Como funciona a assinatura?",
-                  a: "Todo mês você recebe um convite de mesversário personalizado com a foto do bebê. Pode cancelar quando quiser!"
+                  a: "Todo mês você recebe um convite personalizado. Cancele quando quiser!"
                 },
                 {
-                  q: "Quantas revisões posso solicitar?",
-                  a: "No personalizado estão incluídas 2 rodadas de revisão. Queremos que fique perfeito!"
+                  q: "Quantas revisões?",
+                  a: "No personalizado: 2 rodadas de revisão incluídas. Queremos que fique perfeito!"
+                },
+                {
+                  q: "Quais formatos recebo?",
+                  a: "PNG e PDF em alta qualidade + link do Canva totalmente editável."
                 }
               ].map((item, i) => (
-                <div key={i} className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300">
-                  <h3 className="text-lg font-serif text-brown-700 mb-2">{item.q}</h3>
+                <div key={i} className="bg-white rounded-xl p-5 shadow-md hover:shadow-lg transition-all duration-300">
+                  <h3 className="text-base font-serif text-brown-700 mb-2">{item.q}</h3>
                   <p className="text-brown-600 leading-relaxed text-sm">{item.a}</p>
                 </div>
               ))}
