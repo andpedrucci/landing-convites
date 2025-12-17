@@ -150,11 +150,15 @@ export default function Home() {
       <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-4">
         {secoes.map((secao, index) => (
           <button
-            key={secao.id}
-            onClick={() => scrollToSection(secao.id)}
-            className="group relative"
-            aria-label={`Ir para ${secao.nome}`}
-          >
+            <button
+              key={secao.id}
+              onClick={() => {
+                scrollToSection(secao.id);
+                setSecaoAtual(index);
+              }}
+              className="group relative"
+              aria-label={`Ir para ${secao.nome}`}
+            >
             <div className={`w-3 h-3 rounded-full transition-all duration-300 border-2 ${
               secaoAtual === index 
                 ? 'bg-beige-300 border-beige-300 scale-125' 
