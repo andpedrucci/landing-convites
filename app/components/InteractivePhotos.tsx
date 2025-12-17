@@ -238,7 +238,7 @@ export default function InteractivePhotos() {
                         alt={photo.title}
                         className="w-full h-full object-cover"
                         loading="eager"
-                        style={{ imageRendering: 'high-quality' }}
+                        style={{ imageRendering: 'crisp-edges' as any }}
                       />
                     </div>
                     <div className="text-center">
