@@ -20,6 +20,11 @@
   section {
     margin: 0;
   }
+
+  /* Scroll Snap - Rolagem Fixa */
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @layer utilities {
@@ -40,6 +45,19 @@
   .carousel-3d {
     transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
   }
+
+  /* Scroll Snap */
+  .snap-y {
+    scroll-snap-type: y mandatory;
+  }
+
+  .snap-start {
+    scroll-snap-align: start;
+  }
+
+  .snap-section {
+    scroll-snap-stop: always;
+  }
 }
 
 /* Estilos adicionais para melhor visual do carrossel */
@@ -52,4 +70,22 @@
   .carousel-card:hover {
     z-index: 10;
   }
+}
+
+/* Customização da Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f5f0eb;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4b5a0;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c9a68f;
 }
