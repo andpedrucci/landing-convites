@@ -38,7 +38,7 @@ export default function InteractivePhotos() {
     const canvasWidth = 1200;
     const canvasHeight = 700;
     const cardWidth = 280;
-    const cardHeight = 380;
+    const cardHeight = 394;
 
     const initialPhotos = templates.map((template, index) => ({
       id: index,
@@ -142,7 +142,7 @@ export default function InteractivePhotos() {
     let newY = e.clientY - rect.top - dragOffset.y;
 
     const cardWidth = 280;
-    const cardHeight = 380;
+    const cardHeight = 394;
     newX = Math.max(0, Math.min(newX, rect.width - cardWidth));
     newY = Math.max(0, Math.min(newY, rect.height - cardHeight));
 
