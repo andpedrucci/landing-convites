@@ -164,14 +164,14 @@ export default function Home() {
               <div className="absolute -top-20 -right-20 w-40 h-40 bg-rose-200 opacity-10 blur-3xl group-hover:opacity-20 group-hover:scale-150 transition-all duration-700" />
               
               <div className="relative">
-                <div className="flex items-start justify-between mb-8">
-                  <div>
-                    <h3 className="text-3xl font-serif text-brown-700 mb-2">Template Pronto</h3>
-                    <p className="text-brown-600/70 text-sm">Personalize você mesma</p>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm text-brown-600/60 mb-1">a partir de</div>
+                <div className="mb-8">
+                  <div className="flex items-baseline justify-between mb-2">
+                    <h3 className="text-3xl font-serif text-brown-700">Template Pronto</h3>
                     <div className="text-4xl font-bold text-beige-300">R$ 47</div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <p className="text-brown-600/70 text-sm">Personalize você mesma</p>
+                    <div className="text-xs text-brown-600/60">a partir de</div>
                   </div>
                 </div>
 
