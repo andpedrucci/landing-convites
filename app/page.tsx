@@ -106,7 +106,7 @@ export default function Home() {
       <TemplateCarousel />
 
       {/* Benefícios */}
-      <section className="pb-24 bg-white/60 backdrop-blur-sm" style={{paddingTop: '0'}}>
+      <section className="pt-2 pb-24 bg-white/60 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid md:grid-cols-3 gap-16">
             {[
