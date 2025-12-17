@@ -105,8 +105,8 @@ export default function Home() {
       {/* Seção Interativa de Templates */}
       <TemplateCarousel />
 
-      {/* Benefícios */}
-      <section className="pb-24">
+      {/* Benefícios - CORRIGIDO: py-24 ao invés de pb-24 */}
+      <section className="py-24">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid md:grid-cols-3 gap-16">
             {[
