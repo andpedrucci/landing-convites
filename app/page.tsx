@@ -224,7 +224,7 @@ export default function Home() {
         </section>
 
         {/* Seção Carrossel 3D - AJUSTADO COM MELHOR ESPAÇAMENTO */}
-        <section id="carrossel" className="snap-section snap-none py-8 px-6 relative overflow-hidden pt-6 pb-10 flex items-start bg-gradient-to-b from-beige-50 via-white to-beige-50">
+        <section id="carrossel" className="snap-section snap-start py-8 px-6 relative overflow-hidden pt-6 pb-10 flex items-start bg-gradient-to-b from-beige-50 via-white to-beige-50">
           
           <div className="relative max-w-7xl mx-auto w-full">
             
@@ -237,7 +237,7 @@ export default function Home() {
             </div>
 
             {/* Menu de Temas - COMPACTO */}
-            <div className="flex flex-wrap justify-center gap-3 mb-1">
+            <div className="flex flex-wrap justify-center gap-3 mb-3">
               {[
                 { id: 'cha-revelacao', label: 'Chá Revelação', emoji: '🤱' },
                 { id: 'aniversario', label: 'Aniversário', emoji: '🎂' },
@@ -261,7 +261,7 @@ export default function Home() {
             </div>
 
             {/* Carrossel 3D - LÓGICA CORRETA DE MOVIMENTAÇÃO */}
-            <div className="relative h-[360px] flex items-start justify-center mb-2">
+            <div className="relative h-[420px] flex items-start justify-center mb-2">
               <div 
                 className="relative w-full h-full"
                 style={{
