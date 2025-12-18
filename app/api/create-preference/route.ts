@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
         },
         auto_return: 'approved',
         notification_url: `${process.env.NEXT_PUBLIC_SITE_URL}/api/webhook`,
-        statement_descriptor: 'Momentos Únicos',
+        statement_descriptor: 'Studio Invitare',
       },
     });
 
