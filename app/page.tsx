@@ -261,11 +261,11 @@ export default function Home() {
             </div>
 
             {/* Carrossel 3D - LÓGICA CORRETA DE MOVIMENTAÇÃO */}
-            <div className="relative h-[220px] flex items-center justify-center mb-6">
+            <div className="relative h-[380px] flex items-center justify-center mb-6">
               <div 
                 className="relative w-full h-full"
                 style={{
-                  perspective: '1800px',
+                  perspective: '2200px',
                   perspectiveOrigin: 'center center',
                 }}
               >
@@ -290,35 +290,35 @@ export default function Home() {
                   } else if (normalizedDiff === 1) {
                     // Direita próximo
                     cardStyle = {
-                      transform: 'translateX(20%) translateZ(-150px) rotateY(-35deg) scale(0.85)',
+                      transform: 'translateX(20%) translateZ(-200px) rotateY(-35deg) scale(0.85)',
                       opacity: 0.7,
                       zIndex: 40,
                     };
                   } else if (normalizedDiff === -1) {
                     // Esquerda próximo
                     cardStyle = {
-                      transform: 'translateX(-120%) translateZ(-150px) rotateY(35deg) scale(0.85)',
+                      transform: 'translateX(-120%) translateZ(-200px) rotateY(35deg) scale(0.85)',
                       opacity: 0.7,
                       zIndex: 40,
                     };
                   } else if (normalizedDiff === 2) {
                     // Direita longe
                     cardStyle = {
-                      transform: 'translateX(50%) translateZ(-280px) rotateY(-45deg) scale(0.7)',
+                      transform: 'translateX(50%) translateZ(-350px) rotateY(-45deg) scale(0.7)',
                       opacity: 0.4,
                       zIndex: 30,
                     };
                   } else if (normalizedDiff === -2) {
                     // Esquerda longe
                     cardStyle = {
-                      transform: 'translateX(-150%) translateZ(-280px) rotateY(45deg) scale(0.7)',
+                      transform: 'translateX(-150%) translateZ(-350px) rotateY(45deg) scale(0.7)',
                       opacity: 0.4,
                       zIndex: 30,
                     };
                   } else {
                     // Muito longe (invisível)
                     cardStyle = {
-                      transform: 'translateX(-50%) translateZ(-400px) scale(0.5)',
+                      transform: 'translateX(-50%) translateZ(-500px) scale(0.5)',
                       opacity: 0,
                       zIndex: 20,
                     };
@@ -327,7 +327,7 @@ export default function Home() {
                   return (
                     <div
                       key={index}
-                      className="absolute left-1/2 top-1/2 -translate-y-1/2 w-60 h-72 cursor-pointer"
+                      className="absolute left-1/2 top-1/2 -translate-y-1/2 w-72 h-96 cursor-pointer"
                       style={{
                         ...cardStyle,
                         transition: 'all 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
