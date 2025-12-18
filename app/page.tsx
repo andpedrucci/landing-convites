@@ -14,7 +14,7 @@ const imagensPorTema = {
   'aniversario': [
     { nome: 'Floral Delicado', descricao: 'Minimalista e delicado', imagem: '/templates/aniversario/INV-ANI-M-09.png' },
     { nome: 'Safari', descricao: 'Animais divertidos', imagem: '/templates/aniversario/INV-ANI-M-08.png' },
-    { nome: 'Laços', descricao: 'Sofisticado e tradicional', imagem: 'INV-ANI-M-01.png' },
+    { nome: 'Laços', descricao: 'Sofisticado e tradicional', imagem: '/templates/aniversario/INV-ANI-M-01.png' },
     { nome: 'Amigos Animaizinhos', descricao: 'Animais divertidos', imagem: '/templates/aniversario/INV-ANI-H-06.png' },
     { nome: 'Coleho nas Nuvens', descricao: 'Fofo e clean', imagem: '/templates/aniversario/INV-ANI-M-03.png' },
     { nome: 'Meus 3 Aninhos', descricao: 'Girafinha simpática', imagem: '/templates/aniversario/INV-ANI-H-05.png' },
