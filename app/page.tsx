@@ -237,7 +237,7 @@ export default function Home() {
             </div>
 
             {/* Menu de Temas - COMPACTO */}
-            <div className="flex flex-wrap justify-center gap-3 mb-3">
+            <div className="flex flex-wrap justify-center gap-3 mb-6">
               {[
                 { id: 'cha-revelacao', label: 'Chá Revelação', emoji: '🤱' },
                 { id: 'aniversario', label: 'Aniversário', emoji: '🎂' },
