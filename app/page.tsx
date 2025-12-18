@@ -33,8 +33,8 @@ const imagensPorTema = {
     { nome: 'Jardim Encantado', descricao: 'Flores delicadas', emoji: '🌺' },
     { nome: 'Balões Coloridos', descricao: 'Alegria no ar', emoji: '🎈' },
   ],
-  'mesversario': [
-    { nome: 'Minimalista Mensal', descricao: 'Clean e moderno', emoji: '📅' },
+  'Aniversário': [
+    { nome: 'Floral Minimalista', descricao: 'Clean e delicado', emoji: '📅', imagem: '/templates/aniversario/INV-ANI-M-09.png'},
     { nome: 'Números Divertidos', descricao: 'Cada mês especial', emoji: '🔢' },
     { nome: 'Foto Destaque', descricao: 'Seu bebê é a estrela', emoji: '📸' },
     { nome: 'Tema Crescimento', descricao: 'Registrando marcos', emoji: '📏' },
