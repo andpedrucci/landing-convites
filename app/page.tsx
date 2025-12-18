@@ -343,21 +343,20 @@ export default function Home() {
       alt={imagem.nome}
       className="w-full h-full object-cover"
       onError={(e) => {
-        // Fallback para emoji se a imagem não carregar
-        e.currentTarget.style.display = 'none';
-        const parent = e.currentTarget.parentElement;
-        if (parent) {
-          parent.innerHTML = `
-            <div class="w-full h-full bg-gradient-to-br from-beige-100 to-rose-100 flex items-center justify-center">
-              <div class="text-center p-4">
-                <div class="text-4xl mb-2">${imagem.emoji}</div>
-                <h3 class="text-base font-serif text-brown-700 mb-1">${imagem.nome}</h3>
-                <p class="text-xs text-brown-600">${imagem.descricao}</p>
+          e.currentTarget.style.display = 'none';
+          const parent = e.currentTarget.parentElement;
+          if (parent) {
+            parent.innerHTML = `
+              <div class="w-full h-full bg-gradient-to-br from-beige-100 to-rose-100 flex items-center justify-center">
+                <div class="text-center p-4">
+                  <h3 class="text-xl font-serif text-brown-700 mb-1">${imagem.nome}</h3>
+                  <p class="text-sm text-brown-600">${imagem.descricao}</p>
+                  <p class="text-xs text-red-600 mt-2">Imagem não disponível</p>
+                </div>
               </div>
-            </div>
-          `;
-        }
-      }}
+            `;
+          }
+        }}
     />
     
     {/* Overlay escuro ao hover */}
