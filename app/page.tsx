@@ -224,7 +224,7 @@ export default function Home() {
         </section>
 
         {/* Seção Carrossel 3D - AJUSTADO COM MELHOR ESPAÇAMENTO */}
-        <section id="carrossel" className="snap-section snap-start py-8 px-6 relative overflow-hidden pt-6 pb-10 flex items-start bg-gradient-to-b from-beige-50 via-white to-beige-50">
+        <section id="carrossel" className="snap-section snap-none py-8 px-6 relative overflow-hidden pt-6 pb-10 flex items-start bg-gradient-to-b from-beige-50 via-white to-beige-50">
           
           <div className="relative max-w-7xl mx-auto w-full">
             
@@ -261,7 +261,7 @@ export default function Home() {
             </div>
 
             {/* Carrossel 3D - LÓGICA CORRETA DE MOVIMENTAÇÃO */}
-            <div className="relative h-[380px] flex items-center justify-center mb-2">
+            <div className="relative h-[320px] flex items-start justify-center mb-2">
               <div 
                 className="relative w-full h-full"
                 style={{
@@ -327,7 +327,7 @@ export default function Home() {
                   return (
                     <div
                       key={index}
-                      className="absolute left-1/2 top-1/2 -translate-y-1/2 w-72 h-96 cursor-pointer"
+                      className="absolute left-1/2 top-0 w-72 h-96 cursor-pointer"
                       style={{
                         ...cardStyle,
                         transition: 'all 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
