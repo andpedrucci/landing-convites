@@ -21,6 +21,8 @@ const imagensPorTema = {
     { nome: 'Coelhinha Fofinha', descricao: 'Um charme de delicadeza', imagem: '/templates/aniversario/INV-ANI-M-07.png' },
     { nome: 'Hipo Aviador', descricao: 'Um amigo voador', imagem: '/templates/aniversario/INV-ANI-H-04.png' },
     { nome: 'Girafinha', descricao: 'Meu primeiro aniversário', imagem: '/templates/aniversario/INV-ANI-M-10.png' },
+    { nome: 'Morangos', descricao: 'Uma festa deliciosa', imagem: '/templates/aniversario/INV-ANI-U-12.png' },
+    { nome: 'Ripado', descricao: 'Charme e elegância', imagem: '/templates/aniversario/INV-ANI-U-11.png' },
   ],
   'batizado': [
     { nome: 'Clássico Branco', descricao: 'Puro e tradicional', emoji: '🕊️', imagem: '/templates/batizado/classico-branco.jpg' },
