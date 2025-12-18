@@ -3,42 +3,45 @@
 import { useState, useEffect } from 'react';
 import { Heart, Sparkles, Clock, CheckCircle2, Star, Send } from 'lucide-react';
 
-// Definição das imagens por tema
 const imagensPorTema = {
   'cha-revelacao': [
-    { nome: 'Delicado Rosa', descricao: 'Tons suaves e flores', emoji: '🌸' },
-    { nome: 'Azul Clássico', descricao: 'Elegante e atemporal', emoji: '💙' },
-    { nome: 'Neutro Moderno', descricao: 'Minimalista e chic', emoji: '🤍' },
-    { nome: 'Aquarela', descricao: 'Arte fluida e única', emoji: '🎨' },
-    { nome: 'Floral Dourado', descricao: 'Sofisticado com toques de ouro', emoji: '✨' },
+    { nome: 'Delicado Rosa', descricao: 'Tons suaves e flores', emoji: '🌸', imagem: '/templates/cha-revelacao/rosa-delicado.jpg' },
+    { nome: 'Azul Clássico', descricao: 'Elegante e atemporal', emoji: '💙', imagem: '/templates/cha-revelacao/azul-classico.jpg' },
+    { nome: 'Neutro Moderno', descricao: 'Minimalista e chic', emoji: '🤍', imagem: '/templates/cha-revelacao/neutro-moderno.jpg' },
+    { nome: 'Aquarela', descricao: 'Arte fluida e única', emoji: '🎨', imagem: '/templates/cha-revelacao/aquarela.jpg' },
+    { nome: 'Floral Dourado', descricao: 'Sofisticado com toques de ouro', emoji: '✨', imagem: '/templates/cha-revelacao/floral-dourado.jpg' },
   ],
   'aniversario': [
-    { nome: 'Festa Jardim', descricao: 'Flores e borboletas', emoji: '🦋' },
-    { nome: 'Circo Colorido', descricao: 'Alegre e divertido', emoji: '🎪' },
-    { nome: 'Unicórnio Mágico', descricao: 'Encanto e fantasia', emoji: '🦄' },
-    { nome: 'Safari Aventura', descricao: 'Animais selvagens', emoji: '🦁' },
-    { nome: 'Princesa Realeza', descricao: 'Elegante e real', emoji: '👑' },
+    { nome: 'Floral Delicado', descricao: 'Minimalista e delicado', imagem: '/templates/aniversario/INV-ANI-M-09.png' },
+    { nome: 'Safari', descricao: 'Animais divertidos', imagem: '/templates/aniversario/INV-ANI-M-08.png' },
+    { nome: 'Laços', descricao: 'Sofisticado e tradicional', imagem: 'INV-ANI-M-01.png' },
+    { nome: 'Amigos Animaizinhos', descricao: 'Animais divertidos', imagem: '/templates/aniversario/INV-ANI-H-06.png' },
+    { nome: 'Coleho nas Nuvens', descricao: 'Fofo e clean', imagem: '/templates/aniversario/INV-ANI-M-03.png' },
+    { nome: 'Meus 3 Aninhos', descricao: 'Girafinha simpática', imagem: '/templates/aniversario/INV-ANI-H-05.png' },
+    { nome: 'Coelhinha Fofinha', descricao: 'Um charme de delicadeza', imagem: '/templates/aniversario/INV-ANI-M-07.png' },
+    { nome: 'Hipo Aviador', descricao: 'Um amigo voador', imagem: '/templates/aniversario/INV-ANI-H-04.png' },
+    { nome: 'Girafinha', descricao: 'Meu primeiro aniversário', imagem: '/templates/aniversario/INV-ANI-M-10.png' },
   ],
   'batizado': [
-    { nome: 'Clássico Branco', descricao: 'Puro e tradicional', emoji: '🕊️' },
-    { nome: 'Anjo Delicado', descricao: 'Celestial e suave', emoji: '👼' },
-    { nome: 'Cruz Dourada', descricao: 'Religioso elegante', emoji: '✝️' },
-    { nome: 'Floral Divino', descricao: 'Natureza e fé', emoji: '🌿' },
-    { nome: 'Azul Serenidade', descricao: 'Paz e harmonia', emoji: '💫' },
+    { nome: 'Clássico Branco', descricao: 'Puro e tradicional', emoji: '🕊️', imagem: '/templates/batizado/classico-branco.jpg' },
+    { nome: 'Anjo Delicado', descricao: 'Celestial e suave', emoji: '👼', imagem: '/templates/batizado/anjo-delicado.jpg' },
+    { nome: 'Cruz Dourada', descricao: 'Religioso elegante', emoji: '✝️', imagem: '/templates/batizado/cruz-dourada.jpg' },
+    { nome: 'Floral Divino', descricao: 'Natureza e fé', emoji: '🌿', imagem: '/templates/batizado/floral-divino.jpg' },
+    { nome: 'Azul Serenidade', descricao: 'Paz e harmonia', emoji: '💫', imagem: '/templates/batizado/azul-serenidade.jpg' },
   ],
   'cha-bebe': [
-    { nome: 'Nuvens Sonhadoras', descricao: 'Suave como algodão', emoji: '☁️' },
-    { nome: 'Bichinhos Fofos', descricao: 'Animais adoráveis', emoji: '🐻' },
-    { nome: 'Lua e Estrelas', descricao: 'Noite mágica', emoji: '🌙' },
-    { nome: 'Jardim Encantado', descricao: 'Flores delicadas', emoji: '🌺' },
-    { nome: 'Balões Coloridos', descricao: 'Alegria no ar', emoji: '🎈' },
+    { nome: 'Nuvens Sonhadoras', descricao: 'Suave como algodão', emoji: '☁️', imagem: '/templates/cha-bebe/nuvens-sonhadoras.jpg' },
+    { nome: 'Bichinhos Fofos', descricao: 'Animais adoráveis', emoji: '🐻', imagem: '/templates/cha-bebe/bichinhos-fofos.jpg' },
+    { nome: 'Lua e Estrelas', descricao: 'Noite mágica', emoji: '🌙', imagem: '/templates/cha-bebe/lua-estrelas.jpg' },
+    { nome: 'Jardim Encantado', descricao: 'Flores delicadas', emoji: '🌺', imagem: '/templates/cha-bebe/jardim-encantado.jpg' },
+    { nome: 'Balões Coloridos', descricao: 'Alegria no ar', emoji: '🎈', imagem: '/templates/cha-bebe/baloes-coloridos.jpg' },
   ],
-  'Aniversário': [
-    { nome: 'Floral Minimalista', descricao: 'Clean e delicado', emoji: '📅', imagem: '/templates/aniversario/INV-ANI-M-09.png'},
-    { nome: 'Números Divertidos', descricao: 'Cada mês especial', emoji: '🔢' },
-    { nome: 'Foto Destaque', descricao: 'Seu bebê é a estrela', emoji: '📸' },
-    { nome: 'Tema Crescimento', descricao: 'Registrando marcos', emoji: '📏' },
-    { nome: 'Alegria Mensal', descricao: 'Celebrando juntos', emoji: '🎊' },
+  'mesversario': [
+    { nome: 'Minimalista Clean', descricao: 'Clean e moderno', emoji: '📅', imagem: '/templates/mesversario/minimalista-clean.jpg' },
+    { nome: 'Números Divertidos', descricao: 'Cada mês especial', emoji: '🔢', imagem: '/templates/mesversario/numeros-divertidos.jpg' },
+    { nome: 'Foto Destaque', descricao: 'Seu bebê é a estrela', emoji: '📸', imagem: '/templates/mesversario/foto-destaque.jpg' },
+    { nome: 'Tema Crescimento', descricao: 'Registrando marcos', emoji: '📏', imagem: '/templates/mesversario/tema-crescimento.jpg' },
+    { nome: 'Alegria Mensal', descricao: 'Celebrando juntos', emoji: '🎊', imagem: '/templates/mesversario/alegria-mensal.jpg' },
   ],
 };
 
@@ -332,15 +335,41 @@ export default function Home() {
                       }}
                       onClick={() => setImagemDestaque(index)}
                     >
-                      <div className="w-full h-full bg-white rounded-xl shadow-2xl overflow-hidden border-4 border-beige-200 hover:border-beige-300 hover:scale-105 transition-all duration-300">
-                        <div className="w-full h-full bg-gradient-to-br from-beige-100 to-rose-100 flex items-center justify-center">
-                          <div className="text-center p-4">
-                            <div className="text-4xl mb-2">{imagem.emoji}</div>
-                            <h3 className="text-base font-serif text-brown-700 mb-1">{imagem.nome}</h3>
-                            <p className="text-xs text-brown-600">{imagem.descricao}</p>
-                          </div>
-                        </div>
-                      </div>
+                      <div className="w-full h-full bg-white rounded-xl shadow-2xl overflow-hidden border-4 border-beige-200 hover:border-beige-300 transition-all duration-300 group">
+  <div className="w-full h-full relative overflow-hidden">
+    {/* Imagem do Template */}
+    <img 
+      src={imagem.imagem} 
+      alt={imagem.nome}
+      className="w-full h-full object-cover"
+      onError={(e) => {
+        // Fallback para emoji se a imagem não carregar
+        e.currentTarget.style.display = 'none';
+        const parent = e.currentTarget.parentElement;
+        if (parent) {
+          parent.innerHTML = `
+            <div class="w-full h-full bg-gradient-to-br from-beige-100 to-rose-100 flex items-center justify-center">
+              <div class="text-center p-4">
+                <div class="text-4xl mb-2">${imagem.emoji}</div>
+                <h3 class="text-base font-serif text-brown-700 mb-1">${imagem.nome}</h3>
+                <p class="text-xs text-brown-600">${imagem.descricao}</p>
+              </div>
+            </div>
+          `;
+        }
+      }}
+    />
+    
+    {/* Overlay escuro ao hover */}
+    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+    
+    {/* Texto por cima da imagem ao hover */}
+    <div className="absolute bottom-0 left-0 right-0 p-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <h3 className="text-lg font-serif mb-1">{imagem.nome}</h3>
+      <p className="text-xs text-white/90">{imagem.descricao}</p>
+    </div>
+  </div>
+</div>
                     </div>
                   );
                 })}
