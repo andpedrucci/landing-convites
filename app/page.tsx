@@ -261,7 +261,7 @@ export default function Home() {
             </div>
 
             {/* Carrossel 3D - LÓGICA CORRETA DE MOVIMENTAÇÃO */}
-            <div className="relative h-[320px] flex items-start justify-center mb-2">
+            <div className="relative h-[360px] flex items-start justify-center mb-2">
               <div 
                 className="relative w-full h-full"
                 style={{
