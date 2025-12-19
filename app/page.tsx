@@ -51,6 +51,47 @@ const imagensPorTema = {
     { nome: 'Fundo do Mar 09', descricao: 'Charme e elegância', imagem: '/templates/aniversario/mar/INV-MAR-09.png' },
     { nome: 'Fundo do Mar 10', descricao: 'Charme e elegância', imagem: '/templates/aniversario/mar/INV-MAR-10.png' },
   ],
+    'princesa': [
+    { nome: 'Princesa 01', descricao: 'Charme e elegância', imagem: '/templates/aniversario/pri/INV-PRI-01.png' },
+    { nome: 'Princesa 02', descricao: 'Charme e elegância', imagem: '/templates/aniversario/pri/INV-PRI-02.png' },
+    { nome: 'Princesa 03', descricao: 'Charme e elegância', imagem: '/templates/aniversario/pri/INV-PRI-03.png' },
+    { nome: 'Princesa 04', descricao: 'Charme e elegância', imagem: '/templates/aniversario/pri/INV-PRI-04.png' },
+    { nome: 'Princesa 05', descricao: 'Charme e elegância', imagem: '/templates/aniversario/pri/INV-PRI-05.png' },
+    { nome: 'Princesa 06', descricao: 'Charme e elegância', imagem: '/templates/aniversario/pri/INV-PRI-06.png' },
+    { nome: 'Princesa 07', descricao: 'Charme e elegância', imagem: '/templates/aniversario/pri/INV-PRI-07.png' },
+    { nome: 'Princesa 08', descricao: 'Charme e elegância', imagem: '/templates/aniversario/pri/INV-PRI-08.png' },
+    { nome: 'Princesa 09', descricao: 'Charme e elegância', imagem: '/templates/aniversario/pri/INV-PRI-09.png' },
+    { nome: 'Princesa 10', descricao: 'Charme e elegância', imagem: '/templates/aniversario/pri/INV-PRI-10.png' },
+  ],
+     'revelacao': [
+    { nome: 'Chá Revelação 01', descricao: 'Charme e elegância', imagem: '/templates/aniversario/rev/INV-REV-01.png' },
+    { nome: 'Chá Revelação 02', descricao: 'Charme e elegância', imagem: '/templates/aniversario/rev/INV-REV-02.png' },
+    { nome: 'Chá Revelação 03', descricao: 'Charme e elegância', imagem: '/templates/aniversario/rev/INV-REV-03.png' },
+    { nome: 'Chá Revelação 04', descricao: 'Charme e elegância', imagem: '/templates/aniversario/rev/INV-REV-04.png' },
+    { nome: 'Chá Revelação 05', descricao: 'Charme e elegância', imagem: '/templates/aniversario/rev/INV-REV-05.png' },
+    { nome: 'Chá Revelação 06', descricao: 'Charme e elegância', imagem: '/templates/aniversario/rev/INV-REV-06.png' },
+    { nome: 'Chá Revelação 07', descricao: 'Charme e elegância', imagem: '/templates/aniversario/rev/INV-REV-07.png' },
+    { nome: 'Chá Revelação 08', descricao: 'Charme e elegância', imagem: '/templates/aniversario/rev/INV-REV-08.png' },
+    { nome: 'Chá Revelação 09', descricao: 'Charme e elegância', imagem: '/templates/aniversario/rev/INV-REV-09.png' },
+    { nome: 'Chá Revelação 10', descricao: 'Charme e elegância', imagem: '/templates/aniversario/rev/INV-REV-10.png' },
+  ],
+     'diversos': [
+    { nome: 'Diversos 01', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-01.png' },
+    { nome: 'Diversos 02', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-02.png' },
+    { nome: 'Diversos 03', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-03.png' },
+    { nome: 'Diversos 04', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-04.png' },
+    { nome: 'Diversos 05', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-05.png' },
+    { nome: 'Diversos 06', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-06.png' },
+    { nome: 'Diversos 07', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-07.png' },
+    { nome: 'Diversos 08', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-08.png' },
+    { nome: 'Diversos 09', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-09.png' },
+    { nome: 'Diversos 10', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-10.png' },
+    { nome: 'Diversos 11', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-11.png' },
+    { nome: 'Diversos 12', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-12.png' },
+    { nome: 'Diversos 13', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-13.png' },
+    { nome: 'Diversos 14', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-14.png' },
+    { nome: 'Diversos 15', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-15.png' },
+  ],
 };
 
 export default function Home() {
@@ -249,8 +290,11 @@ export default function Home() {
               {[
                 { id: 'aniversario', label: 'Aniversário', emoji: '🎂' },
                 { id: 'batizado', label: 'Batizado', emoji: '✨' },
+                { id: 'revelacao', label: 'Chá Revelação', emoji: '👶🏻❔' },
                 { id: 'cha-bebe', label: 'Chá de Bebê', emoji: '🍼' },
                 { id: 'fundomar', label: 'Fundo do Mar', emoji: '🌊' },
+                { id: 'princesa', label: 'Princesas', emoji: '👸🏼' },🎉
+                { id: 'diversos', label: 'Diversos', emoji: '👸🎉' },
 
               ].map((tema) => (
                 <button
