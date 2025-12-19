@@ -4,13 +4,6 @@ import { useState, useEffect } from 'react';
 import { Heart, Sparkles, Clock, CheckCircle2, Star, Send } from 'lucide-react';
 
 const imagensPorTema = {
-  'cha-revelacao': [
-    { nome: 'Delicado Rosa', descricao: 'Tons suaves e flores', emoji: '🌸', imagem: '/templates/cha-revelacao/rosa-delicado.jpg' },
-    { nome: 'Azul Clássico', descricao: 'Elegante e atemporal', emoji: '💙', imagem: '/templates/cha-revelacao/azul-classico.jpg' },
-    { nome: 'Neutro Moderno', descricao: 'Minimalista e chic', emoji: '🤍', imagem: '/templates/cha-revelacao/neutro-moderno.jpg' },
-    { nome: 'Aquarela', descricao: 'Arte fluida e única', emoji: '🎨', imagem: '/templates/cha-revelacao/aquarela.jpg' },
-    { nome: 'Floral Dourado', descricao: 'Sofisticado com toques de ouro', emoji: '✨', imagem: '/templates/cha-revelacao/floral-dourado.jpg' },
-  ],
   'aniversario': [
     { nome: 'Floral Delicado', descricao: 'Minimalista e delicado', imagem: '/templates/aniversario/INV-ANI-M-09.png' },
     { nome: 'Safari', descricao: 'Animais divertidos', imagem: '/templates/aniversario/INV-ANI-M-08.png' },
@@ -251,7 +244,6 @@ export default function Home() {
             {/* Menu de Temas - COMPACTO */}
             <div className="flex flex-wrap justify-center gap-3 mb-6">
               {[
-                { id: 'cha-revelacao', label: 'Chá Revelação', emoji: '🤱' },
                 { id: 'aniversario', label: 'Aniversário', emoji: '🎂' },
                 { id: 'batizado', label: 'Batizado', emoji: '✨' },
                 { id: 'cha-bebe', label: 'Chá de Bebê', emoji: '🍼' },
