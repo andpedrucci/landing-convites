@@ -89,8 +89,6 @@ const imagensPorTema = {
     { nome: 'Diversos 11', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-11.png' },
     { nome: 'Diversos 12', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-12.png' },
     { nome: 'Diversos 13', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-13.png' },
-    { nome: 'Diversos 14', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-14.png' },
-    { nome: 'Diversos 15', descricao: 'Charme e elegância', imagem: '/templates/aniversario/div/INV-DIV-15.png' },
   ],
 };
 
