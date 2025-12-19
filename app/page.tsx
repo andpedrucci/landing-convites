@@ -39,12 +39,17 @@ const imagensPorTema = {
     { nome: 'Chá de Bebê 09', descricao: 'Charme e elegância', imagem: '/templates/aniversario/cha/INV-CHA-09.png' },
     { nome: 'Chá de Bebê 10', descricao: 'Charme e elegância', imagem: '/templates/aniversario/cha/INV-CHA-10.png' },
   ],
-  'mesversario': [
-    { nome: 'Minimalista Clean', descricao: 'Clean e moderno', emoji: '📅', imagem: '/templates/mesversario/minimalista-clean.jpg' },
-    { nome: 'Números Divertidos', descricao: 'Cada mês especial', emoji: '🔢', imagem: '/templates/mesversario/numeros-divertidos.jpg' },
-    { nome: 'Foto Destaque', descricao: 'Seu bebê é a estrela', emoji: '📸', imagem: '/templates/mesversario/foto-destaque.jpg' },
-    { nome: 'Tema Crescimento', descricao: 'Registrando marcos', emoji: '📏', imagem: '/templates/mesversario/tema-crescimento.jpg' },
-    { nome: 'Alegria Mensal', descricao: 'Celebrando juntos', emoji: '🎊', imagem: '/templates/mesversario/alegria-mensal.jpg' },
+  'fundomar': [
+    { nome: 'Fundo do Mar 01', descricao: 'Charme e elegância', imagem: '/templates/aniversario/mar/INV-MAR-01.png' },
+    { nome: 'Fundo do Mar 02', descricao: 'Charme e elegância', imagem: '/templates/aniversario/mar/INV-MAR-02.png' },
+    { nome: 'Fundo do Mar 03', descricao: 'Charme e elegância', imagem: '/templates/aniversario/mar/INV-MAR-03.png' },
+    { nome: 'Fundo do Mar 04', descricao: 'Charme e elegância', imagem: '/templates/aniversario/mar/INV-MAR-04.png' },
+    { nome: 'Fundo do Mar 05', descricao: 'Charme e elegância', imagem: '/templates/aniversario/mar/INV-MAR-05.png' },
+    { nome: 'Fundo do Mar 06', descricao: 'Charme e elegância', imagem: '/templates/aniversario/mar/INV-MAR-06.png' },
+    { nome: 'Fundo do Mar 07', descricao: 'Charme e elegância', imagem: '/templates/aniversario/mar/INV-MAR-07.png' },
+    { nome: 'Fundo do Mar 08', descricao: 'Charme e elegância', imagem: '/templates/aniversario/mar/INV-MAR-08.png' },
+    { nome: 'Fundo do Mar 09', descricao: 'Charme e elegância', imagem: '/templates/aniversario/mar/INV-MAR-09.png' },
+    { nome: 'Fundo do Mar 10', descricao: 'Charme e elegância', imagem: '/templates/aniversario/mar/INV-MAR-10.png' },
   ],
 };
 
@@ -245,7 +250,8 @@ export default function Home() {
                 { id: 'aniversario', label: 'Aniversário', emoji: '🎂' },
                 { id: 'batizado', label: 'Batizado', emoji: '✨' },
                 { id: 'cha-bebe', label: 'Chá de Bebê', emoji: '🍼' },
-                { id: 'mesversario', label: 'Mesversário', emoji: '🎈' },
+                { id: 'fundomar', label: 'Fundo do Mar', emoji: '🌊' },
+
               ].map((tema) => (
                 <button
                   key={tema.id}
@@ -362,7 +368,7 @@ export default function Home() {
     />
     
     {/* Overlay escuro ao hover */}
-    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
     
     {/* Texto por cima da imagem ao hover */}
     <div className="absolute bottom-0 left-0 right-0 p-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
