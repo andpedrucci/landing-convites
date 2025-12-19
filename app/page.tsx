@@ -99,7 +99,7 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const whatsappNumber = "5511999999999";
+  const whatsappNumber = "5511995087592";
   
   const getWhatsAppLink = (produto: string, preco: string) => {
     const message = encodeURIComponent(
