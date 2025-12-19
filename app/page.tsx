@@ -290,10 +290,10 @@ export default function Home() {
               {[
                 { id: 'aniversario', label: 'Aniversário', emoji: '🎂' },
                 { id: 'batizado', label: 'Batizado', emoji: '✨' },
-                { id: 'revelacao', label: 'Chá Revelação', emoji: '👶🏻❔' },
+                { id: 'revelacao', label: 'Chá Revelação', emoji: '🎀' },
                 { id: 'cha-bebe', label: 'Chá de Bebê', emoji: '🍼' },
                 { id: 'fundomar', label: 'Fundo do Mar', emoji: '🌊' },
-                { id: 'princesa', label: 'Princesas', emoji: '👸🏼' },🎉
+                { id: 'princesa', label: 'Princesas', emoji: '👸🏼' },
                 { id: 'diversos', label: 'Diversos', emoji: '👸🎉' },
 
               ].map((tema) => (
