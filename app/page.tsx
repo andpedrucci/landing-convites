@@ -105,7 +105,7 @@ export default function Home() {
   };
 
   const getImagensTema = (tema: string) => {
-    return imagensPorTema[tema as keyof typeof imagensPorTema] || imagensPorTema['cha-revelacao'];
+    return imagensPorTema[tema as keyof typeof imagensPorTema] || imagensPorTema['aniversario'];
   };
 
   const handleComprarTemplate = async () => {
