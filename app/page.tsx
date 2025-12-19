@@ -38,8 +38,6 @@ const imagensPorTema = {
     { nome: 'Chá de Bebê 08', descricao: 'Charme e elegância', imagem: '/templates/aniversario/cha/INV-CHA-08.png' },
     { nome: 'Chá de Bebê 09', descricao: 'Charme e elegância', imagem: '/templates/aniversario/cha/INV-CHA-09.png' },
     { nome: 'Chá de Bebê 10', descricao: 'Charme e elegância', imagem: '/templates/aniversario/cha/INV-CHA-10.png' },
-
-
   ],
   'mesversario': [
     { nome: 'Minimalista Clean', descricao: 'Clean e moderno', emoji: '📅', imagem: '/templates/mesversario/minimalista-clean.jpg' },
@@ -53,7 +51,7 @@ const imagensPorTema = {
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [isLoadingCheckout, setIsLoadingCheckout] = useState(false);
-  const [temaAtivo, setTemaAtivo] = useState('cha-revelacao');
+  const [temaAtivo, setTemaAtivo] = useState('aniversario');
   const [imagemDestaque, setImagemDestaque] = useState(0);
   const [secaoAtual, setSecaoAtual] = useState(0);
 
