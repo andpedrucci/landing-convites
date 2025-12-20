@@ -21,7 +21,7 @@ export default function Home() {
     setImagemDestaque(0);
   }, [temaAtivo]);
 
-  // Detectar seção atual baseada no scroll - CORRIGIDO DINAMICAMENTE
+  // Detectar seção atual baseada no scroll
   useEffect(() => {
     const handleScroll = () => {
       const sections = document.querySelectorAll('.snap-section');
@@ -30,18 +30,14 @@ export default function Home() {
         const element = section as HTMLElement;
         const rect = element.getBoundingClientRect();
         
-        // Considera a seção atual quando ela está mais próxima do topo da viewport
-        // ou quando ocupa a maior parte da tela visível
         if (rect.top <= 100 && rect.bottom >= 100) {
           setSecaoAtual(index);
         }
       });
     };
 
-    handleScroll(); // Executar imediatamente
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
-    
-    // Também executar após um pequeno delay para garantir que pegue o estado inicial
     setTimeout(handleScroll, 100);
     
     return () => window.removeEventListener('scroll', handleScroll);
@@ -60,11 +56,37 @@ export default function Home() {
     return imagensPorTema[tema as keyof typeof imagensPorTema] || imagensPorTema['aniversario'];
   };
 
-const handleComprarTemplate = async () => {
+  const handleComprarTemplate = async () => {
     setIsLoadingCheckout(true);
     
     try {
       const response = await fetch('/api/create-preference-templates', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.init_point) {
+        window.location.href = data.init_point;
+      } else {
+        alert('Erro ao processar pagamento. Tente novamente.');
+        setIsLoadingCheckout(false);
+      }
+    } catch (error) {
+      console.error('Erro:', error);
+      alert('Erro ao processar pagamento. Tente novamente.');
+      setIsLoadingCheckout(false);
+    }
+  };
+
+  const handleComprarPersonalizado = async () => {
+    setIsLoadingCheckout(true);
+    
+    try {
+      const response = await fetch('/api/create-preference-personalizado', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -105,7 +127,7 @@ const handleComprarTemplate = async () => {
 
   return (
     <>
-      {/* Indicador de Navegação Lateral - CORRIGIDO DINAMICAMENTE */}
+      {/* Indicador de Navegação Lateral */}
       <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-4">
         {secoes.map((secao, index) => (
           <button
@@ -139,7 +161,6 @@ const handleComprarTemplate = async () => {
           <div className="relative max-w-7xl mx-auto px-6 py-20 w-full">
             <div className={`text-center transition-all duration-1000 ease-out ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
               
-              {/* Badge */}
               <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/70 backdrop-blur-md rounded-full border border-beige-300/30 shadow-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-beige-300">
                   <circle cx="12" cy="12" r="10"/>
@@ -153,21 +174,18 @@ const handleComprarTemplate = async () => {
                 <span className="text-sm font-medium text-brown-600 tracking-[0.25em] uppercase">Studio Invitare</span>
               </div>
 
-              {/* Headline */}
               <h1 className="text-6xl md:text-8xl font-serif text-brown-700 mb-8 leading-[1.1] px-4 mt-16">
                 Convites que tocam
                 <br />
                 <span className="text-beige-300 italic font-light">o coração</span>
               </h1>
               
-              {/* Subheadline */}
               <p className="text-xl md:text-2xl text-brown-600 max-w-2xl mx-auto mb-14 font-light leading-relaxed px-4">
                 Transforme momentos especiais em convites digitais inesquecíveis.
                 <br className="hidden md:block" />
                 Criados com carinho para celebrar sua história.
               </p>
 
-              {/* CTA Principal */}
               <button
                 onClick={() => scrollToSection('carrossel')}
                 className="inline-flex items-center gap-2 px-12 py-5 bg-beige-300 text-white rounded-full font-medium text-lg hover:bg-beige-400 transition-all duration-300 hover:scale-105 shadow-xl hover:shadow-2xl group"
@@ -179,12 +197,11 @@ const handleComprarTemplate = async () => {
           </div>
         </section>
 
-        {/* Seção Carrossel 3D - AJUSTADO COM MELHOR ESPAÇAMENTO */}
+        {/* Seção Carrossel 3D */}
         <section id="carrossel" className="snap-section snap-start py-8 px-6 relative overflow-hidden pt-6 pb-10 flex items-start bg-gradient-to-b from-beige-50 via-white to-beige-50">
           
           <div className="relative max-w-7xl mx-auto w-full">
             
-            {/* Header - COMPACTO E EM UMA LINHA */}
             <div className="text-center mb-4">
               <h2 className="text-3xl md:text-4xl font-serif text-brown-700 mb-2">
                 Explore nossos <span className="text-beige-300 italic">temas exclusivos</span>
@@ -192,7 +209,6 @@ const handleComprarTemplate = async () => {
               <p className="text-sm text-brown-600 font-light">Escolha o estilo perfeito para o seu momento</p>
             </div>
 
-            {/* Menu de Temas - COMPACTO */}
             <div className="flex flex-wrap justify-center gap-3 mb-6">
               {[
                 { id: 'aniversario', label: 'Aniversário', emoji: '🎂' },
@@ -202,7 +218,6 @@ const handleComprarTemplate = async () => {
                 { id: 'fundomar', label: 'Fundo do Mar', emoji: '🌊' },
                 { id: 'princesa', label: 'Princesas', emoji: '👸🏼' },
                 { id: 'diversos', label: 'Diversos', emoji: '👸🎉' },
-
               ].map((tema) => (
                 <button
                   key={tema.id}
@@ -219,7 +234,6 @@ const handleComprarTemplate = async () => {
               ))}
             </div>
 
-            {/* Carrossel 3D - LÓGICA CORRETA DE MOVIMENTAÇÃO */}
             <div className="relative h-[420px] flex items-start justify-center mb-2">
               <div 
                 className="relative w-full h-full"
@@ -240,42 +254,36 @@ const handleComprarTemplate = async () => {
                   let cardStyle = {};
                   
                   if (normalizedDiff === 0) {
-                    // Frente
                     cardStyle = {
                       transform: 'translateX(-50%) translateZ(0px) rotateY(0deg) scale(1)',
                       opacity: 1,
                       zIndex: 50,
                     };
                   } else if (normalizedDiff === 1) {
-                    // Direita próximo
                     cardStyle = {
                       transform: 'translateX(20%) translateZ(-200px) rotateY(-35deg) scale(0.85)',
                       opacity: 0.7,
                       zIndex: 40,
                     };
                   } else if (normalizedDiff === -1) {
-                    // Esquerda próximo
                     cardStyle = {
                       transform: 'translateX(-120%) translateZ(-200px) rotateY(35deg) scale(0.85)',
                       opacity: 0.7,
                       zIndex: 40,
                     };
                   } else if (normalizedDiff === 2) {
-                    // Direita longe
                     cardStyle = {
                       transform: 'translateX(50%) translateZ(-350px) rotateY(-45deg) scale(0.7)',
                       opacity: 0.4,
                       zIndex: 30,
                     };
                   } else if (normalizedDiff === -2) {
-                    // Esquerda longe
                     cardStyle = {
                       transform: 'translateX(-150%) translateZ(-350px) rotateY(45deg) scale(0.7)',
                       opacity: 0.4,
                       zIndex: 30,
                     };
                   } else {
-                    // Muito longe (invisível)
                     cardStyle = {
                       transform: 'translateX(-50%) translateZ(-500px) scale(0.5)',
                       opacity: 0,
@@ -295,46 +303,42 @@ const handleComprarTemplate = async () => {
                       onClick={() => setImagemDestaque(index)}
                     >
                       <div className="w-full h-full bg-white rounded-xl shadow-2xl overflow-hidden border-4 border-beige-200 hover:border-beige-300 transition-all duration-300 group">
-  <div className="w-full h-full relative overflow-hidden">
-    {/* Imagem do Template */}
-    <img 
-      src={imagem.imagem} 
-      alt={imagem.nome}
-      className="w-full h-full object-cover"
-      onError={(e) => {
-          e.currentTarget.style.display = 'none';
-          const parent = e.currentTarget.parentElement;
-          if (parent) {
-            parent.innerHTML = `
-              <div class="w-full h-full bg-gradient-to-br from-beige-100 to-rose-100 flex items-center justify-center">
-                <div class="text-center p-4">
-                  <h3 class="text-xl font-serif text-brown-700 mb-1">${imagem.nome}</h3>
-                  <p class="text-sm text-brown-600">${imagem.descricao}</p>
-                  <p class="text-xs text-red-600 mt-2">Imagem não disponível</p>
-                </div>
-              </div>
-            `;
-          }
-        }}
-    />
-    
-    {/* Overlay escuro ao hover */}
-    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-    
-    {/* Texto por cima da imagem ao hover */}
-    <div className="absolute bottom-0 left-0 right-0 p-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-      <h3 className="text-lg font-serif mb-1">{imagem.nome}</h3>
-      <p className="text-xs text-white/90">{imagem.descricao}</p>
-    </div>
-  </div>
-</div>
+                        <div className="w-full h-full relative overflow-hidden">
+                          <img 
+                            src={imagem.imagem} 
+                            alt={imagem.nome}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              const parent = e.currentTarget.parentElement;
+                              if (parent) {
+                                parent.innerHTML = `
+                                  <div class="w-full h-full bg-gradient-to-br from-beige-100 to-rose-100 flex items-center justify-center">
+                                    <div class="text-center p-4">
+                                      <h3 class="text-xl font-serif text-brown-700 mb-1">${imagem.nome}</h3>
+                                      <p class="text-sm text-brown-600">${imagem.descricao}</p>
+                                      <p class="text-xs text-red-600 mt-2">Imagem não disponível</p>
+                                    </div>
+                                  </div>
+                                `;
+                              }
+                            }}
+                          />
+                          
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          
+                          <div className="absolute bottom-0 left-0 right-0 p-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <h3 className="text-lg font-serif mb-1">{imagem.nome}</h3>
+                            <p className="text-xs text-white/90">{imagem.descricao}</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   );
                 })}
               </div>
             </div>
 
-            {/* Controles do Carrossel - COMPACTOS */}
             <div className="flex justify-center gap-3">
               <button
                 onClick={() => {
@@ -401,11 +405,10 @@ const handleComprarTemplate = async () => {
           </div>
         </section>
 
-        {/* Produtos - SEM MESVERSÁRIO, MAIS COMPACTO */}
+        {/* Produtos */}
         <section id="produtos" className="snap-section snap-start py-12 px-6 min-h-screen flex items-center bg-gradient-to-b from-white to-beige-50">
           <div className="max-w-6xl mx-auto w-full">
             
-            {/* Header - COMPACTO */}
             <div className="text-center mb-10">
               <h2 className="text-4xl md:text-5xl font-serif text-brown-700 mb-3 leading-tight">
                 Escolha seu
@@ -415,10 +418,9 @@ const handleComprarTemplate = async () => {
               <p className="text-base text-brown-600 font-light">Criado especialmente para o seu momento</p>
             </div>
 
-            {/* Cards de Produtos - APENAS 2 CARDS */}
             <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               
-              {/* Template Pronto */}
+              {/* Template Pronto - ATUALIZADO */}
               <div className="bg-white rounded-[2rem] p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 relative overflow-hidden group border border-beige-200/50">
                 
                 <div className="absolute -top-20 -right-20 w-40 h-40 bg-rose-200 opacity-10 blur-3xl group-hover:opacity-20 group-hover:scale-150 transition-all duration-700" />
@@ -429,15 +431,15 @@ const handleComprarTemplate = async () => {
                       <h3 className="text-2xl font-serif text-brown-700">Template Pronto</h3>
                       <div className="text-3xl font-bold text-beige-300">R$ 47</div>
                     </div>
-                    <p className="text-brown-600/70 text-sm">Personalize você mesma</p>
+                    <p className="text-brown-600/70 text-sm">Escolha seus favoritos</p>
                   </div>
 
-                  <ul className="space-y-2.5 mb-8">
+                  <ul className="space-y-2.5 mb-6">
                     {[
                       "5 modelos lindos para escolher",
-                      "Edite você mesma no Canva",
-                      "PNG + PDF em alta qualidade",
-                      "Entrega imediata"
+                      "Enviado por email",
+                      "2 revisões incluídas",
+                      "PNG + PDF em alta qualidade"
                     ].map((item, i) => (
                       <li key={i} className="flex items-start gap-3 group/item">
                         <CheckCircle2 className="w-4 h-4 text-beige-300 mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform" strokeWidth={2} />
@@ -446,27 +448,39 @@ const handleComprarTemplate = async () => {
                     ))}
                   </ul>
 
-                  <button
-                    onClick={handleComprarTemplate}
-                    disabled={isLoadingCheckout}
-                    className="flex items-center justify-center gap-2 w-full py-3.5 bg-beige-300 text-white text-center rounded-full font-medium hover:bg-beige-400 transition-all duration-300 shadow-md hover:shadow-xl group/btn disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {isLoadingCheckout ? (
-                      <>
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        <span>Processando...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Comprar Agora!</span>
-                        <Heart className="w-5 h-5 group-hover/btn:fill-white transition-all" />
-                      </>
-                    )}
-                  </button>
+                  <div className="space-y-3">
+                    <button
+                      onClick={handleComprarTemplate}
+                      disabled={isLoadingCheckout}
+                      className="flex items-center justify-center gap-2 w-full py-3.5 bg-beige-300 text-white text-center rounded-full font-medium hover:bg-beige-400 transition-all duration-300 shadow-md hover:shadow-xl group/btn disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isLoadingCheckout ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          <span>Processando...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Comprar Agora!</span>
+                          <Heart className="w-5 h-5 group-hover/btn:fill-white transition-all" />
+                        </>
+                      )}
+                    </button>
+
+                    <a
+                      href={getWhatsAppLink("Templates Digitais", "R$ 47")}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 w-full py-3 border-2 border-beige-300 text-beige-300 text-center rounded-full font-medium hover:bg-beige-50 transition-all duration-300"
+                    >
+                      <Send className="w-4 h-4" />
+                      <span>Tirar Dúvidas</span>
+                    </a>
+                  </div>
                 </div>
               </div>
 
-              {/* Personalizado */}
+              {/* Personalizado - ATUALIZADO COM BOTÃO */}
               <div className="bg-gradient-to-br from-beige-300 via-beige-400 to-beige-300 rounded-[2rem] p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 relative overflow-hidden group">
                 
                 <div className="absolute top-6 right-6 bg-rose-200 text-white px-4 py-1.5 rounded-full text-xs font-medium shadow-lg rotate-3 hover:rotate-6 transition-transform">
@@ -511,14 +525,35 @@ const handleComprarTemplate = async () => {
                     </p>
                   </div>
 
-                  <a href={getWhatsAppLink("Personalizado", "R$ 147")}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 w-full py-3.5 bg-white text-beige-300 text-center rounded-full font-medium hover:bg-beige-50 transition-all duration-300 shadow-xl hover:shadow-2xl group/btn"
-                  >
-                    <span>Quero Personalizado!</span>
-                    <Send className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-                  </a>
+                  <div className="space-y-3">
+                    <button
+                      onClick={handleComprarPersonalizado}
+                      disabled={isLoadingCheckout}
+                      className="flex items-center justify-center gap-2 w-full py-3.5 bg-white text-beige-300 text-center rounded-full font-medium hover:bg-beige-50 transition-all duration-300 shadow-xl hover:shadow-2xl group/btn disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isLoadingCheckout ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-beige-300 border-t-transparent rounded-full animate-spin" />
+                          <span>Processando...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Quero Personalizado!</span>
+                          <Heart className="w-5 h-5 group-hover/btn:fill-beige-300 transition-all" />
+                        </>
+                      )}
+                    </button>
+
+                    <a
+                      href={getWhatsAppLink("Personalizado", "R$ 147")}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 w-full py-3 border-2 border-white text-white text-center rounded-full font-medium hover:bg-white/10 transition-all duration-300"
+                    >
+                      <Send className="w-4 h-4" />
+                      <span>Tirar Dúvidas</span>
+                    </a>
+                  </div>
                 </div>
               </div>
 
@@ -568,7 +603,7 @@ const handleComprarTemplate = async () => {
           </div>
         </section>
 
-        {/* FAQ - 2 COLUNAS, COMPACTO */}
+        {/* FAQ */}
         <section id="faq" className="snap-section snap-start py-12 px-6 min-h-screen flex items-center bg-beige-50">
           <div className="max-w-5xl mx-auto w-full">
             <h2 className="text-4xl md:text-5xl font-serif text-brown-700 text-center mb-10">
