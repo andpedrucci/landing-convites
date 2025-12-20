@@ -12,7 +12,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 // 📌 IDS FIXOS DO STUDIO INVITARE NA DATAMIND
 // ============================================
 const EMPRESA_ID = '4cc6753d-0002-4ae8-90ad-6c3bc418f015';
-const FUNIL_PROJETO_ID = '91b38814-ba8c-4cbc-b2a7-ff777a18923f';
+const FUNIL_TEMPLATES_DIGITAIS = '9ce3a9c2-0540-40ee-9c8e-bbe83df4001a';
 const ETAPA_INICIAL = 'Projeto iniciado';
 
 export async function POST(request: Request) {
@@ -49,6 +49,7 @@ export async function POST(request: Request) {
       .insert({
         nome: nome,
         telefone: whatsapp,
+        email: email || null,
         empresa_id: EMPRESA_ID,
         origem: 'Landing Page - Studio Invitare'
       })
@@ -111,7 +112,7 @@ ${observacoes || 'Nenhuma observação.'}
         nome: `Templates - ${nome}`,
         descricao: descricaoProjeto,
         empresa_id: EMPRESA_ID,
-        funil_projeto_id: FUNIL_PROJETO_ID,
+        funil_projeto_id: FUNIL_TEMPLATES_DIGITAIS,
         etapa: ETAPA_INICIAL,
         status: 'ativo',
         origem: 'Landing Page - Studio Invitare',
@@ -126,6 +127,29 @@ ${observacoes || 'Nenhuma observação.'}
     }
 
     console.log('✅ Projeto criado:', projeto.id);
+
+    // ============================================
+    // 4️⃣ SALVAR OS 5 TEMPLATES NA TABELA projeto_templates
+    // ============================================
+    
+    const templatesParaSalvar = templates.map((t: any) => ({
+      projeto_id: projeto.id,
+      ordem: t.ordem,
+      nome: t.nome,
+      tema: t.tema,
+      link_canva: t.linkCanva
+    }));
+
+    const { error: erroTemplates } = await supabase
+      .from('projeto_templates')
+      .insert(templatesParaSalvar);
+
+    if (erroTemplates) {
+      console.error('⚠️ Erro ao salvar templates:', erroTemplates);
+      // Não falha o processo, apenas loga
+    } else {
+      console.log('✅ Templates salvos:', templatesParaSalvar.length);
+    }
 
     // ============================================
     // 4️⃣ ENVIAR PARA MAKE.COM (OPCIONAL)
