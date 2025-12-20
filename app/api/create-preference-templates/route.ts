@@ -20,6 +20,10 @@ export async function POST(request: NextRequest) {
             currency_id: 'BRL',
           },
         ],
+        payment_methods: {
+          excluded_payment_types: [],
+          installments: 12,
+        },
         back_urls: {
           success: `${process.env.NEXT_PUBLIC_SITE_URL}/sucesso/templates`,
           failure: `${process.env.NEXT_PUBLIC_SITE_URL}/falha`,
