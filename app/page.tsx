@@ -438,7 +438,7 @@ export default function Home() {
                     {[
                       "2 modelos lindos para escolher;",
                       "1 revisão no momento do envio da arte;",
-                      "1 revisão extra por 9,90 em até um mês;",
+                      "1 revisão extra por R$ 9,90 em até um mês;",
                       "Enviado no whatsapp em Imagem e PDF pra impressão."
                     ].map((item, i) => (
                       <li key={i} className="flex items-start gap-3 group/item">
@@ -614,15 +614,15 @@ export default function Home() {
               {[
                 {
                   q: "Os convites são digitais?",
-                  a: "Sim! Você recebe o arquivo em alta qualidade para compartilhar por WhatsApp, redes sociais ou imprimir."
+                  a: "Sim! Você recebe o arquivo em alta qualidade para compartilhar por WhatsApp, redes sociais junto com o PDF para imprimir."
                 },
                 {
                   q: "Como funciona a entrega?",
-                  a: "Templates prontos: entrega imediata. Personalizados: 3-5 dias úteis."
+                  a: "3-5 dias úteis."
                 },
                 {
                   q: "Posso editar depois?",
-                  a: "Sim! No período de um mês você pode solicitar uma revisão extra por R$9,90 (limitado a alteração de texto nos Convites Prontos)"
+                  a: "Sim! No período de um mês você pode solicitar uma revisão extra por R$ 9,90 (limitado a alteração de texto nos Convites Prontos)"
                 },
                 {
                   q: "Como funciona a assinatura?",
@@ -634,7 +634,7 @@ export default function Home() {
                 },
                 {
                   q: "Quais formatos recebo?",
-                  a: "PNG e PDF em alta qualidade + link do Canva totalmente editável."
+                  a: "Imagem de alta qualidade + PDF para impressão."
                 }
               ].map((item, i) => (
                 <div key={i} className="bg-white rounded-xl p-5 shadow-md hover:shadow-lg transition-all duration-300">
