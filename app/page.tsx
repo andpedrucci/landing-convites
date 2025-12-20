@@ -60,19 +60,15 @@ export default function Home() {
     return imagensPorTema[tema as keyof typeof imagensPorTema] || imagensPorTema['aniversario'];
   };
 
-  const handleComprarTemplate = async () => {
+const handleComprarTemplate = async () => {
     setIsLoadingCheckout(true);
     
     try {
-      const response = await fetch('/api/create-preference', {
+      const response = await fetch('/api/create-preference-templates', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          title: '5 Templates Digitais Premium',
-          price: 47,
-        }),
       });
 
       const data = await response.json();
