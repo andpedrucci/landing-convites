@@ -49,7 +49,6 @@ export async function POST(request: Request) {
       .insert({
         nome: nome,
         telefone: whatsapp,
-        email: email || null,
         empresa_id: EMPRESA_ID,
         origem: 'Landing Page - Studio Invitare'
       })
@@ -152,50 +151,36 @@ ${observacoes || 'Nenhuma observação.'}
     }
 
     // ============================================
-    // 4️⃣ ENVIAR PARA MAKE.COM (OPCIONAL)
+    // 5️⃣ CHAMAR API DO MAKE (ENVIAR EMAIL)
     // ============================================
-    const webhookUrl = process.env.MAKE_WEBHOOK_URL;
-    
-    let resultadoMake = null;
-    if (webhookUrl) {
-      try {
-        const dadosParaMake = {
+    const templatesDetalhes = templates
+      .map((t: any) => `${t.ordem}. ${t.nome} (${t.tema})`)
+      .join('\n');
+
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/enviar-email-make`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          produto: 'Templates Digitais',
+          preco: 47.00,
           cliente: {
             nome,
-            email,
-            whatsapp,
-            tipoEvento: tipoEvento || 'Não informado',
-            observacoes: observacoes || ''
+            email: email || '',
+            whatsapp
           },
-          templates: templates.map((t: any, index: number) => ({
-            ordem: index + 1,
-            nome: t.nome,
-            tema: t.tema,
-            linkCanva: t.linkCanva
-          })),
+          detalhes: `Templates selecionados:\n${templatesDetalhes}\n\nObservações: ${observacoes || 'Nenhuma'}`,
+          tipoEvento: tipoEvento || 'Não informado',
           datamind: {
             empresa_lead_id: empresaLead.id,
             contato_id: contato?.id,
             projeto_id: projeto.id
-          },
-          dataHora: new Date().toISOString()
-        };
-
-        const responseMake = await fetch(webhookUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(dadosParaMake),
-        });
-
-        if (responseMake.ok) {
-          resultadoMake = await responseMake.json();
-          console.log('✅ Enviado para Make.com');
-        } else {
-          console.warn('⚠️ Erro ao enviar para Make:', responseMake.statusText);
-        }
-      } catch (erroMake) {
-        console.warn('⚠️ Falha ao enviar para Make (não crítico):', erroMake);
-      }
+          }
+        }),
+      });
+      console.log('✅ Email enviado via Make');
+    } catch (erroMake) {
+      console.warn('⚠️ Falha ao enviar email (não crítico):', erroMake);
     }
 
     // ============================================
@@ -207,8 +192,7 @@ ${observacoes || 'Nenhuma observação.'}
       data: {
         empresa_lead_id: empresaLead.id,
         contato_id: contato?.id,
-        projeto_id: projeto.id,
-        make_enviado: !!resultadoMake
+        projeto_id: projeto.id
       }
     });
 
