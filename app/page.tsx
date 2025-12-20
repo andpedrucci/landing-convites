@@ -428,7 +428,7 @@ export default function Home() {
                 <div className="relative">
                   <div className="mb-6">
                     <div className="flex items-baseline justify-between mb-2">
-                      <h3 className="text-2xl font-serif text-brown-700">Template Pronto</h3>
+                      <h3 className="text-2xl font-serif text-brown-700">Convite Pronto</h3>
                       <div className="text-3xl font-bold text-beige-300">R$ 47</div>
                     </div>
                     <p className="text-brown-600/70 text-sm">Escolha seus favoritos</p>
@@ -436,10 +436,10 @@ export default function Home() {
 
                   <ul className="space-y-2.5 mb-6">
                     {[
-                      "5 modelos lindos para escolher",
-                      "Enviado por email",
-                      "2 revisões incluídas",
-                      "PNG + PDF em alta qualidade"
+                      "2 modelos lindos para escolher",
+                      "1 revisão no momento do envio da arte",
+                      "1 revisão extra por 9,90 em até um mês",
+                      "enviado no whatsapp em Imagem e PDF pra impressão"
                     ].map((item, i) => (
                       <li key={i} className="flex items-start gap-3 group/item">
                         <CheckCircle2 className="w-4 h-4 text-beige-300 mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform" strokeWidth={2} />
@@ -496,7 +496,7 @@ export default function Home() {
                   <div className="flex items-start justify-between mb-6">
                     <div>
                       <h3 className="text-2xl font-serif text-white mb-1">Personalizado</h3>
-                      <p className="text-white/80 text-xs">Exclusivo para você</p>
+                      <p className="text-white/80 text-xs">Exclusivo para você | Escolha seu próprio tema!</p>
                     </div>
                     <div className="text-right">
                       <div className="text-xs text-white/70 mb-1">investimento</div>
@@ -507,9 +507,10 @@ export default function Home() {
                   <ul className="space-y-2.5 mb-6">
                     {[
                       "Design exclusivo pro seu momento",
-                      "2 revisões incluídas",
+                      "Faça até duas alterações no período de um mês",
                       "Arquivo final + Canva editável",
-                      "Entrega em 3-5 dias úteis"
+                      "Entrega em 3-5 dias úteis",
+                      "enviado no whatsapp em Imagem e PDF pra impressão"
                     ].map((item, i) => (
                       <li key={i} className="flex items-start gap-3 group/item">
                         <Star className="w-4 h-4 text-white mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform" fill="white" strokeWidth={2} />
