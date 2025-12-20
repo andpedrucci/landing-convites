@@ -386,8 +386,8 @@ export default function Home() {
                 },
                 {
                   icon: <CheckCircle2 className="w-8 h-8" strokeWidth={1.5} />,
-                  title: "Edite quando quiser",
-                  desc: "Canva editável + arquivos PNG e PDF de alta qualidade."
+                  title: "Escolha entre dois modelos",
+                  desc: "Você recebe dois convites e escolhe aquele que mais gostar!"
                 }
               ].map((item, i) => (
                 <div 
@@ -436,10 +436,10 @@ export default function Home() {
 
                   <ul className="space-y-2.5 mb-6">
                     {[
-                      "2 modelos lindos para escolher",
-                      "1 revisão no momento do envio da arte",
-                      "1 revisão extra por 9,90 em até um mês",
-                      "enviado no whatsapp em Imagem e PDF pra impressão"
+                      "2 modelos lindos para escolher;",
+                      "1 revisão no momento do envio da arte;",
+                      "1 revisão extra por 9,90 em até um mês;",
+                      "Enviado no whatsapp em Imagem e PDF pra impressão."
                     ].map((item, i) => (
                       <li key={i} className="flex items-start gap-3 group/item">
                         <CheckCircle2 className="w-4 h-4 text-beige-300 mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform" strokeWidth={2} />
@@ -506,11 +506,10 @@ export default function Home() {
 
                   <ul className="space-y-2.5 mb-6">
                     {[
-                      "Design exclusivo pro seu momento",
-                      "Faça até duas alterações no período de um mês",
-                      "Arquivo final + Canva editável",
-                      "Entrega em 3-5 dias úteis",
-                      "enviado no whatsapp em Imagem e PDF pra impressão"
+                      "Design exclusivo pro seu momento;",
+                      "Faça até duas alterações no período de um mês;",
+                      "Entrega em 3-5 dias úteis;",
+                      "Enviado no whatsapp em Imagem e PDF pra impressão."
                     ].map((item, i) => (
                       <li key={i} className="flex items-start gap-3 group/item">
                         <Star className="w-4 h-4 text-white mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform" fill="white" strokeWidth={2} />
@@ -623,7 +622,7 @@ export default function Home() {
                 },
                 {
                   q: "Posso editar depois?",
-                  a: "Sim! Você recebe o link do Canva editável para ajustes sempre que precisar."
+                  a: "Sim! No período de um mês você pode solicitar uma revisão extra por R$9,90 (limitado a alteração de texto nos Convites Prontos)"
                 },
                 {
                   q: "Como funciona a assinatura?",
