@@ -49,7 +49,6 @@ export async function POST(request: Request) {
       .insert({
         nome: nome,
         telefone: whatsapp,
-        email: email || null,
         empresa_id: EMPRESA_ID,
         origem: 'Landing Page - Studio Invitare'
       })
