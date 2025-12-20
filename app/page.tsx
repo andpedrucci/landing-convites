@@ -376,8 +376,8 @@ export default function Home() {
               {[
                 {
                   icon: <Clock className="w-8 h-8" strokeWidth={1.5} />,
-                  title: "Receba na hora",
-                  desc: "Templates entregues imediatamente. Personalizados em até 5 dias."
+                  title: "Entrega Rápida",
+                  desc: "Em 3-5 dias úteis você tem seu convite pronto!"
                 },
                 {
                   icon: <Heart className="w-8 h-8" strokeWidth={1.5} />,
