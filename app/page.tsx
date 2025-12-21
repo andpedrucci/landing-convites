@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Heart, Sparkles, Clock, CheckCircle2, Star, Send } from 'lucide-react';
 import { imagensPorTema } from '@/lib/templates-data';
-import { AVAILABLE_COUPONS } from '@/lib/coupons';
+import { AVAILABLE_COUPONS } from '@/lib/cupons';
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
