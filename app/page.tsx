@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { Heart, Sparkles, Clock, CheckCircle2, Star, Send } from 'lucide-react';
-
 import { imagensPorTema } from '@/lib/templates-data';
+import { AVAILABLE_COUPONS } from '@/lib/coupons';
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -12,34 +12,34 @@ export default function Home() {
   const [imagemDestaque, setImagemDestaque] = useState(0);
   const [secaoAtual, setSecaoAtual] = useState(0);
 
+  // Estados para Cupons
+  const [couponTemplate, setCouponTemplate] = useState('');
+  const [couponPerso, setCouponPerso] = useState('');
+  const [discountTemplate, setDiscountTemplate] = useState(0); 
+  const [discountPerso, setDiscountPerso] = useState(0);
+
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Resetar destaque quando mudar de tema
   useEffect(() => {
     setImagemDestaque(0);
   }, [temaAtivo]);
 
-  // Detectar seção atual baseada no scroll
   useEffect(() => {
     const handleScroll = () => {
       const sections = document.querySelectorAll('.snap-section');
-      
       sections.forEach((section, index) => {
         const element = section as HTMLElement;
         const rect = element.getBoundingClientRect();
-        
         if (rect.top <= 100 && rect.bottom >= 100) {
           setSecaoAtual(index);
         }
       });
     };
-
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     setTimeout(handleScroll, 100);
-    
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -56,19 +56,32 @@ export default function Home() {
     return imagensPorTema[tema as keyof typeof imagensPorTema] || imagensPorTema['aniversario'];
   };
 
+  const applyCoupon = (type: 'TEMPLATE' | 'PERSONALIZADO') => {
+    const code = type === 'TEMPLATE' ? couponTemplate : couponPerso;
+    const found = AVAILABLE_COUPONS.find(c => 
+      c.code === code.toUpperCase() && 
+      c.isActive && 
+      (c.allowedProduct === type || c.allowedProduct === 'ALL')
+    );
+
+    if (found) {
+      if (type === 'TEMPLATE') setDiscountTemplate(found.discountPercentage);
+      else setDiscountPerso(found.discountPercentage);
+      alert(`Cupom de ${found.discountPercentage}% aplicado com sucesso!`);
+    } else {
+      alert("Cupom inválido para este produto ou expirado.");
+    }
+  };
+
   const handleComprarTemplate = async () => {
     setIsLoadingCheckout(true);
-    
     try {
       const response = await fetch('/api/create-preference-templates', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ couponCode: couponTemplate }),
       });
-
       const data = await response.json();
-
       if (data.init_point) {
         window.location.href = data.init_point;
       } else {
@@ -84,17 +97,13 @@ export default function Home() {
 
   const handleComprarPersonalizado = async () => {
     setIsLoadingCheckout(true);
-    
     try {
       const response = await fetch('/api/create-preference-personalizado', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ couponCode: couponPerso }),
       });
-
       const data = await response.json();
-
       if (data.init_point) {
         window.location.href = data.init_point;
       } else {
@@ -127,7 +136,6 @@ export default function Home() {
 
   return (
     <>
-      {/* Indicador de Navegação Lateral */}
       <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-4">
         {secoes.map((secao, index) => (
           <button
@@ -153,7 +161,6 @@ export default function Home() {
 
       <main className="snap-y snap-mandatory h-screen overflow-y-scroll scroll-smooth">
         
-        {/* Hero Section */}
         <section id="hero" className="snap-section snap-start relative overflow-hidden min-h-screen flex items-center">
           <div className="absolute top-20 right-10 w-[500px] h-[500px] bg-rose-200 opacity-20 blur-[120px] rounded-full animate-pulse" style={{animationDuration: '4s'}} />
           <div className="absolute bottom-20 left-10 w-[400px] h-[400px] bg-beige-300 opacity-20 blur-[100px] rounded-full animate-pulse" style={{animationDuration: '5s'}} />
@@ -197,11 +204,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Seção Carrossel 3D */}
         <section id="carrossel" className="snap-section snap-start py-8 px-6 relative overflow-hidden pt-6 pb-10 flex items-start bg-gradient-to-b from-beige-50 via-white to-beige-50">
-          
           <div className="relative max-w-7xl mx-auto w-full">
-            
             <div className="text-center mb-4">
               <h2 className="text-3xl md:text-4xl font-serif text-brown-700 mb-2">
                 Explore nossos <span className="text-beige-300 italic">temas exclusivos</span>
@@ -324,9 +328,7 @@ export default function Home() {
                               }
                             }}
                           />
-                          
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                          
                           <div className="absolute bottom-0 left-0 right-0 p-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <h3 className="text-lg font-serif mb-1">{imagem.nome}</h3>
                             <p className="text-xs text-white/90">{imagem.descricao}</p>
@@ -365,11 +367,9 @@ export default function Home() {
                 </svg>
               </button>
             </div>
-
           </div>
         </section>
 
-        {/* Benefícios */}
         <section id="beneficios" className="snap-section snap-start py-24 min-h-screen flex items-center bg-white">
           <div className="max-w-6xl mx-auto px-6 w-full">
             <div className="grid md:grid-cols-3 gap-16">
@@ -405,7 +405,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Produtos */}
         <section id="produtos" className="snap-section snap-start py-12 px-6 min-h-screen flex items-center bg-gradient-to-b from-white to-beige-50">
           <div className="max-w-6xl mx-auto w-full">
             
@@ -420,16 +419,21 @@ export default function Home() {
 
             <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               
-              {/* Template Pronto - ATUALIZADO */}
+              {/* Card Template Pronto */}
               <div className="bg-white rounded-[2rem] p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 relative overflow-hidden group border border-beige-200/50">
-                
                 <div className="absolute -top-20 -right-20 w-40 h-40 bg-rose-200 opacity-10 blur-3xl group-hover:opacity-20 group-hover:scale-150 transition-all duration-700" />
-                
                 <div className="relative">
                   <div className="mb-6">
                     <div className="flex items-baseline justify-between mb-2">
                       <h3 className="text-2xl font-serif text-brown-700">Convite Pronto</h3>
-                      <div className="text-3xl font-bold text-beige-300">R$ 47</div>
+                      <div className="text-right">
+                        {discountTemplate > 0 && (
+                          <span className="text-sm line-through text-gray-400 mr-2">R$ 47</span>
+                        )}
+                        <div className="text-3xl font-bold text-beige-300">
+                          R$ {(47 * (1 - discountTemplate / 100)).toFixed(2)}
+                        </div>
+                      </div>
                     </div>
                     <p className="text-brown-600/70 text-sm">Escolha seus favoritos</p>
                   </div>
@@ -447,6 +451,23 @@ export default function Home() {
                       </li>
                     ))}
                   </ul>
+
+                  {/* Campo de Cupom Template */}
+                  <div className="flex gap-2 mb-6">
+                    <input 
+                      type="text" 
+                      placeholder="Cupom" 
+                      className="flex-1 px-4 py-2 border border-beige-200 rounded-full text-sm outline-none focus:border-beige-300 transition-all"
+                      value={couponTemplate}
+                      onChange={(e) => setCouponTemplate(e.target.value)}
+                    />
+                    <button 
+                      onClick={() => applyCoupon('TEMPLATE')}
+                      className="px-4 py-2 bg-beige-100 text-brown-700 rounded-full text-xs font-bold hover:bg-beige-200 transition-colors"
+                    >
+                      Aplicar
+                    </button>
+                  </div>
 
                   <div className="space-y-3">
                     <button
@@ -466,7 +487,6 @@ export default function Home() {
                         </>
                       )}
                     </button>
-
                     <a
                       href={getWhatsAppLink("Templates Digitais", "R$ 47")}
                       target="_blank"
@@ -480,18 +500,15 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Personalizado - ATUALIZADO COM BOTÃO */}
+              {/* Card Personalizado */}
               <div className="bg-gradient-to-br from-beige-300 via-beige-400 to-beige-300 rounded-[2rem] p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 relative overflow-hidden group">
-                
                 <div className="absolute top-6 right-6 bg-rose-200 text-white px-4 py-1.5 rounded-full text-xs font-medium shadow-lg rotate-3 hover:rotate-6 transition-transform">
                   <div className="flex items-center gap-1.5">
                     <Star className="w-3 h-3" fill="white" />
                     <span>Mais Escolhido</span>
                   </div>
                 </div>
-
                 <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-white opacity-10 blur-3xl group-hover:opacity-20 group-hover:scale-150 transition-all duration-700" />
-                
                 <div className="relative pt-6">
                   <div className="flex items-start justify-between mb-6">
                     <div>
@@ -500,7 +517,12 @@ export default function Home() {
                     </div>
                     <div className="text-right">
                       <div className="text-xs text-white/70 mb-1">investimento</div>
-                      <div className="text-3xl font-bold text-white">R$ 147</div>
+                      {discountPerso > 0 && (
+                        <span className="text-sm line-through text-white/50 mr-2">R$ 147</span>
+                      )}
+                      <div className="text-3xl font-bold text-white">
+                        R$ {(147 * (1 - discountPerso / 100)).toFixed(2)}
+                      </div>
                     </div>
                   </div>
 
@@ -517,6 +539,23 @@ export default function Home() {
                       </li>
                     ))}
                   </ul>
+
+                  {/* Campo de Cupom Personalizado */}
+                  <div className="flex gap-2 mb-6">
+                    <input 
+                      type="text" 
+                      placeholder="Cupom" 
+                      className="flex-1 px-4 py-2 border border-white/30 bg-white/10 text-white placeholder:text-white/50 rounded-full text-sm outline-none focus:bg-white/20 transition-all"
+                      value={couponPerso}
+                      onChange={(e) => setCouponPerso(e.target.value)}
+                    />
+                    <button 
+                      onClick={() => applyCoupon('PERSONALIZADO')}
+                      className="px-4 py-2 bg-white text-beige-300 rounded-full text-xs font-bold hover:bg-beige-50 transition-colors"
+                    >
+                      Aplicar
+                    </button>
+                  </div>
 
                   <div className="bg-white/20 backdrop-blur-md rounded-2xl p-3 mb-6 text-center border border-white/30">
                     <p className="text-white font-medium flex items-center justify-center gap-2 text-sm">
@@ -543,7 +582,6 @@ export default function Home() {
                         </>
                       )}
                     </button>
-
                     <a
                       href={getWhatsAppLink("Personalizado", "R$ 147")}
                       target="_blank"
@@ -561,13 +599,11 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Depoimentos */}
         <section id="depoimentos" className="snap-section snap-start py-20 px-6 min-h-screen flex items-center bg-white/40 backdrop-blur-sm">
           <div className="max-w-5xl mx-auto w-full">
             <h2 className="text-4xl md:text-5xl font-serif text-brown-700 text-center mb-12">
               O que dizem sobre nós
             </h2>
-
             <div className="grid md:grid-cols-3 gap-6">
               {[
                 {
@@ -603,13 +639,11 @@ export default function Home() {
           </div>
         </section>
 
-        {/* FAQ */}
         <section id="faq" className="snap-section snap-start py-12 px-6 min-h-screen flex items-center bg-beige-50">
           <div className="max-w-5xl mx-auto w-full">
             <h2 className="text-4xl md:text-5xl font-serif text-brown-700 text-center mb-10">
               Dúvidas Frequentes
             </h2>
-
             <div className="grid md:grid-cols-2 gap-4">
               {[
                 {
@@ -646,7 +680,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* CTA Final */}
         <section id="cta" className="snap-section snap-start py-24 px-6 min-h-screen flex items-center bg-gradient-to-br from-beige-300 to-beige-400">
           <div className="max-w-4xl mx-auto text-center text-white w-full">
             <h2 className="text-4xl md:text-6xl font-serif mb-6">
@@ -657,7 +690,6 @@ export default function Home() {
             <p className="text-xl mb-10 text-white/90 font-light">
               Celebre seu momento especial com um convite único
             </p>
-            
             <a href={getWhatsAppLink("Quero conhecer os convites", "")}
               target="_blank"
               rel="noopener noreferrer"
@@ -669,14 +701,12 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Footer */}
         <footer className="py-12 px-6 bg-brown-700 text-white">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-8">
               <h3 className="text-2xl font-serif mb-2">Studio Invitare</h3>
               <p className="text-white/70 font-light text-sm">Convites que celebram sua história</p>
             </div>
-            
             <div className="flex justify-center mb-8">
               <a href={getWhatsAppLink("Olá, gostaria de saber mais!", "")}
                 target="_blank"
@@ -687,7 +717,6 @@ export default function Home() {
                 <span>Fale conosco</span>
               </a>
             </div>
-
             <div className="pt-6 border-t border-white/10 text-center">
               <p className="text-xs text-white/50">
                 © 2024 Studio Invitare. Feito com <Heart className="w-4 h-4 inline fill-rose-200 text-rose-200" /> para celebrar seus momentos especiais.
@@ -695,7 +724,6 @@ export default function Home() {
             </div>
           </div>
         </footer>
-
       </main>
     </>
   );
