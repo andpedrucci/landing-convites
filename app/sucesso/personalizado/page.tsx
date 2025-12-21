@@ -156,7 +156,7 @@ function PersonalizadoContent() {
                 type="tel"
                 value={formData.whatsapp}
                 onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                placeholder="(11) 99999-9999"
+                placeholder="(11) 99508-7592"
                 className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-beige-300 focus:outline-none transition-all"
                 required
               />
