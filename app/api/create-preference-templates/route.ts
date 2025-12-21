@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { MercadoPagoConfig, Preference } from 'mercadopago';
+import { AVAILABLE_COUPONS } from '@/lib/coupons';
 
 export async function POST(request: NextRequest) {
   try {
@@ -8,14 +9,26 @@ export async function POST(request: NextRequest) {
     });
 
     const preference = new Preference(client);
-
-    // ✅ Tenta pegar dados do corpo da requisição se existirem
     const bodyData = await request.json().catch(() => ({}));
 
-    // ✅ REFERÊNCIA EXTERNA
-    const externalReference = `TEMPLATE-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    // --- LÓGICA DE PREÇO E CUPOM ---
+    let unitPrice = 47.00;
+    const couponCode = bodyData.couponCode?.trim().toUpperCase();
 
-    // ✅ VALIDAÇÃO DA URL DE NOTIFICAÇÃO (Não pode ser localhost)
+    if (couponCode) {
+      const validCoupon = AVAILABLE_COUPONS.find(c => 
+        c.code === couponCode && 
+        c.isActive && 
+        (c.allowedProduct === 'TEMPLATE' || c.allowedProduct === 'ALL')
+      );
+      
+      if (validCoupon) {
+        unitPrice = unitPrice * (1 - validCoupon.discountPercentage / 100);
+      }
+    }
+    // -------------------------------
+
+    const externalReference = `TEMPLATE-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
     const isLocalhost = siteUrl.includes('localhost');
     const notificationUrl = isLocalhost 
@@ -29,9 +42,8 @@ export async function POST(request: NextRequest) {
             id: 'templates-digitais',
             title: 'Convite Digital - 2 Templates',
             description: 'Pacote com 2 templates digitais editáveis do mesmo tema para seu evento especial',
-            // ✅ REMOVIDO category_id - vai usar a categoria do painel (Artes/Artesanato)
             quantity: 1,
-            unit_price: 47.00,
+            unit_price: Number(unitPrice.toFixed(2)),
             currency_id: 'BRL',
           },
         ],
@@ -41,7 +53,7 @@ export async function POST(request: NextRequest) {
         payment_methods: {
           excluded_payment_methods: [],
           excluded_payment_types: [],
-          installments: 3, // ✅ CORRIGIDO: Máximo 3x (era 12x)
+          installments: 3,
         },
         back_urls: {
           success: `${siteUrl}/sucesso/templates`,
@@ -52,11 +64,9 @@ export async function POST(request: NextRequest) {
         external_reference: externalReference,
         statement_descriptor: 'STUDIOINVITAR', 
         notification_url: notificationUrl,
-        binary_mode: true, // ✅ CORRIGIDO: true (era false)
+        binary_mode: true,
       },
     });
-
-    console.log('✅ Preferência criada com sucesso:', result.id);
 
     return NextResponse.json({ 
       id: result.id, 
@@ -66,7 +76,6 @@ export async function POST(request: NextRequest) {
 
   } catch (error: any) {
     console.error('❌ Erro Mercado Pago:', error.api_response?.body || error.message);
-    
     return NextResponse.json(
       { 
         error: 'Erro ao processar pagamento', 
