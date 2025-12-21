@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { MercadoPagoConfig, Preference } from 'mercadopago';
-import { AVAILABLE_COUPONS } from '@/lib/coupons';
+import { AVAILABLE_COUPONS } from '@/lib/cupons';
 
 export async function POST(request: NextRequest) {
   try {
