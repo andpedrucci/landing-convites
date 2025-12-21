@@ -29,7 +29,7 @@ export default function Falha() {
           </a>
           
           <a
-            href="https://wa.me/5511999999999?text=Tive%20problema%20com%20o%20pagamento"
+            href="https://wa.me/5511995087592?text=Tive%20problema%20com%20o%20pagamento"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 w-full py-4 bg-beige-100 text-brown-700 rounded-full font-medium hover:bg-beige-200 transition-all"
