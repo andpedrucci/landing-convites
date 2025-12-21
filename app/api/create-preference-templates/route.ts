@@ -9,8 +9,18 @@ export async function POST(request: NextRequest) {
 
     const preference = new Preference(client);
 
-    // ✅ REFERÊNCIA EXTERNA - OBRIGATÓRIO (17 pontos)
+    // ✅ Tenta pegar dados do corpo da requisição se existirem
+    const bodyData = await request.json().catch(() => ({}));
+
+    // ✅ REFERÊNCIA EXTERNA
     const externalReference = `TEMPLATE-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+    // ✅ VALIDAÇÃO DA URL DE NOTIFICAÇÃO (Não pode ser localhost)
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
+    const isLocalhost = siteUrl.includes('localhost');
+    const notificationUrl = isLocalhost 
+      ? undefined 
+      : `${siteUrl}/api/webhook-mercadopago`;
 
     const result = await preference.create({
       body: {
@@ -18,18 +28,16 @@ export async function POST(request: NextRequest) {
           {
             id: 'templates-digitais',
             title: 'Convite Digital - 2 Templates',
-            // ✅ DESCRIÇÃO DO ITEM - RECOMENDADO (3 pontos)
             description: 'Pacote com 2 templates digitais editáveis do mesmo tema para seu evento especial',
-            // ✅ CATEGORIA DO ITEM - RECOMENDADO (4 pontos)
-            category_id: 'services', // Categoria: Serviços
+            category_id: 'services',
             quantity: 1,
             unit_price: 47.00,
             currency_id: 'BRL',
           },
         ],
-        // ✅ INFORMAÇÕES DO COMPRADOR
         payer: {
-          email: 'cliente@studioinvitare.com.br', // OBRIGATÓRIO para aprovação
+          // Se sua mulher for testar, peça para ela digitar o e-mail dela no checkout
+          email: bodyData.email || 'cliente@email.com.br', 
         },
         payment_methods: {
           excluded_payment_methods: [],
@@ -37,42 +45,35 @@ export async function POST(request: NextRequest) {
           installments: 12,
         },
         back_urls: {
-          success: `${process.env.NEXT_PUBLIC_SITE_URL}/sucesso/templates`,
-          failure: `${process.env.NEXT_PUBLIC_SITE_URL}/falha`,
-          pending: `${process.env.NEXT_PUBLIC_SITE_URL}/pendente`,
+          success: `${siteUrl}/sucesso/templates`,
+          failure: `${siteUrl}/falha`,
+          pending: `${siteUrl}/pendente`,
         },
         auto_return: 'approved',
-        // ✅ REFERÊNCIA EXTERNA - OBRIGATÓRIO (17 pontos)
         external_reference: externalReference,
-        statement_descriptor: 'STUDIO INVITARE',
-        // ✅ NOTIFICAÇÕES WEBHOOK - OBRIGATÓRIO (14 pontos)
-        notification_url: `${process.env.NEXT_PUBLIC_SITE_URL}/api/webhook-mercadopago`,
+        // ✅ CORREÇÃO: Máximo 13 caracteres para aparecer na fatura
+        statement_descriptor: 'STUDIOINVITAR', 
+        notification_url: notificationUrl,
         binary_mode: false,
-        expires: false,
       },
     });
 
-    console.log('✅ Preferência COMPLETA criada:', {
-      id: result.id,
-      external_reference: externalReference,
-      init_point: result.init_point,
-      notification_url: `${process.env.NEXT_PUBLIC_SITE_URL}/api/webhook-mercadopago`
-    });
+    console.log('✅ Preferência criada com sucesso:', result.id);
 
     return NextResponse.json({ 
-      id: result.id,
+      id: result.id, 
       init_point: result.init_point,
-      external_reference: externalReference
+      external_reference: externalReference 
     });
 
   } catch (error: any) {
-    console.error('❌ Erro ao criar preferência:', error);
-    console.error('Detalhes:', error.message);
+    // Log detalhado para você ver no terminal da Vercel/Node o motivo real da falha
+    console.error('❌ Erro Mercado Pago:', error.api_response?.body || error.message);
     
     return NextResponse.json(
       { 
-        error: 'Erro ao processar pagamento',
-        details: error.message 
+        error: 'Erro ao processar pagamento', 
+        details: error.api_response?.body?.message || error.message 
       },
       { status: 500 }
     );
