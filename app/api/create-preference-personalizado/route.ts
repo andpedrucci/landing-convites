@@ -27,6 +27,10 @@ export async function POST(request: NextRequest) {
             currency_id: 'BRL',
           },
         ],
+        // ✅ INFORMAÇÕES DO COMPRADOR
+        payer: {
+          email: 'cliente@studioinvitare.com.br', // OBRIGATÓRIO para aprovação
+        },
         payment_methods: {
           excluded_payment_methods: [],
           excluded_payment_types: [],
