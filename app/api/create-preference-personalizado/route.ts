@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
             id: 'convite-personalizado',
             title: 'Convite Digital Personalizado',
             description: 'Convite digital exclusivo com design único',
-            category_id: 'services',
+            // ✅ REMOVIDO category_id - vai usar a categoria do painel (Artes/Artesanato)
             quantity: 1,
             unit_price: 147.00,
             currency_id: 'BRL',
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
         payment_methods: {
           excluded_payment_methods: [],
           excluded_payment_types: [],
-          installments: 12,
+          installments: 6, // ✅ CORRIGIDO: Máximo 6x (era 12x) - R$ 147 em 6x = R$ 24,50/mês
         },
         back_urls: {
           success: `${siteUrl}/sucesso/personalizado`,
@@ -46,10 +46,9 @@ export async function POST(request: NextRequest) {
         },
         auto_return: 'approved',
         external_reference: externalReference,
-        // ✅ CORREÇÃO: Removido espaço e limitado a 13 caracteres
         statement_descriptor: 'STUDIOINVITAR', 
         notification_url: notificationUrl,
-        binary_mode: false,
+        binary_mode: true, // ✅ CORRIGIDO: true (era false)
       },
     });
 
