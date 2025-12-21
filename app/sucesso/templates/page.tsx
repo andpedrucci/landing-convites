@@ -144,11 +144,11 @@ function SucessoContent() {
           </div>
           
           <h1 className="text-4xl md:text-5xl font-serif text-brown-700 mb-4">
-            Templates Enviados! 🎉
+            Convites Enviados! 🎉
           </h1>
           
           <p className="text-xl text-brown-600 mb-8">
-            Você receberá um email com os 2 templates selecionados em instantes!
+            Você receberá uma mensagem no whatsapp com os 2 convites selecionados em instantes!
           </p>
 
           <a 
@@ -176,7 +176,7 @@ function SucessoContent() {
             Pagamento Confirmado! 🎉
           </h1>
           
-          <p className="text-lg text-brown-600 mb-1">Selecione 2 templates do mesmo tema</p>
+          <p className="text-lg text-brown-600 mb-1">Selecione 2 convites do mesmo tema</p>
           <p className="text-brown-600/70 text-sm">
             {templatesSelecionados.length} de 2 selecionados
             {temaEscolhido && ` • Tema: ${getTemaLabel(temaEscolhido)}`}
@@ -189,7 +189,7 @@ function SucessoContent() {
             <div className="flex items-start gap-3">
               <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
               <p className="text-sm text-blue-800">
-                Você está selecionando templates do tema <strong>{getTemaLabel(temaEscolhido)}</strong>. 
+                Você está selecionando convites do tema <strong>{getTemaLabel(temaEscolhido)}</strong>. 
                 Para escolher outro tema, remova os templates já selecionados.
               </p>
             </div>
@@ -294,7 +294,7 @@ function SucessoContent() {
 
                 {templatesSelecionados.length === 0 ? (
                   <p className="text-brown-600/60 text-sm text-center py-4">
-                    Nenhum template selecionado ainda
+                    Nenhum convite selecionado ainda
                   </p>
                 ) : (
                   <div className="space-y-3">
