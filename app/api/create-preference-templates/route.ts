@@ -31,8 +31,6 @@ export async function POST(request: NextRequest) {
           excluded_payment_methods: [],
           excluded_payment_types: [],
           installments: 12,
-          default_payment_method_id: null,
-          default_installments: null
         },
         back_urls: {
           success: `${process.env.NEXT_PUBLIC_SITE_URL}/sucesso/templates`,
