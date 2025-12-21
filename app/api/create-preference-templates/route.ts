@@ -29,20 +29,19 @@ export async function POST(request: NextRequest) {
             id: 'templates-digitais',
             title: 'Convite Digital - 2 Templates',
             description: 'Pacote com 2 templates digitais editáveis do mesmo tema para seu evento especial',
-            category_id: 'services',
+            // ✅ REMOVIDO category_id - vai usar a categoria do painel (Artes/Artesanato)
             quantity: 1,
             unit_price: 47.00,
             currency_id: 'BRL',
           },
         ],
         payer: {
-          // Se sua mulher for testar, peça para ela digitar o e-mail dela no checkout
           email: bodyData.email || 'cliente@email.com.br', 
         },
         payment_methods: {
           excluded_payment_methods: [],
           excluded_payment_types: [],
-          installments: 12,
+          installments: 3, // ✅ CORRIGIDO: Máximo 3x (era 12x)
         },
         back_urls: {
           success: `${siteUrl}/sucesso/templates`,
@@ -51,10 +50,9 @@ export async function POST(request: NextRequest) {
         },
         auto_return: 'approved',
         external_reference: externalReference,
-        // ✅ CORREÇÃO: Máximo 13 caracteres para aparecer na fatura
         statement_descriptor: 'STUDIOINVITAR', 
         notification_url: notificationUrl,
-        binary_mode: false,
+        binary_mode: true, // ✅ CORRIGIDO: true (era false)
       },
     });
 
@@ -67,7 +65,6 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error: any) {
-    // Log detalhado para você ver no terminal da Vercel/Node o motivo real da falha
     console.error('❌ Erro Mercado Pago:', error.api_response?.body || error.message);
     
     return NextResponse.json(
