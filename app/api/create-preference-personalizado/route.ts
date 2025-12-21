@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { MercadoPagoConfig, Preference } from 'mercadopago';
+import { AVAILABLE_COUPONS } from '@/lib/coupons';
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,10 +11,25 @@ export async function POST(request: NextRequest) {
     const preference = new Preference(client);
     const bodyData = await request.json().catch(() => ({}));
 
+    // --- LÓGICA DE PREÇO E CUPOM ---
+    let unitPrice = 147.00;
+    const couponCode = bodyData.couponCode?.trim().toUpperCase();
+
+    if (couponCode) {
+      const validCoupon = AVAILABLE_COUPONS.find(c => 
+        c.code === couponCode && 
+        c.isActive && 
+        (c.allowedProduct === 'PERSONALIZADO' || c.allowedProduct === 'ALL')
+      );
+      
+      if (validCoupon) {
+        unitPrice = unitPrice * (1 - validCoupon.discountPercentage / 100);
+      }
+    }
+    // -------------------------------
+
     const externalReference = `PERSONALIZADO-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
-    
-    // ✅ Evita erro de localhost e garante que a URL está correta
     const notificationUrl = siteUrl.includes('localhost') 
       ? undefined 
       : `${siteUrl}/api/webhook-mercadopago`;
@@ -24,10 +40,9 @@ export async function POST(request: NextRequest) {
           {
             id: 'convite-personalizado',
             title: 'Convite Digital Personalizado',
-            description: 'Convite digital exclusivo com design único',
-            // ✅ REMOVIDO category_id - vai usar a categoria do painel (Artes/Artesanato)
+            description: 'Convite digital exclusivo criado especialmente para você, com design único e personalizado',
             quantity: 1,
-            unit_price: 147.00,
+            unit_price: Number(unitPrice.toFixed(2)),
             currency_id: 'BRL',
           },
         ],
@@ -37,7 +52,7 @@ export async function POST(request: NextRequest) {
         payment_methods: {
           excluded_payment_methods: [],
           excluded_payment_types: [],
-          installments: 6, // ✅ CORRIGIDO: Máximo 6x (era 12x) - R$ 147 em 6x = R$ 24,50/mês
+          installments: 6,
         },
         back_urls: {
           success: `${siteUrl}/sucesso/personalizado`,
@@ -48,7 +63,7 @@ export async function POST(request: NextRequest) {
         external_reference: externalReference,
         statement_descriptor: 'STUDIOINVITAR', 
         notification_url: notificationUrl,
-        binary_mode: true, // ✅ CORRIGIDO: true (era false)
+        binary_mode: true,
       },
     });
 
