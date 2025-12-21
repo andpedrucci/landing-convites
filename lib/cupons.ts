@@ -11,11 +11,11 @@ export interface Coupon {
 
 export const AVAILABLE_COUPONS: Coupon[] = [
   // Cupons exclusivos para Templates (Preço base 47)
-  { code: 'PROMO47', discountPercentage: 10, isActive: true, allowedProduct: 'TEMPLATE' },
+  { code: 'DELUDOVICO15', discountPercentage: 15, isActive: true, allowedProduct: 'TEMPLATE' },
   
   // Cupons exclusivos para Personalizados (Preço base 147)
-  { code: 'VIP147', discountPercentage: 20, isActive: true, allowedProduct: 'PERSONALIZADO' },
+  { code: 'DELUDOVICO20', discountPercentage: 20, isActive: true, allowedProduct: 'PERSONALIZADO' },
   
   // Cupom que funciona em qualquer um
-  { code: 'STUDIO10', discountPercentage: 10, isActive: true, allowedProduct: 'ALL' },
+  { code: 'STUDIO1014528', discountPercentage: 10, isActive: true, allowedProduct: 'ALL' },
 ];
