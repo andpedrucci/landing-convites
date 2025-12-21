@@ -21,20 +21,20 @@ export async function POST(request: Request) {
     const { cliente, templates } = body;
 
     // ============================================
-    // 🔍 VALIDAÇÃO DOS DADOS
+    // 🔍 VALIDAÇÃO DOS DADOS - ATUALIZADO
     // ============================================
-    if (!cliente || !templates || templates.length !== 5) {
+    if (!cliente || !templates || templates.length !== 2) {
       return NextResponse.json(
-        { error: 'Dados inválidos. Envie cliente e exatamente 5 templates.' },
+        { error: 'Dados inválidos. Envie cliente e exatamente 2 templates.' },
         { status: 400 }
       );
     }
 
-    const { nome, email, whatsapp, tipoEvento, observacoes } = cliente;
+    const { nomeCrianca, idadeConvite, dataEvento, endereco, whatsapp, observacoes } = cliente;
 
-    if (!nome || !whatsapp) {
+    if (!nomeCrianca || !whatsapp || !dataEvento) {
       return NextResponse.json(
-        { error: 'Nome e WhatsApp são obrigatórios.' },
+        { error: 'Nome da Criança, WhatsApp e Data do Evento são obrigatórios.' },
         { status: 400 }
       );
     }
@@ -47,7 +47,7 @@ export async function POST(request: Request) {
     const { data: empresaLead, error: erroEmpresa } = await supabase
       .from('empresa_leads')
       .insert({
-        nome: nome,
+        nome: nomeCrianca,
         telefone: whatsapp,
         empresa_id: EMPRESA_ID,
         origem: 'Landing Page - Studio Invitare'
@@ -69,8 +69,8 @@ export async function POST(request: Request) {
       .from('contato_leads')
       .insert({
         empresa_lead_id: empresaLead.id,
-        nome: nome,
-        email: email || null,
+        nome: nomeCrianca,
+        email: null,
         telefone: whatsapp,
         contato_principal: true,
         empresa_id: EMPRESA_ID,
@@ -87,7 +87,7 @@ export async function POST(request: Request) {
     }
 
     // ============================================
-    // 3️⃣ CRIAR PROJETO
+    // 3️⃣ CRIAR PROJETO - ATUALIZADO COM NOVOS CAMPOS
     // ============================================
     
     // Montar descrição com os templates
@@ -95,10 +95,16 @@ export async function POST(request: Request) {
       .map((t: any) => `${t.ordem}. ${t.nome} (${t.tema}) - ${t.linkCanva}`)
       .join('\n');
 
-    const descricaoProjeto = `
-📋 TIPO DE EVENTO: ${tipoEvento || 'Não informado'}
+    // Formatar data para exibição
+    const dataFormatada = new Date(dataEvento).toLocaleDateString('pt-BR');
 
-🎨 TEMPLATES SELECIONADOS:
+    const descricaoProjeto = `
+👶 NOME DA CRIANÇA: ${nomeCrianca}
+🎂 IDADE: ${idadeConvite || 'Não informado'}
+📅 DATA DO EVENTO: ${dataFormatada}
+📍 ENDEREÇO: ${endereco || 'Não informado'}
+
+🎨 TEMPLATES SELECIONADOS (${templates.length}):
 ${templatesTexto}
 
 💬 OBSERVAÇÕES DO CLIENTE:
@@ -108,7 +114,7 @@ ${observacoes || 'Nenhuma observação.'}
     const { data: projeto, error: erroProjeto } = await supabase
       .from('projetos')
       .insert({
-        nome: `Templates - ${nome}`,
+        nome: `Templates - ${nomeCrianca}`,
         descricao: descricaoProjeto,
         empresa_id: EMPRESA_ID,
         funil_projeto_id: FUNIL_TEMPLATES_DIGITAIS,
@@ -128,7 +134,7 @@ ${observacoes || 'Nenhuma observação.'}
     console.log('✅ Projeto criado:', projeto.id);
 
     // ============================================
-    // 4️⃣ SALVAR OS 5 TEMPLATES NA TABELA projeto_templates
+    // 4️⃣ SALVAR OS 2 TEMPLATES NA TABELA projeto_templates
     // ============================================
     
     const templatesParaSalvar = templates.map((t: any) => ({
@@ -151,7 +157,7 @@ ${observacoes || 'Nenhuma observação.'}
     }
 
     // ============================================
-    // 5️⃣ CHAMAR API DO MAKE (ENVIAR EMAIL)
+    // 5️⃣ CHAMAR API DO MAKE (ENVIAR EMAIL) - ATUALIZADO
     // ============================================
     const templatesDetalhes = templates
       .map((t: any) => `${t.ordem}. ${t.nome} (${t.tema})`)
@@ -165,12 +171,22 @@ ${observacoes || 'Nenhuma observação.'}
           produto: 'Templates Digitais',
           preco: 47.00,
           cliente: {
-            nome,
-            email: email || '',
+            nome: nomeCrianca,
+            email: '',
             whatsapp
           },
-          detalhes: `Templates selecionados:\n${templatesDetalhes}\n\nObservações: ${observacoes || 'Nenhuma'}`,
-          tipoEvento: tipoEvento || 'Não informado',
+          detalhes: `
+Nome da Criança: ${nomeCrianca}
+Idade: ${idadeConvite || 'Não informado'}
+Data do Evento: ${dataFormatada}
+Endereço: ${endereco || 'Não informado'}
+
+Templates selecionados:
+${templatesDetalhes}
+
+Observações: ${observacoes || 'Nenhuma'}
+          `.trim(),
+          tipoEvento: templates[0]?.tema || 'Não informado',
           datamind: {
             empresa_lead_id: empresaLead.id,
             contato_id: contato?.id,
