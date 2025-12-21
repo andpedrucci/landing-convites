@@ -8,9 +8,15 @@ export async function POST(request: NextRequest) {
     });
 
     const preference = new Preference(client);
+    const bodyData = await request.json().catch(() => ({}));
 
-    // ✅ REFERÊNCIA EXTERNA - OBRIGATÓRIO (17 pontos)
     const externalReference = `PERSONALIZADO-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
+    
+    // ✅ Evita erro de localhost e garante que a URL está correta
+    const notificationUrl = siteUrl.includes('localhost') 
+      ? undefined 
+      : `${siteUrl}/api/webhook-mercadopago`;
 
     const result = await preference.create({
       body: {
@@ -18,18 +24,15 @@ export async function POST(request: NextRequest) {
           {
             id: 'convite-personalizado',
             title: 'Convite Digital Personalizado',
-            // ✅ DESCRIÇÃO DO ITEM - RECOMENDADO (3 pontos)
-            description: 'Convite digital exclusivo criado especialmente para você, com design único e personalizado',
-            // ✅ CATEGORIA DO ITEM - RECOMENDADO (4 pontos)
-            category_id: 'services', // Categoria: Serviços
+            description: 'Convite digital exclusivo com design único',
+            category_id: 'services',
             quantity: 1,
             unit_price: 147.00,
             currency_id: 'BRL',
           },
         ],
-        // ✅ INFORMAÇÕES DO COMPRADOR
         payer: {
-          email: 'cliente@studioinvitare.com.br', // OBRIGATÓRIO para aprovação
+          email: bodyData.email || 'cliente@studioinvitare.com.br',
         },
         payment_methods: {
           excluded_payment_methods: [],
@@ -37,44 +40,27 @@ export async function POST(request: NextRequest) {
           installments: 12,
         },
         back_urls: {
-          success: `${process.env.NEXT_PUBLIC_SITE_URL}/sucesso/personalizado`,
-          failure: `${process.env.NEXT_PUBLIC_SITE_URL}/falha`,
-          pending: `${process.env.NEXT_PUBLIC_SITE_URL}/pendente`,
+          success: `${siteUrl}/sucesso/personalizado`,
+          failure: `${siteUrl}/falha`,
+          pending: `${siteUrl}/pendente`,
         },
         auto_return: 'approved',
-        // ✅ REFERÊNCIA EXTERNA - OBRIGATÓRIO (17 pontos)
         external_reference: externalReference,
-        statement_descriptor: 'STUDIO INVITARE',
-        // ✅ NOTIFICAÇÕES WEBHOOK - OBRIGATÓRIO (14 pontos)
-        notification_url: `${process.env.NEXT_PUBLIC_SITE_URL}/api/webhook-mercadopago`,
+        // ✅ CORREÇÃO: Removido espaço e limitado a 13 caracteres
+        statement_descriptor: 'STUDIOINVITAR', 
+        notification_url: notificationUrl,
         binary_mode: false,
-        expires: false,
       },
     });
 
-    console.log('✅ Preferência COMPLETA criada:', {
-      id: result.id,
-      external_reference: externalReference,
-      init_point: result.init_point,
-      notification_url: `${process.env.NEXT_PUBLIC_SITE_URL}/api/webhook-mercadopago`
-    });
-
     return NextResponse.json({ 
-      id: result.id,
+      id: result.id, 
       init_point: result.init_point,
       external_reference: externalReference
     });
 
   } catch (error: any) {
-    console.error('❌ Erro ao criar preferência:', error);
-    console.error('Detalhes:', error.message);
-    
-    return NextResponse.json(
-      { 
-        error: 'Erro ao processar pagamento',
-        details: error.message 
-      },
-      { status: 500 }
-    );
+    console.error('❌ Erro MP:', error.api_response?.body || error.message);
+    return NextResponse.json({ error: 'Erro ao processar pagamento' }, { status: 500 });
   }
 }
