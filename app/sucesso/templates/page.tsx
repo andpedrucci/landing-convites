@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react';
 import { useEffect, useState } from 'react';
-import { CheckCircle2, Heart, Send, X, Check } from 'lucide-react';
+import { CheckCircle2, Heart, Send, X, Check, AlertCircle } from 'lucide-react';
 import { imagensPorTema } from '@/lib/templates-data';
 
 interface TemplateComTema {
@@ -17,15 +17,17 @@ function SucessoContent() {
   const [mounted, setMounted] = useState(false);
   const [templatesSelecionados, setTemplatesSelecionados] = useState<TemplateComTema[]>([]);
   const [temaAtivo, setTemaAtivo] = useState('aniversario');
+  const [temaEscolhido, setTemaEscolhido] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
   const [enviado, setEnviado] = useState(false);
 
-  // Dados do formulário
+  // Dados do formulário - ATUALIZADO
   const [formData, setFormData] = useState({
-    nome: '',
-    email: '',
+    nomeCrianca: '',
+    idadeConvite: '',
+    dataEvento: '',
+    endereco: '',
     whatsapp: '',
-    tipoEvento: '',
     observacoes: ''
   });
 
@@ -42,17 +44,46 @@ function SucessoContent() {
     // Se já está selecionado, remove
     if (templatesSelecionados.find(t => t.linkCanva === template.linkCanva)) {
       setTemplatesSelecionados(templatesSelecionados.filter(t => t.linkCanva !== template.linkCanva));
+      
+      // Se removeu todos, libera a escolha de tema novamente
+      if (templatesSelecionados.length === 1) {
+        setTemaEscolhido(null);
+      }
       return;
     }
 
-    // Se já tem 5, não adiciona mais
-    if (templatesSelecionados.length >= 5) {
-      alert('Você já selecionou 5 templates! Remova um para adicionar outro.');
+    // NOVA LÓGICA: Verifica se já escolheu um tema
+    if (temaEscolhido && template.tema !== temaEscolhido) {
+      alert(`Você só pode escolher templates do tema "${getTemaLabel(temaEscolhido)}". Remova os templates selecionados para escolher outro tema.`);
       return;
+    }
+
+    // Se já tem 2, não adiciona mais (MUDOU DE 5 PARA 2)
+    if (templatesSelecionados.length >= 2) {
+      alert('Você já selecionou 2 templates! Remova um para adicionar outro.');
+      return;
+    }
+
+    // Define o tema escolhido na primeira seleção
+    if (templatesSelecionados.length === 0) {
+      setTemaEscolhido(template.tema);
     }
 
     // Adiciona o template
     setTemplatesSelecionados([...templatesSelecionados, template]);
+  };
+
+  const getTemaLabel = (temaId: string) => {
+    const temas: { [key: string]: string } = {
+      'aniversario': 'Aniversário',
+      'batizado': 'Batizado',
+      'revelacao': 'Chá Revelação',
+      'cha-bebe': 'Chá de Bebê',
+      'fundomar': 'Fundo do Mar',
+      'princesa': 'Princesas',
+      'diversos': 'Diversos'
+    };
+    return temas[temaId] || temaId;
   };
 
   const estaSelecionado = (linkCanva: string) => {
@@ -60,14 +91,14 @@ function SucessoContent() {
   };
 
   const handleEnviarTemplates = async () => {
-    // Validações
-    if (templatesSelecionados.length !== 5) {
-      alert('Você precisa selecionar exatamente 5 templates!');
+    // Validações - ATUALIZADO
+    if (templatesSelecionados.length !== 2) {
+      alert('Você precisa selecionar exatamente 2 templates!');
       return;
     }
 
-    if (!formData.nome || !formData.email || !formData.whatsapp) {
-      alert('Por favor, preencha todos os campos obrigatórios!');
+    if (!formData.nomeCrianca || !formData.whatsapp || !formData.dataEvento) {
+      alert('Por favor, preencha todos os campos obrigatórios (Nome da Criança, WhatsApp e Data do Evento)!');
       return;
     }
 
@@ -81,7 +112,8 @@ function SucessoContent() {
         },
         body: JSON.stringify({
           cliente: formData,
-          templates: templatesSelecionados.map(t => ({
+          templates: templatesSelecionados.map((t, index) => ({
+            ordem: index + 1,
             nome: t.nome,
             linkCanva: t.linkCanva,
             tema: t.tema
@@ -116,7 +148,7 @@ function SucessoContent() {
           </h1>
           
           <p className="text-xl text-brown-600 mb-8">
-            Você receberá um email com os 5 templates selecionados em instantes!
+            Você receberá um email com os 2 templates selecionados em instantes!
           </p>
 
           <a 
@@ -144,11 +176,25 @@ function SucessoContent() {
             Pagamento Confirmado! 🎉
           </h1>
           
-          <p className="text-lg text-brown-600 mb-1">Selecione seus 5 templates favoritos</p>
+          <p className="text-lg text-brown-600 mb-1">Selecione 2 templates do mesmo tema</p>
           <p className="text-brown-600/70 text-sm">
-            {templatesSelecionados.length} de 5 selecionados
+            {templatesSelecionados.length} de 2 selecionados
+            {temaEscolhido && ` • Tema: ${getTemaLabel(temaEscolhido)}`}
           </p>
         </div>
+
+        {/* Aviso sobre tema único */}
+        {temaEscolhido && (
+          <div className="max-w-2xl mx-auto mb-6 bg-blue-50 border-l-4 border-blue-400 p-4 rounded-lg">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-blue-800">
+                Você está selecionando templates do tema <strong>{getTemaLabel(temaEscolhido)}</strong>. 
+                Para escolher outro tema, remova os templates já selecionados.
+              </p>
+            </div>
+          </div>
+        )}
 
         <div className="grid lg:grid-cols-3 gap-8">
           
@@ -169,9 +215,12 @@ function SucessoContent() {
                 <button
                   key={tema.id}
                   onClick={() => setTemaAtivo(tema.id)}
+                  disabled={temaEscolhido !== null && temaEscolhido !== tema.id}
                   className={`px-3 py-2 rounded-full font-medium transition-all text-sm ${
                     temaAtivo === tema.id
                       ? 'bg-beige-300 text-white shadow-lg'
+                      : temaEscolhido !== null && temaEscolhido !== tema.id
+                      ? 'bg-gray-200 text-gray-400 cursor-not-allowed opacity-50'
                       : 'bg-white text-brown-700 hover:bg-beige-50 shadow-md'
                   }`}
                 >
@@ -186,14 +235,17 @@ function SucessoContent() {
               {imagensPorTema[temaAtivo as keyof typeof imagensPorTema]?.map((template, index) => {
                 const templateComTema = { ...template, tema: temaAtivo };
                 const selecionado = estaSelecionado(template.linkCanva);
+                const desabilitado = temaEscolhido !== null && temaEscolhido !== temaAtivo;
                 
                 return (
                   <div
                     key={index}
-                    onClick={() => handleSelecionarTemplate(templateComTema)}
+                    onClick={() => !desabilitado && handleSelecionarTemplate(templateComTema)}
                     className={`relative cursor-pointer group rounded-xl overflow-hidden transition-all ${
                       selecionado 
                         ? 'ring-4 ring-green-400 shadow-xl' 
+                        : desabilitado
+                        ? 'opacity-40 cursor-not-allowed'
                         : 'hover:shadow-lg'
                     }`}
                   >
@@ -207,6 +259,8 @@ function SucessoContent() {
                     <div className={`absolute inset-0 transition-all ${
                       selecionado 
                         ? 'bg-green-600/20' 
+                        : desabilitado
+                        ? 'bg-gray-500/50'
                         : 'bg-black/0 group-hover:bg-black/10'
                     }`} />
 
@@ -235,7 +289,7 @@ function SucessoContent() {
               <div className="bg-white rounded-2xl p-6 shadow-lg">
                 <h3 className="font-serif text-xl text-brown-700 mb-4 flex items-center gap-2">
                   <Heart className="w-5 h-5 text-beige-300" />
-                  Selecionados ({templatesSelecionados.length}/5)
+                  Selecionados ({templatesSelecionados.length}/2)
                 </h3>
 
                 {templatesSelecionados.length === 0 ? (
@@ -253,10 +307,13 @@ function SucessoContent() {
                         />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium text-brown-700 truncate">{template.nome}</p>
-                          <p className="text-xs text-brown-600/60 capitalize">{template.tema}</p>
+                          <p className="text-xs text-brown-600/60 capitalize">{getTemaLabel(template.tema)}</p>
                         </div>
                         <button
-                          onClick={() => handleSelecionarTemplate(template)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSelecionarTemplate(template);
+                          }}
                           className="p-1 hover:bg-red-100 rounded-full transition-colors"
                         >
                           <X className="w-4 h-4 text-red-600" />
@@ -267,37 +324,68 @@ function SucessoContent() {
                 )}
               </div>
 
-              {/* Formulário */}
+              {/* Formulário - ATUALIZADO */}
               <div className="bg-white rounded-2xl p-6 shadow-lg">
-                <h3 className="font-serif text-xl text-brown-700 mb-4">Seus Dados</h3>
+                <h3 className="font-serif text-xl text-brown-700 mb-4">Dados do Evento</h3>
 
                 <div className="space-y-4">
+                  
+                  {/* Nome da Criança */}
                   <div>
                     <label className="block text-sm font-medium text-brown-700 mb-1">
-                      Nome Completo *
+                      Nome da Criança *
                     </label>
                     <input
                       type="text"
-                      value={formData.nome}
-                      onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+                      value={formData.nomeCrianca}
+                      onChange={(e) => setFormData({ ...formData, nomeCrianca: e.target.value })}
                       className="w-full px-4 py-2 border border-beige-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-beige-300"
-                      placeholder="Maria Silva"
+                      placeholder="Maria"
                     />
                   </div>
 
+                  {/* Idade do Convite */}
                   <div>
                     <label className="block text-sm font-medium text-brown-700 mb-1">
-                      Email *
+                      Idade do Convite *
                     </label>
                     <input
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      type="text"
+                      value={formData.idadeConvite}
+                      onChange={(e) => setFormData({ ...formData, idadeConvite: e.target.value })}
                       className="w-full px-4 py-2 border border-beige-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-beige-300"
-                      placeholder="maria@email.com"
+                      placeholder="Ex: 1 ano, 3 meses, etc"
                     />
                   </div>
 
+                  {/* Data do Evento */}
+                  <div>
+                    <label className="block text-sm font-medium text-brown-700 mb-1">
+                      Data do Evento *
+                    </label>
+                    <input
+                      type="date"
+                      value={formData.dataEvento}
+                      onChange={(e) => setFormData({ ...formData, dataEvento: e.target.value })}
+                      className="w-full px-4 py-2 border border-beige-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-beige-300"
+                    />
+                  </div>
+
+                  {/* Endereço */}
+                  <div>
+                    <label className="block text-sm font-medium text-brown-700 mb-1">
+                      Endereço do Evento *
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.endereco}
+                      onChange={(e) => setFormData({ ...formData, endereco: e.target.value })}
+                      className="w-full px-4 py-2 border border-beige-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-beige-300"
+                      placeholder="Rua, número, bairro, cidade"
+                    />
+                  </div>
+
+                  {/* WhatsApp */}
                   <div>
                     <label className="block text-sm font-medium text-brown-700 mb-1">
                       WhatsApp *
@@ -311,24 +399,7 @@ function SucessoContent() {
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-brown-700 mb-1">
-                      Tipo de Evento
-                    </label>
-                    <select
-                      value={formData.tipoEvento}
-                      onChange={(e) => setFormData({ ...formData, tipoEvento: e.target.value })}
-                      className="w-full px-4 py-2 border border-beige-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-beige-300"
-                    >
-                      <option value="">Selecione...</option>
-                      <option value="aniversario">Aniversário</option>
-                      <option value="batizado">Batizado</option>
-                      <option value="cha-revelacao">Chá Revelação</option>
-                      <option value="cha-bebe">Chá de Bebê</option>
-                      <option value="outros">Outros</option>
-                    </select>
-                  </div>
-
+                  {/* Observações */}
                   <div>
                     <label className="block text-sm font-medium text-brown-700 mb-1">
                       Observações
@@ -344,7 +415,7 @@ function SucessoContent() {
 
                   <button
                     onClick={handleEnviarTemplates}
-                    disabled={enviando || templatesSelecionados.length !== 5}
+                    disabled={enviando || templatesSelecionados.length !== 2}
                     className="w-full flex items-center justify-center gap-2 py-3.5 bg-beige-300 text-white rounded-full font-medium hover:bg-beige-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {enviando ? (
