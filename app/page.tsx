@@ -18,6 +18,32 @@ export default function Home() {
   const [discountTemplate, setDiscountTemplate] = useState(0); 
   const [discountPerso, setDiscountPerso] = useState(0);
 
+const [isPlaying, setIsPlaying] = useState(false);
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+
+  // 1. Criar o áudio apenas uma vez quando a página carregar
+  useEffect(() => {
+    const music = new Audio('/sunshine.mp3');
+    music.loop = true;
+    music.volume = 0.5; // Opcional: volume em 50% para não assustar
+    setAudio(music);
+
+    // Limpeza: desliga a música se o usuário sair da página
+    return () => {
+      music.pause();
+      setAudio(null);
+    };
+  }, []);
+
+  // 2. Função de iniciar música
+  const iniciarMusica = () => {
+    if (audio && !isPlaying) {
+      audio.play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => console.log("Permissão de áudio pendente:", err));
+    }
+  };
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -225,7 +251,10 @@ export default function Home() {
               ].map((tema) => (
                 <button
                   key={tema.id}
-                  onClick={() => setTemaAtivo(tema.id)}
+                  onClick={() => {
+                    setTemaAtivo(tema.id);
+                    iniciarMusica();
+                  }}
                   className={`px-4 py-2 rounded-full font-medium transition-all duration-300 text-sm ${
                     temaAtivo === tema.id
                       ? 'bg-beige-300 text-white shadow-lg scale-105'
@@ -304,7 +333,10 @@ export default function Home() {
                         transition: 'all 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
                         transformStyle: 'preserve-3d',
                       }}
-                      onClick={() => setImagemDestaque(index)}
+                      onClick={() => {
+                        setImagemDestaque(index);
+                        iniciarMusica();
+                      }}
                     >
                       <div className="w-full h-full bg-white rounded-xl shadow-2xl overflow-hidden border-4 border-beige-200 hover:border-beige-300 transition-all duration-300 group">
                         <div className="w-full h-full relative overflow-hidden">
@@ -346,6 +378,7 @@ export default function Home() {
                 onClick={() => {
                   const total = getImagensTema(temaAtivo).length;
                   setImagemDestaque((imagemDestaque - 1 + total) % total);
+                  iniciarMusica();
                 }}
                 className="p-3 bg-white rounded-full shadow-lg hover:bg-beige-50 transition-all hover:scale-110"
                 aria-label="Anterior"
@@ -358,6 +391,7 @@ export default function Home() {
                 onClick={() => {
                   const total = getImagensTema(temaAtivo).length;
                   setImagemDestaque((imagemDestaque + 1) % total);
+                  iniciarMusica();
                 }}
                 className="p-3 bg-white rounded-full shadow-lg hover:bg-beige-50 transition-all hover:scale-110"
                 aria-label="Próximo"
@@ -723,6 +757,16 @@ export default function Home() {
               </p>
             </div>
           </div>
+          {isPlaying && (
+          <button 
+            onClick={() => {
+              if (audio?.paused) { audio.play(); } else { audio?.pause(); }
+            }}
+            className="fixed bottom-24 right-8 z-[70] bg-white/80 p-3 rounded-full shadow-lg border border-beige-200 text-brown-600 text-[10px] font-bold"
+          >
+            SOM ON/OFF
+          </button>
+        )}
         </footer>
       </main>
     </>
