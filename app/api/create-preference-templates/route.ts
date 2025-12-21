@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
         items: [
           {
             id: 'templates-digitais',
-            title: '5 Templates Digitais Premium',
+            title: 'Convite digital',
             quantity: 1,
             unit_price: 47.00,
             currency_id: 'BRL',
