@@ -2,15 +2,7 @@
 
 import { Suspense } from 'react';
 import { useEffect, useState } from 'react';
-import {
-  Sparkles,
-  Heart,
-  X,
-  Check,
-  AlertCircle,
-  TicketPercent,
-  CreditCard
-} from 'lucide-react';
+import { Sparkles, Heart, X, Check, AlertCircle, TicketPercent, CreditCard } from 'lucide-react';
 import { AVAILABLE_COUPONS } from '@/lib/cupons';
 
 function PersonalizadoPreCheckoutContent() {
