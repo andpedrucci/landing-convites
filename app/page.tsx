@@ -64,7 +64,7 @@ const [isPlaying, setIsPlaying] = useState(false);
 
   const whatsappNumber = "5511995087592";
   
-  const getWhatsAppLink = (produto: string) => {
+  const getWhatsAppLink = (produto: string, mensagemExtra: string = "") => {
   const message = encodeURIComponent(
     `Olá! Tenho interesse no *${produto}*. Gostaria de mais informações! 💕`
   );
@@ -119,7 +119,6 @@ const [isPlaying, setIsPlaying] = useState(false);
       </div>
 
       <main className="snap-y snap-mandatory h-screen overflow-y-scroll scroll-smooth">
-        
         <section id="hero" className="snap-section snap-start relative overflow-hidden min-h-screen flex items-center">
           <div className="absolute top-20 right-10 w-[500px] h-[500px] bg-rose-200 opacity-20 blur-[120px] rounded-full animate-pulse" style={{animationDuration: '4s'}} />
           <div className="absolute bottom-20 left-10 w-[400px] h-[400px] bg-beige-300 opacity-20 blur-[100px] rounded-full animate-pulse" style={{animationDuration: '5s'}} />
