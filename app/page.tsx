@@ -214,16 +214,16 @@ const [isPlaying, setIsPlaying] = useState(false);
               </h1>
               
               <p className="text-xl md:text-2xl text-brown-600 max-w-2xl mx-auto mb-14 font-light leading-relaxed px-4">
-                Transforme momentos especiais em convites digitais inesquecíveis.
+                Escolha entre dezenas de estilos ou descreva o <b>seu</b> convite perfeito!
                 <br className="hidden md:block" />
-                Criados com carinho para celebrar sua história.
+                Nós cuidamos <b>com todo carinho</b> de todo o processo para você!
               </p>
 
               <button
                 onClick={() => scrollToSection('carrossel')}
                 className="inline-flex items-center gap-2 px-12 py-5 bg-beige-300 text-white rounded-full font-medium text-lg hover:bg-beige-400 transition-all duration-300 hover:scale-105 shadow-xl hover:shadow-2xl group"
               >
-                <span>Ver Convites</span>
+                <span>Encontrar meu convite perfeito</span>
                 <Heart className="w-5 h-5 group-hover:fill-white transition-all" />
               </button>
             </div>
