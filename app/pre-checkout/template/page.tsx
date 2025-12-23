@@ -3,9 +3,8 @@
 import { Suspense } from 'react';
 import { useEffect, useState } from 'react';
 import {
-  CheckCircle2,
+  Sparkles,
   Heart,
-  Send,
   X,
   Check,
   AlertCircle,
@@ -23,7 +22,7 @@ interface TemplateComTema {
   tema: string;
 }
 
-function SucessoContent() {
+function TemplatePreCheckoutContent() {
   const [mounted, setMounted] = useState(false);
 
   // ===== Templates =====
@@ -45,6 +44,7 @@ function SucessoContent() {
   const PRECO_BASE = 47;
   const [coupon, setCoupon] = useState('');
   const [discount, setDiscount] = useState(0);
+  const [couponApplied, setCouponApplied] = useState(false);
   const [loadingPagamento, setLoadingPagamento] = useState(false);
 
   const precoFinal = Number((PRECO_BASE * (1 - discount / 100)).toFixed(2));
@@ -108,10 +108,12 @@ function SucessoContent() {
     if (!found) {
       alert('Cupom inválido ou expirado.');
       setDiscount(0);
+      setCouponApplied(false);
       return;
     }
 
     setDiscount(found.discountPercentage);
+    setCouponApplied(true);
     alert(`Cupom de ${found.discountPercentage}% aplicado!`);
   };
 
@@ -123,7 +125,7 @@ function SucessoContent() {
     }
 
     if (!formData.nomeCrianca || !formData.whatsapp || !formData.dataEvento) {
-      alert('Preencha todos os campos obrigatórios.');
+      alert('Preencha todos os campos obrigatórios (Nome, WhatsApp e Data do Evento).');
       return;
     }
 
@@ -164,13 +166,13 @@ function SucessoContent() {
         {/* Header */}
         <div className="text-center mb-10">
           <div className="inline-flex items-center justify-center w-14 h-14 bg-beige-200 rounded-full mb-4">
-            <CheckCircle2 className="w-8 h-8 text-brown-700" />
+            <Sparkles className="w-8 h-8 text-beige-300" />
           </div>
           <h1 className="text-3xl md:text-4xl font-serif text-brown-700 mb-2">
-            Último passo antes do pagamento
+            Escolha seus templates e finalize
           </h1>
           <p className="text-brown-600">
-            Escolha 2 convites e finalize seu pedido
+            Selecione 2 convites do mesmo tema
           </p>
         </div>
 
@@ -184,10 +186,12 @@ function SucessoContent() {
                   key={tema}
                   onClick={() => setTemaAtivo(tema)}
                   disabled={temaEscolhido !== null && temaEscolhido !== tema}
-                  className={`px-3 py-2 rounded-full text-sm font-medium ${
+                  className={`px-3 py-2 rounded-full text-sm font-medium transition-all ${
                     temaAtivo === tema
                       ? 'bg-beige-300 text-white'
-                      : 'bg-white text-brown-700'
+                      : temaEscolhido !== null && temaEscolhido !== tema
+                      ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                      : 'bg-white text-brown-700 hover:bg-beige-50'
                   }`}
                 >
                   {getTemaLabel(tema)}
@@ -195,18 +199,60 @@ function SucessoContent() {
               ))}
             </div>
 
+            {/* Aviso sobre tema único */}
+            {temaEscolhido && (
+              <div className="mb-6 bg-blue-50 border-l-4 border-blue-400 p-4 rounded-lg">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-blue-800">
+                    Você está selecionando do tema <strong>{getTemaLabel(temaEscolhido)}</strong>. 
+                    Para escolher outro tema, remova os templates selecionados.
+                  </p>
+                </div>
+              </div>
+            )}
+
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {imagensPorTema[temaAtivo as keyof typeof imagensPorTema]?.map((template, index) => {
+                const templateComTema = { ...template, tema: temaAtivo };
                 const selecionado = estaSelecionado(template.linkCanva);
+                const desabilitado = temaEscolhido !== null && temaEscolhido !== temaAtivo;
+                
                 return (
                   <div
                     key={index}
-                    onClick={() => handleSelecionarTemplate({ ...template, tema: temaAtivo })}
-                    className={`cursor-pointer rounded-xl overflow-hidden border-4 ${
-                      selecionado ? 'border-green-400' : 'border-transparent'
+                    onClick={() => !desabilitado && handleSelecionarTemplate(templateComTema)}
+                    className={`relative cursor-pointer group rounded-xl overflow-hidden transition-all ${
+                      selecionado 
+                        ? 'ring-4 ring-green-400 shadow-xl' 
+                        : desabilitado
+                        ? 'opacity-40 cursor-not-allowed'
+                        : 'hover:shadow-lg'
                     }`}
                   >
-                    <img src={template.imagem} alt={template.nome} />
+                    <img 
+                      src={template.imagem} 
+                      alt={template.nome}
+                      className="w-full aspect-[3/4] object-cover"
+                    />
+                    
+                    <div className={`absolute inset-0 transition-all ${
+                      selecionado 
+                        ? 'bg-green-600/20' 
+                        : desabilitado
+                        ? 'bg-gray-500/50'
+                        : 'bg-black/0 group-hover:bg-black/10'
+                    }`} />
+
+                    {selecionado && (
+                      <div className="absolute top-2 right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+                        <Check className="w-5 h-5 text-white" strokeWidth={3} />
+                      </div>
+                    )}
+
+                    <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                      <p className="text-white text-sm font-medium">{template.nome}</p>
+                    </div>
                   </div>
                 );
               })}
@@ -216,24 +262,99 @@ function SucessoContent() {
           {/* Sidebar */}
           <div className="space-y-6">
 
-            {/* Dados */}
-            <div className="bg-white rounded-2xl p-6 shadow-lg space-y-3">
-              <h3 className="font-serif text-xl text-brown-700">Dados do Evento</h3>
+            {/* Templates Selecionados */}
+            <div className="bg-white rounded-2xl p-6 shadow-lg">
+              <h3 className="font-serif text-xl text-brown-700 mb-4 flex items-center gap-2">
+                <Heart className="w-5 h-5 text-beige-300" />
+                Selecionados ({templatesSelecionados.length}/2)
+              </h3>
 
-              {[
-                ['Nome da Criança', 'nomeCrianca'],
-                ['Idade', 'idadeConvite'],
-                ['WhatsApp', 'whatsapp'],
-                ['Endereço', 'endereco']
-              ].map(([label, key]) => (
+              {templatesSelecionados.length === 0 ? (
+                <p className="text-brown-600/60 text-sm text-center py-4">
+                  Nenhum convite selecionado
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {templatesSelecionados.map((template, index) => (
+                    <div key={index} className="flex items-center gap-3 bg-beige-50 rounded-lg p-3">
+                      <img 
+                        src={template.imagem} 
+                        alt={template.nome}
+                        className="w-12 h-16 object-cover rounded"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-brown-700 truncate">{template.nome}</p>
+                        <p className="text-xs text-brown-600/60 capitalize">{getTemaLabel(template.tema)}</p>
+                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSelecionarTemplate(template);
+                        }}
+                        className="p-1 hover:bg-red-100 rounded-full transition-colors"
+                      >
+                        <X className="w-4 h-4 text-red-600" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Dados do Evento */}
+            <div className="bg-white rounded-2xl p-6 shadow-lg space-y-3">
+              <h3 className="font-serif text-xl text-brown-700 mb-4">Dados do Evento</h3>
+
+              <div>
+                <label className="block text-sm font-medium text-brown-700 mb-1">Nome da Criança *</label>
                 <input
-                  key={key}
-                  placeholder={label}
-                  value={(formData as any)[key]}
-                  onChange={e => setFormData({ ...formData, [key]: e.target.value })}
-                  className="w-full px-4 py-2 border rounded-lg"
+                  placeholder="Maria"
+                  value={formData.nomeCrianca}
+                  onChange={e => setFormData({ ...formData, nomeCrianca: e.target.value })}
+                  className="w-full px-4 py-2 border border-beige-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-beige-300"
                 />
-              ))}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-brown-700 mb-1">Idade *</label>
+                <input
+                  placeholder="Ex: 1 ano"
+                  value={formData.idadeConvite}
+                  onChange={e => setFormData({ ...formData, idadeConvite: e.target.value })}
+                  className="w-full px-4 py-2 border border-beige-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-beige-300"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-brown-700 mb-1">Data do Evento *</label>
+                <input
+                  type="date"
+                  value={formData.dataEvento}
+                  onChange={e => setFormData({ ...formData, dataEvento: e.target.value })}
+                  className="w-full px-4 py-2 border border-beige-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-beige-300"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-brown-700 mb-1">Endereço</label>
+                <input
+                  placeholder="Local do evento"
+                  value={formData.endereco}
+                  onChange={e => setFormData({ ...formData, endereco: e.target.value })}
+                  className="w-full px-4 py-2 border border-beige-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-beige-300"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-brown-700 mb-1">WhatsApp *</label>
+                <input
+                  type="tel"
+                  placeholder="(11) 99999-9999"
+                  value={formData.whatsapp}
+                  onChange={e => setFormData({ ...formData, whatsapp: e.target.value })}
+                  className="w-full px-4 py-2 border border-beige-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-beige-300"
+                />
+              </div>
             </div>
 
             {/* Pagamento */}
@@ -244,33 +365,52 @@ function SucessoContent() {
 
               <div className="flex gap-2">
                 <input
-                  placeholder="Cupom"
+                  placeholder="Cupom de desconto"
                   value={coupon}
-                  onChange={e => setCoupon(e.target.value)}
-                  className="flex-1 px-4 py-2 border rounded-lg"
+                  onChange={e => {
+                    setCoupon(e.target.value);
+                    setCouponApplied(false);
+                    setDiscount(0);
+                  }}
+                  className="flex-1 px-4 py-2 border border-beige-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-beige-300"
                 />
                 <button
                   onClick={aplicarCupom}
-                  className="px-4 bg-beige-200 rounded-lg"
+                  className="px-4 py-2 bg-beige-200 hover:bg-beige-300 rounded-lg transition-colors"
                 >
-                  <TicketPercent className="w-4 h-4" />
+                  <TicketPercent className="w-5 h-5 text-brown-700" />
                 </button>
               </div>
 
-              <div className="text-center">
-                <p className="text-sm text-gray-400">Total</p>
+              {couponApplied && discount > 0 && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-sm text-green-700">
+                  ✅ Cupom aplicado: {discount}% de desconto
+                </div>
+              )}
+
+              <div className="text-center py-4">
+                {discount > 0 && (
+                  <p className="text-sm text-gray-400 line-through mb-1">
+                    R$ {PRECO_BASE.toFixed(2)}
+                  </p>
+                )}
                 <p className="text-3xl font-bold text-brown-700">
                   R$ {precoFinal.toFixed(2)}
                 </p>
+                <p className="text-xs text-gray-500 mt-1">Pacote com 2 templates</p>
               </div>
 
               <button
                 onClick={handleIrParaPagamento}
-                disabled={loadingPagamento}
-                className="w-full py-3 bg-beige-300 text-white rounded-full font-medium"
+                disabled={loadingPagamento || templatesSelecionados.length !== 2}
+                className="w-full py-3 bg-beige-300 text-white rounded-full font-medium hover:bg-beige-400 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loadingPagamento ? 'Redirecionando...' : 'Ir para pagamento'}
+                {loadingPagamento ? 'Redirecionando...' : 'Finalizar Compra'}
               </button>
+
+              <p className="text-xs text-center text-brown-600/60">
+                Pagamento seguro via Mercado Pago
+              </p>
             </div>
 
           </div>
@@ -280,10 +420,14 @@ function SucessoContent() {
   );
 }
 
-export default function Sucesso() {
+export default function TemplatePreCheckout() {
   return (
-    <Suspense fallback={<div className="p-20 text-center">Carregando...</div>}>
-      <SucessoContent />
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-b from-beige-50 via-beige-100 to-beige-50 flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-beige-300 border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <TemplatePreCheckoutContent />
     </Suspense>
   );
 }
