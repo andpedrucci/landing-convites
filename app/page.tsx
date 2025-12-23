@@ -213,7 +213,7 @@ const [isPlaying, setIsPlaying] = useState(false);
                 <span className="text-beige-300 italic font-light">o coração</span>
               </h1>
               
-              <p className="text-xl md:text-2xl text-brown-600 max-w-2xl mx-auto mb-14 font-light leading-relaxed px-4">
+              <p className="text-xl md:text-2xl text-brown-600 max-w-3xl mx-auto mb-14 font-light leading-relaxed px-4">
                 Escolha entre dezenas de estilos ou descreva o <b>seu</b> convite perfeito!
                 <br className="hidden md:block" />
                 Nós cuidamos <b>com todo carinho</b> de todo o processo para você!
@@ -409,20 +409,22 @@ const [isPlaying, setIsPlaying] = useState(false);
             <div className="grid md:grid-cols-3 gap-16">
               {[
                 {
-                  icon: <Clock className="w-8 h-8" strokeWidth={1.5} />,
-                  title: "Entrega Rápida",
-                  desc: "Em 3-5 dias úteis você tem seu convite pronto!"
+                  icon: <CheckCircle2 className="w-8 h-8" strokeWidth={1.5} />,
+                  title: "Como Funciona?",
+                  desc: "Você seleciona 2 modelos preferidos, e nossa equipe preenche com as informações do seu evento!"
                 },
                 {
                   icon: <Heart className="w-8 h-8" strokeWidth={1.5} />,
-                  title: "Feito com carinho",
-                  desc: "Cada detalhe pensado para celebrar seu momento especial."
+                  title: "E se eu não gostar?",
+                  desc: "Fique traqnuila, após a finalização, te enviamos para voce verificar se está tudo certo!."
                 },
                 {
-                  icon: <CheckCircle2 className="w-8 h-8" strokeWidth={1.5} />,
-                  title: "Escolha entre dois modelos",
-                  desc: "Você recebe dois convites e escolhe aquele que mais gostar!"
+                  icon: <Clock className="w-8 h-8" strokeWidth={1.5} />,
+                  title: "Recebo em quanto tempo?",
+                  desc: "Em até 3 dias úteis te enviamos a versão para aprovação."
                 }
+                
+                
               ].map((item, i) => (
                 <div 
                   key={i}
