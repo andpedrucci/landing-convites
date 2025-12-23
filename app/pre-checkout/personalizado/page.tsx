@@ -1,248 +1,293 @@
 'use client';
 
-import { Suspense } from 'react';
-import { useEffect, useState } from 'react';
-import { CheckCircle2, Heart, Send, Sparkles } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Heart, Sparkles, Clock, CheckCircle2, Star, Send } from 'lucide-react';
+import { imagensPorTema } from '@/lib/templates-data';
 
-function PersonalizadoContent() {
+export default function Home() {
   const [mounted, setMounted] = useState(false);
-  const [enviando, setEnviando] = useState(false);
-  const [enviado, setEnviado] = useState(false);
+  const [temaAtivo, setTemaAtivo] = useState('aniversario');
+  const [imagemDestaque, setImagemDestaque] = useState(0);
+  const [secaoAtual, setSecaoAtual] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
 
-  // Dados do formulário
-  const [formData, setFormData] = useState({
-    nome: '',
-    email: '',
-    whatsapp: '',
-    tipoEvento: '',
-    observacoes: ''
-  });
+  useEffect(() => {
+    const music = new Audio('/sunshine.mp3');
+    music.loop = true;
+    music.volume = 0.5;
+    setAudio(music);
+
+    return () => {
+      music.pause();
+      setAudio(null);
+    };
+  }, []);
+
+  const iniciarMusica = () => {
+    if (audio && !isPlaying) {
+      audio.play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => console.log("Permissão de áudio pendente:", err));
+    }
+  };
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const handleEnviarSolicitacao = async () => {
-    // Validações
-    if (!formData.nome || !formData.whatsapp) {
-      alert('Por favor, preencha Nome e WhatsApp!');
-      return;
-    }
+  useEffect(() => {
+    setImagemDestaque(0);
+  }, [temaAtivo]);
 
-    setEnviando(true);
-
-    try {
-      const response = await fetch('/api/enviar-personalizado', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          cliente: formData
-        }),
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = document.querySelectorAll('.snap-section');
+      sections.forEach((section, index) => {
+        const element = section as HTMLElement;
+        const rect = element.getBoundingClientRect();
+        if (rect.top <= 100 && rect.bottom >= 100) {
+          setSecaoAtual(index);
+        }
       });
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-      if (!response.ok) {
-        throw new Error('Erro ao enviar solicitação');
-      }
+  const whatsappNumber = "5511995087592";
+  
+  const getWhatsAppLink = (produto: string, extra: string = "") => {
+    const message = encodeURIComponent(
+      `Olá! Tenho interesse no *${produto}*. Gostaria de mais informações! 💕 ${extra}`
+    );
+    return `https://wa.me/${whatsappNumber}?text=${message}`;
+  };
 
-      setEnviado(true);
-    } catch (error) {
-      console.error('Erro:', error);
-      alert('Erro ao enviar solicitação. Tente novamente.');
-    } finally {
-      setEnviando(false);
+  const getImagensTema = (tema: string) => {
+    return imagensPorTema[tema as keyof typeof imagensPorTema] || imagensPorTema['aniversario'];
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
-  if (enviado) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-beige-50 via-beige-100 to-beige-50 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 text-center space-y-6">
-          <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto">
-            <CheckCircle2 className="w-12 h-12 text-white" />
-          </div>
-          
-          <h1 className="text-3xl font-serif text-brown-700">
-            Solicitação Enviada! 🎉
-          </h1>
-          
-          <div className="space-y-3 text-left bg-beige-50 rounded-xl p-6">
-            <p className="text-brown-700">
-              <strong>Olá, {formData.nome}!</strong>
-            </p>
-            <p className="text-brown-700">
-              Recebemos sua solicitação para criação de convite personalizado! 
-            </p>
-            <p className="text-brown-700">
-              Em breve entraremos em contato pelo WhatsApp <strong>{formData.whatsapp}</strong> para entender melhor sua visão e criar algo único para você.
-            </p>
-          </div>
+  const secoes = [
+    { id: 'hero', nome: 'Início' },
+    { id: 'carrossel', nome: 'Temas' },
+    { id: 'beneficios', nome: 'Benefícios' },
+    { id: 'produtos', nome: 'Produtos' },
+    { id: 'depoimentos', nome: 'Depoimentos' },
+    { id: 'faq', nome: 'FAQ' },
+    { id: 'cta', nome: 'Contato' },
+  ];
 
-          <a 
-            href="/" 
-            className="inline-flex items-center gap-2 px-8 py-4 bg-beige-300 text-white rounded-full font-medium hover:bg-beige-400 transition-all"
+  return (
+    <>
+      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col gap-4">
+        {secoes.map((secao, index) => (
+          <button
+            key={secao.id}
+            onClick={() => {
+              scrollToSection(secao.id);
+              setSecaoAtual(index);
+            }}
+            className="group relative"
+            aria-label={`Ir para ${secao.nome}`}
           >
-            Voltar para o site
-          </a>
-        </div>
+            <div className={`w-3 h-3 rounded-full transition-all duration-300 border-2 ${
+              secaoAtual === index 
+                ? 'bg-beige-300 border-beige-300 scale-125' 
+                : 'bg-transparent border-brown-400 hover:bg-brown-400 hover:border-brown-400'
+            }`} />
+            <span className="absolute right-6 top-1/2 -translate-y-1/2 bg-brown-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none shadow-lg">
+              {secao.nome}
+            </span>
+          </button>
+        ))}
       </div>
-    );
-  }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-beige-50 via-beige-100 to-beige-50 py-12 px-4">
-      <div className="max-w-2xl mx-auto">
-        
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-            <CheckCircle2 className="w-10 h-10 text-green-600" />
-          </div>
+      <main className="snap-y snap-mandatory h-screen overflow-y-scroll scroll-smooth">
+        <section id="hero" className="snap-section snap-start relative overflow-hidden min-h-screen flex items-center">
+          <div className="absolute top-20 right-10 w-[500px] h-[500px] bg-rose-200 opacity-20 blur-[120px] rounded-full animate-pulse" style={{animationDuration: '4s'}} />
+          <div className="absolute bottom-20 left-10 w-[400px] h-[400px] bg-beige-300 opacity-20 blur-[100px] rounded-full animate-pulse" style={{animationDuration: '5s'}} />
           
-          <h1 className="text-3xl md:text-4xl font-serif text-brown-700 mb-3">
-            Pagamento Confirmado! 🎉
-          </h1>
-          
-          <div className="inline-flex items-center gap-2 bg-white px-6 py-3 rounded-full shadow-lg mb-4">
-            <Sparkles className="w-5 h-5 text-beige-300" />
-            <span className="font-semibold text-brown-700">Convite Personalizado</span>
-          </div>
-          
-          <p className="text-lg text-brown-600">
-            Preencha o formulário abaixo para começarmos a criar seu convite exclusivo!
-          </p>
-        </div>
-
-        {/* Formulário */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
-          <div className="space-y-6">
-            
-            {/* Nome */}
-            <div>
-              <label className="block text-sm font-semibold text-brown-700 mb-2">
-                Nome completo *
-              </label>
-              <input
-                type="text"
-                value={formData.nome}
-                onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-                placeholder="Seu nome"
-                className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-beige-300 focus:outline-none transition-all"
-                required
-              />
-            </div>
-
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-semibold text-brown-700 mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                placeholder="seu@email.com"
-                className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-beige-300 focus:outline-none transition-all"
-              />
-            </div>
-
-            {/* WhatsApp */}
-            <div>
-              <label className="block text-sm font-semibold text-brown-700 mb-2">
-                WhatsApp *
-              </label>
-              <input
-                type="tel"
-                value={formData.whatsapp}
-                onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                placeholder="(11) 99508-7592"
-                className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-beige-300 focus:outline-none transition-all"
-                required
-              />
-            </div>
-
-            {/* Tipo de Evento */}
-            <div>
-              <label className="block text-sm font-semibold text-brown-700 mb-2">
-                Tipo de evento
-              </label>
-              <select
-                value={formData.tipoEvento}
-                onChange={(e) => setFormData({ ...formData, tipoEvento: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-beige-300 focus:outline-none transition-all bg-white"
+          <div className="relative max-w-7xl mx-auto px-6 py-20 w-full">
+            <div className={`text-center transition-all duration-1000 ease-out ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+              <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/70 backdrop-blur-md rounded-full border border-beige-300/30 shadow-sm">
+                <span className="text-sm font-medium text-brown-600 tracking-[0.25em] uppercase">Studio Invitare</span>
+              </div>
+              <h1 className="text-6xl md:text-8xl font-serif text-brown-700 mb-8 leading-[1.1] px-4 mt-16">
+                Convites que tocam<br />
+                <span className="text-beige-300 italic font-light">o coração</span>
+              </h1>
+              <p className="text-xl md:text-2xl text-brown-600 max-w-3xl mx-auto mb-14 font-light leading-relaxed px-4">
+                Escolha entre dezenas de estilos ou descreva o <b>seu</b> convite perfeito!
+                <br className="hidden md:block" />
+                Nós cuidamos <b>com todo carinho</b> de todo o processo para você!
+              </p>
+              <button
+                onClick={() => scrollToSection('carrossel')}
+                className="inline-flex items-center gap-2 px-12 py-5 bg-beige-300 text-white rounded-full font-medium text-lg hover:bg-beige-400 transition-all duration-300 hover:scale-105 shadow-xl hover:shadow-2xl group"
               >
-                <option value="">Selecione o tipo de evento</option>
-                <option value="Aniversário">Aniversário</option>
-                <option value="Casamento">Casamento</option>
-                <option value="Chá de Bebê">Chá de Bebê</option>
-                <option value="Chá Revelação">Chá Revelação</option>
-                <option value="Batizado">Batizado</option>
-                <option value="Mesversário">Mesversário</option>
-                <option value="Formatura">Formatura</option>
-                <option value="Bodas">Bodas</option>
-                <option value="Outro">Outro</option>
-              </select>
+                <span>Encontrar meu convite perfeito</span>
+                <Heart className="w-5 h-5 group-hover:fill-white transition-all" />
+              </button>
             </div>
-
-            {/* Observações */}
-            <div>
-              <label className="block text-sm font-semibold text-brown-700 mb-2">
-                Conte-nos como você imagina o seu convite ✨
-              </label>
-              <textarea
-                value={formData.observacoes}
-                onChange={(e) => setFormData({ ...formData, observacoes: e.target.value })}
-                placeholder="Descreva como você imagina seu convite: cores, estilo, tema, elementos especiais..."
-                rows={6}
-                className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-beige-300 focus:outline-none transition-all resize-none"
-              />
-            </div>
-
-            {/* Botão Enviar */}
-            <button
-              onClick={handleEnviarSolicitacao}
-              disabled={enviando}
-              className="w-full bg-beige-300 hover:bg-beige-400 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg"
-            >
-              {enviando ? (
-                <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Enviando...
-                </>
-              ) : (
-                <>
-                  <Send className="w-5 h-5" />
-                  Enviar Solicitação
-                </>
-              )}
-            </button>
-
-            <p className="text-sm text-brown-600/60 text-center">
-              * Campos obrigatórios
-            </p>
           </div>
-        </div>
+        </section>
 
-        {/* Footer */}
-        <div className="text-center mt-8 flex items-center justify-center gap-2 text-brown-600">
-          <Heart className="w-4 h-4 fill-current text-beige-300" />
-          <span className="text-sm">Feito com amor pela Studio Invitare</span>
-        </div>
+        <section id="carrossel" className="snap-section snap-start py-8 px-6 relative overflow-hidden pt-6 pb-10 flex items-start bg-gradient-to-b from-beige-50 via-white to-beige-50">
+          <div className="relative max-w-7xl mx-auto w-full">
+            <div className="text-center mb-4">
+              <h2 className="text-3xl md:text-4xl font-serif text-brown-700 mb-2">Explore nossos <span className="text-beige-300 italic">temas exclusivos</span></h2>
+              <p className="text-sm text-brown-600 font-light">Escolha o estilo perfeito para o seu momento</p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-3 mb-6">
+              {[
+                { id: 'aniversario', label: 'Aniversário', emoji: '🎂' },
+                { id: 'batizado', label: 'Batizado', emoji: '✨' },
+                { id: 'revelacao', label: 'Chá Revelação', emoji: '🎀' },
+                { id: 'cha-bebe', label: 'Chá de Bebê', emoji: '🍼' },
+                { id: 'fundomar', label: 'Fundo do Mar', emoji: '🌊' },
+                { id: 'princesa', label: 'Princesas', emoji: '👸🏼' },
+                { id: 'diversos', label: 'Diversos', emoji: '👸🎉' },
+              ].map((tema) => (
+                <button
+                  key={tema.id}
+                  onClick={() => { setTemaAtivo(tema.id); iniciarMusica(); }}
+                  className={`px-4 py-2 rounded-full font-medium transition-all duration-300 text-sm ${temaAtivo === tema.id ? 'bg-beige-300 text-white shadow-lg' : 'bg-white text-brown-700'}`}
+                >
+                  <span className="mr-1.5">{tema.emoji}</span>{tema.label}
+                </button>
+              ))}
+            </div>
+            <div className="relative h-[420px] flex items-start justify-center mb-2">
+              <div className="relative w-full h-full" style={{ perspective: '2200px' }}>
+                {getImagensTema(temaAtivo).map((imagem, index) => {
+                  const diff = index - imagemDestaque;
+                  return (
+                    <div key={index} className="absolute left-1/2 top-0 w-72 h-96 cursor-pointer"
+                      style={{ transform: `translateX(-50%)`, display: index === imagemDestaque ? 'block' : 'none' }}>
+                      <img src={imagem.imagem} alt={imagem.nome} className="w-full h-full object-cover rounded-xl shadow-2xl" />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </section>
 
-      </div>
-    </div>
-  );
-}
+        <section id="produtos" className="snap-section snap-start py-12 px-6 min-h-screen flex items-center bg-gradient-to-b from-white to-beige-50">
+          <div className="max-w-6xl mx-auto w-full">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-serif text-brown-700 mb-3">
+                Escolha seu <span className="text-beige-300 italic">estilo perfeito</span>
+              </h2>
+              <p className="text-brown-600">Convites prontos ou totalmente personalizados</p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              
+              {/* Card Templates */}
+              <div className="bg-white rounded-[2rem] p-8 shadow-2xl border border-beige-200/50 hover:shadow-3xl transition-all">
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-beige-100 rounded-full mb-4">
+                    <Sparkles className="w-8 h-8 text-beige-300" />
+                  </div>
+                  <h3 className="text-2xl font-serif text-brown-700 mb-2">Templates Digitais</h3>
+                  <p className="text-brown-600 text-sm">Escolha 2 convites do mesmo tema</p>
+                </div>
+                
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-center gap-2 text-brown-600">
+                    <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    <span>2 templates editáveis</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-brown-600">
+                    <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    <span>Entrega imediata</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-brown-600">
+                    <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    <span>Edição fácil no Canva</span>
+                  </li>
+                </ul>
+                
+                <button 
+                  onClick={() => window.location.href = '/pre-checkout/template'} 
+                  className="w-full py-3.5 bg-beige-300 text-white rounded-full mb-3 font-medium hover:bg-beige-400 transition-all"
+                >
+                  Escolher Templates
+                </button>
+                <a 
+                  href={getWhatsAppLink("Templates Digitais", "")} 
+                  className="block text-center text-beige-300 border border-beige-300 py-3 rounded-full hover:bg-beige-50 transition-all"
+                >
+                  Tirar Dúvidas
+                </a>
+              </div>
 
-export default function PersonalizadoPage() {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-b from-beige-50 via-beige-100 to-beige-50 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-beige-300 border-t-transparent rounded-full animate-spin" />
-      </div>
-    }>
-      <PersonalizadoContent />
-    </Suspense>
+              {/* Card Personalizado */}
+              <div className="bg-gradient-to-br from-beige-300 to-beige-400 rounded-[2rem] p-8 shadow-2xl text-white hover:shadow-3xl transition-all relative overflow-hidden">
+                <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold">
+                  EXCLUSIVO
+                </div>
+                
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full mb-4">
+                    <Heart className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-serif mb-2">Convite Personalizado</h3>
+                  <p className="text-white/90 text-sm">Criado especialmente para você</p>
+                </div>
+                
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-white" />
+                    <span>Design 100% exclusivo</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-white" />
+                    <span>Criado do zero para você</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-white" />
+                    <span>Atendimento personalizado</span>
+                  </li>
+                </ul>
+                
+                <button 
+                  onClick={() => window.location.href = '/pre-checkout/personalizado'} 
+                  className="w-full py-3.5 bg-white text-beige-300 rounded-full mb-3 font-medium hover:bg-white/90 transition-all"
+                >
+                  Quero Meu Convite
+                </button>
+                <a 
+                  href={getWhatsAppLink("Convite Personalizado", "")} 
+                  className="block text-center border border-white py-3 rounded-full hover:bg-white/10 transition-all"
+                >
+                  Tirar Dúvidas
+                </a>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <footer className="py-12 px-6 bg-brown-700 text-white text-center">
+          <p>© 2024 Studio Invitare</p>
+          {isPlaying && (
+            <button onClick={() => audio?.paused ? audio.play() : audio?.pause()} className="fixed bottom-24 right-8 bg-white/80 p-3 rounded-full shadow-lg text-brown-600 text-[10px] font-bold">
+              SOM ON/OFF
+            </button>
+          )}
+        </footer>
+      </main>
+    </>
   );
 }
