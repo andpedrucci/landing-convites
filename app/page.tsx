@@ -416,7 +416,7 @@ const [isPlaying, setIsPlaying] = useState(false);
                 {
                   icon: <Heart className="w-8 h-8" strokeWidth={1.5} />,
                   title: "E se eu não gostar?",
-                  desc: "Fique traqnuila, após a finalização, te enviamos para voce verificar se está tudo certo!."
+                  desc: "Fique tranquila! Antes da entrega final, enviamos uma prévia para conferência e você pode solicitar uma revisão gratuita."
                 },
                 {
                   icon: <Clock className="w-8 h-8" strokeWidth={1.5} />,
