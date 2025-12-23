@@ -184,17 +184,97 @@ export default function Home() {
 
         <section id="produtos" className="snap-section snap-start py-12 px-6 min-h-screen flex items-center bg-gradient-to-b from-white to-beige-50">
           <div className="max-w-6xl mx-auto w-full">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-serif text-brown-700 mb-3">
+                Escolha seu <span className="text-beige-300 italic">estilo perfeito</span>
+              </h2>
+              <p className="text-brown-600">Convites prontos ou totalmente personalizados</p>
+            </div>
+            
             <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <div className="bg-white rounded-[2rem] p-8 shadow-2xl border border-beige-200/50">
-                <h3 className="text-2xl font-serif text-brown-700 mb-6">Convite Pronto</h3>
-                <button onClick={() => window.location.href = '/pre-checkout/template'} className="w-full py-3.5 bg-beige-300 text-white rounded-full mb-3">Escolher</button>
-                <a href={getWhatsAppLink("Convite Pronto", "")} className="block text-center text-beige-300 border border-beige-300 py-3 rounded-full">Tirar Dúvidas</a>
+              
+              {/* Card Templates */}
+              <div className="bg-white rounded-[2rem] p-8 shadow-2xl border border-beige-200/50 hover:shadow-3xl transition-all">
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-beige-100 rounded-full mb-4">
+                    <Sparkles className="w-8 h-8 text-beige-300" />
+                  </div>
+                  <h3 className="text-2xl font-serif text-brown-700 mb-2">Templates Digitais</h3>
+                  <p className="text-brown-600 text-sm">Escolha 2 convites do mesmo tema</p>
+                </div>
+                
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-center gap-2 text-brown-600">
+                    <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    <span>2 templates editáveis</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-brown-600">
+                    <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    <span>Entrega imediata</span>
+                  </li>
+                  <li className="flex items-center gap-2 text-brown-600">
+                    <CheckCircle2 className="w-5 h-5 text-green-500" />
+                    <span>Edição fácil no Canva</span>
+                  </li>
+                </ul>
+                
+                <button 
+                  onClick={() => window.location.href = '/pre-checkout/template'} 
+                  className="w-full py-3.5 bg-beige-300 text-white rounded-full mb-3 font-medium hover:bg-beige-400 transition-all"
+                >
+                  Escolher Templates
+                </button>
+                <a 
+                  href={getWhatsAppLink("Templates Digitais", "")} 
+                  className="block text-center text-beige-300 border border-beige-300 py-3 rounded-full hover:bg-beige-50 transition-all"
+                >
+                  Tirar Dúvidas
+                </a>
               </div>
-              <div className="bg-gradient-to-br from-beige-300 to-beige-400 rounded-[2rem] p-8 shadow-2xl text-white">
-                <h3 className="text-2xl font-serif mb-6">Personalizado</h3>
-                <button onClick={() => window.location.href = '/pre-checkout/personalizado'} className="w-full py-3.5 bg-white text-beige-300 rounded-full mb-3">Quero meu convite</button>
-                <a href={getWhatsAppLink("Convite Personalizado", "")} className="block text-center border border-white py-3 rounded-full">Tirar Dúvidas</a>
+
+              {/* Card Personalizado */}
+              <div className="bg-gradient-to-br from-beige-300 to-beige-400 rounded-[2rem] p-8 shadow-2xl text-white hover:shadow-3xl transition-all relative overflow-hidden">
+                <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold">
+                  EXCLUSIVO
+                </div>
+                
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full mb-4">
+                    <Heart className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-serif mb-2">Convite Personalizado</h3>
+                  <p className="text-white/90 text-sm">Criado especialmente para você</p>
+                </div>
+                
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-white" />
+                    <span>Design 100% exclusivo</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-white" />
+                    <span>Criado do zero para você</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-white" />
+                    <span>Atendimento personalizado</span>
+                  </li>
+                </ul>
+                
+                <button 
+                  onClick={() => window.location.href = '/pre-checkout/personalizado'} 
+                  className="w-full py-3.5 bg-white text-beige-300 rounded-full mb-3 font-medium hover:bg-white/90 transition-all"
+                >
+                  Quero Meu Convite
+                </button>
+                <a 
+                  href={getWhatsAppLink("Convite Personalizado", "")} 
+                  className="block text-center border border-white py-3 rounded-full hover:bg-white/10 transition-all"
+                >
+                  Tirar Dúvidas
+                </a>
               </div>
+
             </div>
           </div>
         </section>
