@@ -3,20 +3,13 @@
 import { useState, useEffect } from 'react';
 import { Heart, Sparkles, Clock, CheckCircle2, Star, Send } from 'lucide-react';
 import { imagensPorTema } from '@/lib/templates-data';
-import { AVAILABLE_COUPONS } from '@/lib/cupons';
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
-  const [isLoadingCheckout, setIsLoadingCheckout] = useState(false);
   const [temaAtivo, setTemaAtivo] = useState('aniversario');
   const [imagemDestaque, setImagemDestaque] = useState(0);
   const [secaoAtual, setSecaoAtual] = useState(0);
 
-  // Estados para Cupons
-  const [couponTemplate, setCouponTemplate] = useState('');
-  const [couponPerso, setCouponPerso] = useState('');
-  const [discountTemplate, setDiscountTemplate] = useState(0); 
-  const [discountPerso, setDiscountPerso] = useState(0);
 
 const [isPlaying, setIsPlaying] = useState(false);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
@@ -71,77 +64,17 @@ const [isPlaying, setIsPlaying] = useState(false);
 
   const whatsappNumber = "5511995087592";
   
-  const getWhatsAppLink = (produto: string, preco: string) => {
-    const message = encodeURIComponent(
-      `Olá! Tenho interesse no *${produto}* (${preco}). Gostaria de mais informações! 💕`
-    );
-    return `https://wa.me/${whatsappNumber}?text=${message}`;
-  };
+  const getWhatsAppLink = (produto: string) => {
+  const message = encodeURIComponent(
+    `Olá! Tenho interesse no *${produto}*. Gostaria de mais informações! 💕`
+  );
+  return `https://wa.me/${whatsappNumber}?text=${message}`;
+};
 
   const getImagensTema = (tema: string) => {
     return imagensPorTema[tema as keyof typeof imagensPorTema] || imagensPorTema['aniversario'];
   };
 
-  const applyCoupon = (type: 'TEMPLATE' | 'PERSONALIZADO') => {
-    const code = type === 'TEMPLATE' ? couponTemplate : couponPerso;
-    const found = AVAILABLE_COUPONS.find(c => 
-      c.code === code.toUpperCase() && 
-      c.isActive && 
-      (c.allowedProduct === type || c.allowedProduct === 'ALL')
-    );
-
-    if (found) {
-      if (type === 'TEMPLATE') setDiscountTemplate(found.discountPercentage);
-      else setDiscountPerso(found.discountPercentage);
-      alert(`Cupom de ${found.discountPercentage}% aplicado com sucesso!`);
-    } else {
-      alert("Cupom inválido para este produto ou expirado.");
-    }
-  };
-
-  const handleComprarTemplate = async () => {
-    setIsLoadingCheckout(true);
-    try {
-      const response = await fetch('/api/create-preference-templates', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ couponCode: couponTemplate }),
-      });
-      const data = await response.json();
-      if (data.init_point) {
-        window.location.href = data.init_point;
-      } else {
-        alert('Erro ao processar pagamento. Tente novamente.');
-        setIsLoadingCheckout(false);
-      }
-    } catch (error) {
-      console.error('Erro:', error);
-      alert('Erro ao processar pagamento. Tente novamente.');
-      setIsLoadingCheckout(false);
-    }
-  };
-
-  const handleComprarPersonalizado = async () => {
-    setIsLoadingCheckout(true);
-    try {
-      const response = await fetch('/api/create-preference-personalizado', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ couponCode: couponPerso }),
-      });
-      const data = await response.json();
-      if (data.init_point) {
-        window.location.href = data.init_point;
-      } else {
-        alert('Erro ao processar pagamento. Tente novamente.');
-        setIsLoadingCheckout(false);
-      }
-    } catch (error) {
-      console.error('Erro:', error);
-      alert('Erro ao processar pagamento. Tente novamente.');
-      setIsLoadingCheckout(false);
-    }
-  };
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -455,185 +388,113 @@ const [isPlaying, setIsPlaying] = useState(false);
 
             <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               
-              {/* Card Template Pronto */}
-              <div className="bg-white rounded-[2rem] p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 relative overflow-hidden group border border-beige-200/50">
-                <div className="absolute -top-20 -right-20 w-40 h-40 bg-rose-200 opacity-10 blur-3xl group-hover:opacity-20 group-hover:scale-150 transition-all duration-700" />
-                <div className="relative">
-                  <div className="mb-6">
-                    <div className="flex items-baseline justify-between mb-2">
-                      <h3 className="text-2xl font-serif text-brown-700">Convite Pronto</h3>
-                      <div className="text-right">
-                        {discountTemplate > 0 && (
-                          <span className="text-sm line-through text-gray-400 mr-2">R$ 47</span>
-                        )}
-                        <div className="text-3xl font-bold text-beige-300">
-                          R$ {(47 * (1 - discountTemplate / 100)).toFixed(2)}
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-brown-600/70 text-sm">Escolha seus favoritos</p>
-                  </div>
+             {/* Card Template Pronto */}
+<div className="bg-white rounded-[2rem] p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 relative overflow-hidden group border border-beige-200/50">
+  <div className="absolute -top-20 -right-20 w-40 h-40 bg-rose-200 opacity-10 blur-3xl group-hover:opacity-20 group-hover:scale-150 transition-all duration-700" />
+  <div className="relative">
+    
+    <div className="mb-6">
+      <h3 className="text-2xl font-serif text-brown-700 mb-2">Convite Pronto</h3>
+      <p className="text-brown-600/70 text-sm">Escolha seus favoritos</p>
+    </div>
 
-                  <ul className="space-y-2.5 mb-6">
-                    {[
-                      "2 modelos lindos para escolher;",
-                      "1 revisão no momento do envio da arte;",
-                      "1 revisão extra por R$ 9,90 em até um mês;",
-                      "Enviado no whatsapp em Imagem e PDF pra impressão."
-                    ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 group/item">
-                        <CheckCircle2 className="w-4 h-4 text-beige-300 mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform" strokeWidth={2} />
-                        <span className="text-brown-700 leading-relaxed text-sm">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+    <ul className="space-y-2.5 mb-8">
+      {[
+        "2 modelos lindos para escolher;",
+        "1 revisão no momento do envio da arte;",
+        "1 revisão extra por R$ 9,90 em até um mês;",
+        "Enviado no WhatsApp em imagem e PDF para impressão."
+      ].map((item, i) => (
+        <li key={i} className="flex items-start gap-3">
+          <CheckCircle2 className="w-4 h-4 text-beige-300 mt-0.5 flex-shrink-0" strokeWidth={2} />
+          <span className="text-brown-700 leading-relaxed text-sm">{item}</span>
+        </li>
+      ))}
+    </ul>
 
-                  {/* Campo de Cupom Template */}
-                  <div className="flex gap-2 mb-6">
-                    <input 
-                      type="text" 
-                      placeholder="Cupom" 
-                      className="flex-1 px-4 py-2 border border-beige-200 rounded-full text-sm outline-none focus:border-beige-300 transition-all"
-                      value={couponTemplate}
-                      onChange={(e) => setCouponTemplate(e.target.value)}
-                    />
-                    <button 
-                      onClick={() => applyCoupon('TEMPLATE')}
-                      className="px-4 py-2 bg-beige-100 text-brown-700 rounded-full text-xs font-bold hover:bg-beige-200 transition-colors"
-                    >
-                      Aplicar
-                    </button>
-                  </div>
+    <div className="space-y-3">
+      <button
+        onClick={() => (window.location.href = '/pre-checkout/template')}
+        className="flex items-center justify-center gap-2 w-full py-3.5 bg-beige-300 text-white text-center rounded-full font-medium hover:bg-beige-400 transition-all duration-300 shadow-md hover:shadow-xl"
+      >
+        <span>Escolher meus convites</span>
+        <Heart className="w-5 h-5 fill-white" />
+      </button>
 
-                  <div className="space-y-3">
-                    <button
-                      onClick={handleComprarTemplate}
-                      disabled={isLoadingCheckout}
-                      className="flex items-center justify-center gap-2 w-full py-3.5 bg-beige-300 text-white text-center rounded-full font-medium hover:bg-beige-400 transition-all duration-300 shadow-md hover:shadow-xl group/btn disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {isLoadingCheckout ? (
-                        <>
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                          <span>Processando...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Comprar Agora!</span>
-                          <Heart className="w-5 h-5 group-hover/btn:fill-white transition-all" />
-                        </>
-                      )}
-                    </button>
-                    <a
-                      href={getWhatsAppLink("Templates Digitais", "R$ 47")}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 w-full py-3 border-2 border-beige-300 text-beige-300 text-center rounded-full font-medium hover:bg-beige-50 transition-all duration-300"
-                    >
-                      <Send className="w-4 h-4" />
-                      <span>Tirar Dúvidas</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
+      <a
+        href={getWhatsAppLink("Convite Pronto", "")}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center justify-center gap-2 w-full py-3 border-2 border-beige-300 text-beige-300 text-center rounded-full font-medium hover:bg-beige-50 transition-all duration-300"
+      >
+        <Send className="w-4 h-4" />
+        <span>Tirar Dúvidas</span>
+      </a>
+    </div>
 
-              {/* Card Personalizado */}
-              <div className="bg-gradient-to-br from-beige-300 via-beige-400 to-beige-300 rounded-[2rem] p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 relative overflow-hidden group">
-                <div className="absolute top-6 right-6 bg-rose-200 text-white px-4 py-1.5 rounded-full text-xs font-medium shadow-lg rotate-3 hover:rotate-6 transition-transform">
-                  <div className="flex items-center gap-1.5">
-                    <Star className="w-3 h-3" fill="white" />
-                    <span>Mais Escolhido</span>
-                  </div>
-                </div>
-                <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-white opacity-10 blur-3xl group-hover:opacity-20 group-hover:scale-150 transition-all duration-700" />
-                <div className="relative pt-6">
-                  <div className="flex items-start justify-between mb-6">
-                    <div>
-                      <h3 className="text-2xl font-serif text-white mb-1">Personalizado</h3>
-                      <p className="text-white/80 text-xs">Exclusivo para você | Escolha seu próprio tema!</p>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-xs text-white/70 mb-1">investimento</div>
-                      {discountPerso > 0 && (
-                        <span className="text-sm line-through text-white/50 mr-2">R$ 147</span>
-                      )}
-                      <div className="text-3xl font-bold text-white">
-                        R$ {(147 * (1 - discountPerso / 100)).toFixed(2)}
-                      </div>
-                    </div>
-                  </div>
+  </div>
+</div>
 
-                  <ul className="space-y-2.5 mb-6">
-                    {[
-                      "Design exclusivo pro seu momento;",
-                      "Faça até duas alterações no período de um mês;",
-                      "Entrega em 3-5 dias úteis;",
-                      "Enviado no whatsapp em Imagem e PDF pra impressão."
-                    ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-3 group/item">
-                        <Star className="w-4 h-4 text-white mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform" fill="white" strokeWidth={2} />
-                        <span className="text-white leading-relaxed text-sm">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+{/* Card Personalizado */}
+<div className="bg-gradient-to-br from-beige-300 via-beige-400 to-beige-300 rounded-[2rem] p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 relative overflow-hidden group">
+  <div className="absolute top-6 right-6 bg-rose-200 text-white px-4 py-1.5 rounded-full text-xs font-medium shadow-lg rotate-3">
+    <div className="flex items-center gap-1.5">
+      <Star className="w-3 h-3" fill="white" />
+      <span>Mais Escolhido</span>
+    </div>
+  </div>
 
-                  {/* Campo de Cupom Personalizado */}
-                  <div className="flex gap-2 mb-6">
-                    <input 
-                      type="text" 
-                      placeholder="Cupom" 
-                      className="flex-1 px-4 py-2 border border-white/30 bg-white/10 text-white placeholder:text-white/50 rounded-full text-sm outline-none focus:bg-white/20 transition-all"
-                      value={couponPerso}
-                      onChange={(e) => setCouponPerso(e.target.value)}
-                    />
-                    <button 
-                      onClick={() => applyCoupon('PERSONALIZADO')}
-                      className="px-4 py-2 bg-white text-beige-300 rounded-full text-xs font-bold hover:bg-beige-50 transition-colors"
-                    >
-                      Aplicar
-                    </button>
-                  </div>
+  <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-white opacity-10 blur-3xl group-hover:opacity-20 group-hover:scale-150 transition-all duration-700" />
 
-                  <div className="bg-white/20 backdrop-blur-md rounded-2xl p-3 mb-6 text-center border border-white/30">
-                    <p className="text-white font-medium flex items-center justify-center gap-2 text-sm">
-                      <Sparkles className="w-3 h-3" />
-                      <span>Apenas 10 vagas este mês</span>
-                    </p>
-                  </div>
+  <div className="relative pt-6">
+    <div className="mb-6">
+      <h3 className="text-2xl font-serif text-white mb-1">Personalizado</h3>
+      <p className="text-white/80 text-xs">Exclusivo para você | Escolha seu próprio tema!</p>
+    </div>
 
-                  <div className="space-y-3">
-                    <button
-                      onClick={handleComprarPersonalizado}
-                      disabled={isLoadingCheckout}
-                      className="flex items-center justify-center gap-2 w-full py-3.5 bg-white text-beige-300 text-center rounded-full font-medium hover:bg-beige-50 transition-all duration-300 shadow-xl hover:shadow-2xl group/btn disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {isLoadingCheckout ? (
-                        <>
-                          <div className="w-5 h-5 border-2 border-beige-300 border-t-transparent rounded-full animate-spin" />
-                          <span>Processando...</span>
-                        </>
-                      ) : (
-                        <>
-                          <span>Quero Personalizado!</span>
-                          <Heart className="w-5 h-5 group-hover/btn:fill-beige-300 transition-all" />
-                        </>
-                      )}
-                    </button>
-                    <a
-                      href={getWhatsAppLink("Personalizado", "R$ 147")}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 w-full py-3 border-2 border-white text-white text-center rounded-full font-medium hover:bg-white/10 transition-all duration-300"
-                    >
-                      <Send className="w-4 h-4" />
-                      <span>Tirar Dúvidas</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
+    <ul className="space-y-2.5 mb-8">
+      {[
+        "Design exclusivo para o seu momento;",
+        "Até 2 alterações incluídas no período de um mês;",
+        "Entrega em 3–5 dias úteis;",
+        "Enviado no WhatsApp em imagem e PDF para impressão."
+      ].map((item, i) => (
+        <li key={i} className="flex items-start gap-3">
+          <Star className="w-4 h-4 text-white mt-0.5 flex-shrink-0" fill="white" strokeWidth={2} />
+          <span className="text-white leading-relaxed text-sm">{item}</span>
+        </li>
+      ))}
+    </ul>
 
-            </div>
-          </div>
-        </section>
+    <div className="bg-white/20 backdrop-blur-md rounded-2xl p-3 mb-6 text-center border border-white/30">
+      <p className="text-white font-medium flex items-center justify-center gap-2 text-sm">
+        <Sparkles className="w-3 h-3" />
+        <span>Apenas 10 vagas este mês</span>
+      </p>
+    </div>
+
+    <div className="space-y-3">
+      <button
+        onClick={() => (window.location.href = '/pre-checkout/personalizado')}
+        className="flex items-center justify-center gap-2 w-full py-3.5 bg-white text-beige-300 text-center rounded-full font-medium hover:bg-beige-50 transition-all duration-300 shadow-xl hover:shadow-2xl"
+      >
+        <span>Quero meu convite personalizado</span>
+        <Heart className="w-5 h-5 fill-beige-300" />
+      </button>
+
+      <a
+        href={getWhatsAppLink("Convite Personalizado", "")}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center justify-center gap-2 w-full py-3 border-2 border-white text-white text-center rounded-full font-medium hover:bg-white/10 transition-all duration-300"
+      >
+        <Send className="w-4 h-4" />
+        <span>Tirar Dúvidas</span>
+      </a>
+    </div>
+  </div>
+</div>
+</section>
 
         <section id="depoimentos" className="snap-section snap-start py-20 px-6 min-h-screen flex items-center bg-white/40 backdrop-blur-sm">
           <div className="max-w-5xl mx-auto w-full">
