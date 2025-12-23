@@ -494,6 +494,7 @@ const [isPlaying, setIsPlaying] = useState(false);
     </div>
   </div>
 </div>
+            </div>
 </section>
 
         <section id="depoimentos" className="snap-section snap-start py-20 px-6 min-h-screen flex items-center bg-white/40 backdrop-blur-sm">
