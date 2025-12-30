@@ -298,7 +298,7 @@ export default function Home() {
         </section>
 
         <section id="produtos" className="snap-section snap-start py-12 px-6 min-h-screen flex items-center bg-gradient-to-b from-white to-beige-50">
-          <div className="max-w-6xl mx-auto w-full">
+          <div className="max-w-7xl mx-auto w-full">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-serif text-brown-700 mb-3">
                 Escolha seu <span className="text-beige-300 italic">estilo perfeito</span>
@@ -306,88 +306,145 @@ export default function Home() {
               <p className="text-brown-600">Convites prontos ou totalmente personalizados</p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-3 gap-6 max-w-7xl mx-auto">
               
-              {/* Card Templates */}
-              <div className="bg-white rounded-[2rem] p-8 shadow-2xl border border-beige-200/50 hover:shadow-3xl transition-all">
+              {/* Card 1 - Templates Prontos */}
+              <div className="bg-white rounded-[2rem] p-8 shadow-2xl border border-beige-200/50 hover:shadow-3xl transition-all flex flex-col h-[580px]">
                 <div className="text-center mb-6">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-beige-100 rounded-full mb-4">
-                    <Sparkles className="w-8 h-8 text-beige-300" />
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-beige-100 rounded-full mb-4">
+                    <Sparkles className="w-10 h-10 text-beige-300" />
                   </div>
                   <h3 className="text-2xl font-serif text-brown-700 mb-2">Convites Prontos</h3>
                   <p className="text-brown-600 text-sm">Escolha 2 convites do mesmo tema</p>
                 </div>
                 
-                <ul className="space-y-3 mb-8">
-                  <li className="flex items-center gap-2 text-brown-600">
-                    <CheckCircle2 className="w-5 h-5 text-green-500" />
-                    <span>Preencha as informações do evento</span>
+                <ul className="space-y-3 mb-6 flex-grow">
+                  <li className="flex items-start gap-2 text-brown-600">
+                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">Preencha as informações do evento</span>
                   </li>
-                  <li className="flex items-center gap-2 text-brown-600">
-                    <CheckCircle2 className="w-5 h-5 text-green-500" />
-                    <span>Nossa equipe faz uma revisão</span>
+                  <li className="flex items-start gap-2 text-brown-600">
+                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">Nossa equipe faz uma revisão</span>
                   </li>
-                  <li className="flex items-center gap-2 text-brown-600">
-                    <CheckCircle2 className="w-5 h-5 text-green-500" />
-                    <span>Pronto! te entregamos uma imagem de alta qualidade do convite e um arquivo configurado para impressão</span>
+                  <li className="flex items-start gap-2 text-brown-600">
+                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">Pronto! te entregamos uma imagem de alta qualidade do convite e um arquivo configurado para impressão</span>
                   </li>
                 </ul>
                 
-                <button 
-                  onClick={() => window.location.href = '/pre-checkout/template'} 
-                  className="w-full py-3.5 bg-beige-300 text-white rounded-full mb-3 font-medium hover:bg-beige-400 transition-all"
-                >
-                  Escolher Templates
-                </button>
-                <a 
-                  href={getWhatsAppLink("Templates Digitais", "")} 
-                  className="block text-center text-beige-300 border border-beige-300 py-3 rounded-full hover:bg-beige-50 transition-all"
-                >
-                  Tirar Dúvidas
-                </a>
+                <div className="mt-auto space-y-3">
+                  <button 
+                    onClick={() => window.location.href = '/pre-checkout/template'} 
+                    className="w-full py-3.5 bg-beige-300 text-white rounded-full font-medium hover:bg-beige-400 transition-all"
+                  >
+                    Escolher Templates
+                  </button>
+                  <a 
+                    href={getWhatsAppLink("Templates Digitais", "")} 
+                    className="block text-center text-beige-300 border border-beige-300 py-3 rounded-full hover:bg-beige-50 transition-all"
+                  >
+                    Tirar Dúvidas
+                  </a>
+                </div>
               </div>
 
-              {/* Card Personalizado */}
-              <div className="bg-gradient-to-br from-beige-300 to-beige-400 rounded-[2rem] p-8 shadow-2xl text-white hover:shadow-3xl transition-all relative overflow-hidden">
+              {/* Card 2 - Personalizado */}
+              <div className="bg-gradient-to-br from-beige-300 to-beige-400 rounded-[2rem] p-8 shadow-2xl text-white hover:shadow-3xl transition-all relative overflow-hidden flex flex-col h-[580px]">
                 <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold">
                   EXCLUSIVO
                 </div>
                 
                 <div className="text-center mb-6">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full mb-4">
-                    <Heart className="w-8 h-8 text-white" />
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full mb-4">
+                    <Heart className="w-10 h-10 text-white" />
                   </div>
                   <h3 className="text-2xl font-serif mb-2">Convite Personalizado</h3>
                   <p className="text-white/90 text-sm">Criado especialmente para você</p>
                 </div>
                 
-                <ul className="space-y-3 mb-8">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-white" />
-                    <span>Design 100% exclusivo</span>
+                <ul className="space-y-3 mb-6 flex-grow">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-white flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">Design 100% exclusivo</span>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-white" />
-                    <span>Criado do zero para você</span>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-white flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">Criado do zero para você</span>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-white" />
-                    <span>Atendimento personalizado</span>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-white flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">Atendimento personalizado</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-white flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">2 revisões incluídas</span>
                   </li>
                 </ul>
                 
-                <button 
-                  onClick={() => window.location.href = '/pre-checkout/personalizado'} 
-                  className="w-full py-3.5 bg-white text-beige-300 rounded-full mb-3 font-medium hover:bg-white/90 transition-all"
-                >
-                  Quero Meu Convite
-                </button>
-                <a 
-                  href={getWhatsAppLink("Convite Personalizado", "")} 
-                  className="block text-center border border-white py-3 rounded-full hover:bg-white/10 transition-all"
-                >
-                  Tirar Dúvidas
-                </a>
+                <div className="mt-auto space-y-3">
+                  <button 
+                    onClick={() => window.location.href = '/pre-checkout/personalizado'} 
+                    className="w-full py-3.5 bg-white text-beige-300 rounded-full font-medium hover:bg-white/90 transition-all"
+                  >
+                    Quero Meu Convite
+                  </button>
+                  <a 
+                    href={getWhatsAppLink("Convite Personalizado", "")} 
+                    className="block text-center border border-white py-3 rounded-full hover:bg-white/10 transition-all"
+                  >
+                    Tirar Dúvidas
+                  </a>
+                </div>
+              </div>
+
+              {/* Card 3 - Assinatura Mêsversário */}
+              <div className="bg-gradient-to-br from-rose-200 to-beige-200 rounded-[2rem] p-8 shadow-2xl hover:shadow-3xl transition-all relative overflow-hidden flex flex-col h-[580px]">
+                <div className="absolute top-4 right-4 bg-white/40 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-brown-700">
+                  NOVO
+                </div>
+                
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-white/40 backdrop-blur-sm rounded-full mb-4">
+                    <Star className="w-10 h-10 text-beige-400" />
+                  </div>
+                  <h3 className="text-2xl font-serif text-brown-700 mb-2">Assinatura Mêsversário</h3>
+                  <p className="text-brown-700 text-sm">12 artes personalizadas para o 1º ano</p>
+                </div>
+                
+                <ul className="space-y-3 mb-6 flex-grow">
+                  <li className="flex items-start gap-2 text-brown-700">
+                    <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">12 artes exclusivas (1 por mês)</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-brown-700">
+                    <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">Acompanhe o crescimento do bebê</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-brown-700">
+                    <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">Perfeito para redes sociais</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-brown-700">
+                    <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm">Design consistente todo mês</span>
+                  </li>
+                </ul>
+                
+                <div className="mt-auto space-y-3">
+                  <button 
+                    onClick={() => window.location.href = getWhatsAppLink("Assinatura Mêsversário", "Quero saber mais sobre a assinatura!")}
+                    className="w-full py-3.5 bg-beige-300 text-white rounded-full font-medium hover:bg-beige-400 transition-all"
+                  >
+                    Saber Mais
+                  </button>
+                  <a 
+                    href={getWhatsAppLink("Assinatura Mêsversário", "")} 
+                    className="block text-center text-beige-300 border border-beige-300 py-3 rounded-full hover:bg-beige-50 transition-all"
+                  >
+                    Tirar Dúvidas
+                  </a>
+                </div>
               </div>
 
             </div>
