@@ -40,8 +40,8 @@ export async function POST(request: NextRequest) {
         items: [
           {
             id: 'templates-digitais',
-            title: 'Convite Digital - 2 Templates',
-            description: 'Pacote com 2 templates digitais editáveis do mesmo tema para seu evento especial',
+            title: 'Convite Digital',
+            description: 'Modelo de convite pronto (será enviado 2 modelos para escolha do seu preferido)',
             quantity: 1,
             unit_price: Number(unitPrice.toFixed(2)),
             currency_id: 'BRL',
