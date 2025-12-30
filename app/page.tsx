@@ -141,8 +141,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="carrossel" className="snap-section snap-start min-h-screen flex items-center px-6 relative overflow-hidden bg-gradient-to-b from-beige-50 via-white to-beige-50">
-          <div className="relative max-w-7xl mx-auto w-full py-20">
+        <section id="carrossel" className="snap-section snap-start min-h-screen flex items-center px-6 relative bg-gradient-to-b from-beige-50 via-white to-beige-50">
+          <div className="relative max-w-7xl mx-auto w-full py-20 overflow-visible">
             <div className="text-center mb-8">
               <h2 className="text-3xl md:text-4xl font-serif text-brown-700 mb-2">Explore nossos <span className="text-beige-300 italic">temas exclusivos</span></h2>
               <p className="text-sm text-brown-600 font-light">Escolha o estilo perfeito para o seu momento</p>
@@ -166,14 +166,14 @@ export default function Home() {
                 </button>
               ))}
             </div>
-            <div className="relative h-[450px] flex items-center justify-center mb-8">
-              <div className="relative w-full h-full preserve-3d" style={{ perspective: '2200px' }}>
+            <div className="relative h-[450px] flex items-center justify-center mb-8 overflow-visible">
+              <div className="relative w-full h-full preserve-3d overflow-visible" style={{ perspective: '2200px' }}>
                 {getImagensTema(temaAtivo).map((imagem, index) => {
                   const totalImagens = getImagensTema(temaAtivo).length;
                   const diff = index - imagemDestaque;
                   const anglePerImage = 360 / totalImagens;
                   const angle = diff * anglePerImage;
-                  const radius = 350;
+                  const radius = 450;
                   
                   return (
                     <div 
