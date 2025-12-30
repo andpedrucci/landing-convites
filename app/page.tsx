@@ -585,7 +585,7 @@ export default function Home() {
                 <h3 className="text-lg font-semibold mb-4">Nossos Produtos</h3>
                 <ul className="space-y-2 text-sm">
                   <li><a href="/pre-checkout/template" className="text-white/80 hover:text-white transition-colors">Convites Prontos</a></li>
-                  <li><a href="/pre-checkout/personalizado" className="text-white/80 hover:text-white transition-colors">Convite Personalizado</a></li>
+                  <li><a href="/pre-checkout/personalizado" className="text-white/80 hover:text-white transition-colors">Convites Personalizados</a></li>
                   <li><a href={getWhatsAppLink("Assinatura Mêsversário")} className="text-white/80 hover:text-white transition-colors">Assinatura Mêsversário</a></li>
                 </ul>
               </div>
