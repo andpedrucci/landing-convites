@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     const bodyData = await request.json().catch(() => ({}));
 
     // --- LÓGICA DE PREÇO E CUPOM ---
-    let unitPrice = 197.00; // Preço da assinatura anual (12 artes)
+    let unitPrice = 47; // Preço da assinatura anual (12 artes)
     const couponCode = bodyData.couponCode?.trim().toUpperCase();
     
     if (couponCode) {
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
           {
             id: 'assinatura-mesversario',
             title: 'Assinatura Mêsversário - 12 Artes',
-            description: 'Assinatura anual com 12 artes personalizadas para o primeiro ano do bebê (1 arte por mês)',
+            description: 'Assinatura mensal com 1 arte personalizadas por mês para o primeiro ano do bebê',
             quantity: 1,
             unit_price: Number(unitPrice.toFixed(2)),
             currency_id: 'BRL',
