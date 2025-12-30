@@ -1,3 +1,10 @@
+// ============================================
+// 📁 ARQUIVO: /app/api/enviar-templates/route.ts
+// 📝 FUNÇÃO: Salvar dados de TEMPLATES no CRM
+// 🎯 CHAMADO POR: Webhook do Mercado Pago
+// 💾 SALVA EM: Supabase (empresa_leads, contato_leads, projetos, projeto_templates)
+// ============================================
+
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
@@ -21,7 +28,7 @@ export async function POST(request: Request) {
     const { cliente, templates } = body;
 
     // ============================================
-    // 🔍 VALIDAÇÃO DOS DADOS - ATUALIZADO
+    // 🔍 VALIDAÇÃO DOS DADOS
     // ============================================
     if (!cliente || !templates || templates.length !== 2) {
       return NextResponse.json(
@@ -39,7 +46,7 @@ export async function POST(request: Request) {
       );
     }
 
-    console.log('📨 Dados recebidos:', JSON.stringify(body, null, 2));
+    console.log('📨 Dados recebidos (Templates):', JSON.stringify(body, null, 2));
 
     // ============================================
     // 1️⃣ CRIAR EMPRESA_LEAD
@@ -50,7 +57,7 @@ export async function POST(request: Request) {
         nome: nomeCrianca,
         telefone: whatsapp,
         empresa_id: EMPRESA_ID,
-        origem: 'Landing Page - Studio Invitare'
+        origem: 'Landing Page - Studio Invitare (Templates)'
       })
       .select()
       .single();
@@ -74,20 +81,19 @@ export async function POST(request: Request) {
         telefone: whatsapp,
         contato_principal: true,
         empresa_id: EMPRESA_ID,
-        origem: 'Landing Page - Studio Invitare'
+        origem: 'Landing Page - Studio Invitare (Templates)'
       })
       .select()
       .single();
 
     if (erroContato) {
       console.error('⚠️ Erro ao criar contato:', erroContato);
-      // Não falha se contato não for criado
     } else {
       console.log('✅ Contato criado:', contato.id);
     }
 
     // ============================================
-    // 3️⃣ CRIAR PROJETO - ATUALIZADO COM NOVOS CAMPOS
+    // 3️⃣ CRIAR PROJETO
     // ============================================
     
     // Montar descrição com os templates
@@ -121,7 +127,7 @@ ${observacoes || 'Nenhuma observação.'}
         etapa: ETAPA_INICIAL,
         status: 'ativo',
         origem: 'Landing Page - Studio Invitare',
-        valor: 47.00 // Valor fixo do pacote
+        valor: 20.00 // Valor fixo do pacote
       })
       .select()
       .single();
@@ -151,52 +157,8 @@ ${observacoes || 'Nenhuma observação.'}
 
     if (erroTemplates) {
       console.error('⚠️ Erro ao salvar templates:', erroTemplates);
-      // Não falha o processo, apenas loga
     } else {
       console.log('✅ Templates salvos:', templatesParaSalvar.length);
-    }
-
-    // ============================================
-    // 5️⃣ CHAMAR API DO MAKE (ENVIAR EMAIL) - ATUALIZADO
-    // ============================================
-    const templatesDetalhes = templates
-      .map((t: any) => `${t.ordem}. ${t.nome} (${t.tema})`)
-      .join('\n');
-
-    try {
-      await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/enviar-email-make`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          produto: 'Templates Digitais',
-          preco: 47.00,
-          cliente: {
-            nome: nomeCrianca,
-            email: '',
-            whatsapp
-          },
-          detalhes: `
-Nome da Criança: ${nomeCrianca}
-Idade: ${idadeConvite || 'Não informado'}
-Data do Evento: ${dataFormatada}
-Endereço: ${endereco || 'Não informado'}
-
-Templates selecionados:
-${templatesDetalhes}
-
-Observações: ${observacoes || 'Nenhuma'}
-          `.trim(),
-          tipoEvento: templates[0]?.tema || 'Não informado',
-          datamind: {
-            empresa_lead_id: empresaLead.id,
-            contato_id: contato?.id,
-            projeto_id: projeto.id
-          }
-        }),
-      });
-      console.log('✅ Email enviado via Make');
-    } catch (erroMake) {
-      console.warn('⚠️ Falha ao enviar email (não crítico):', erroMake);
     }
 
     // ============================================
@@ -204,7 +166,7 @@ Observações: ${observacoes || 'Nenhuma'}
     // ============================================
     return NextResponse.json({
       success: true,
-      message: 'Projeto criado com sucesso na DataMind!',
+      message: 'Projeto de templates criado com sucesso no CRM!',
       data: {
         empresa_lead_id: empresaLead.id,
         contato_id: contato?.id,
