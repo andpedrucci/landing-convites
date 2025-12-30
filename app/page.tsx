@@ -338,7 +338,7 @@ export default function Home() {
                     onClick={() => window.location.href = '/pre-checkout/template'} 
                     className="w-full py-3.5 bg-beige-300 text-white rounded-full font-medium hover:bg-beige-400 transition-all"
                   >
-                    Escolher Templates
+                    Escolher Convites
                   </button>
                   <a 
                     href={getWhatsAppLink("Templates Digitais", "")} 
