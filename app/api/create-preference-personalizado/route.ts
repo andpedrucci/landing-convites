@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     const bodyData = await request.json().catch(() => ({}));
 
     // --- LÓGICA DE PREÇO E CUPOM ---
-    let unitPrice = 147.00;
+    let unitPrice = 89.00;
     const couponCode = bodyData.couponCode?.trim().toUpperCase();
 
     if (couponCode) {
