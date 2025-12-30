@@ -301,9 +301,9 @@ export default function Home() {
           <div className="max-w-7xl mx-auto w-full">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-serif text-brown-700 mb-3">
-                Escolha seu <span className="text-beige-300 italic">estilo perfeito</span>
+                Escolha seu <span className="text-beige-300 italic">convite perfeito</span>
               </h2>
-              <p className="text-brown-600">Convites prontos ou totalmente personalizados</p>
+              <p className="text-brown-600">Convites prontos, totalmente personalizados ou faça a assinatura e tenha todo mês uma arte para o seu Mêsversário!</p>
             </div>
             
             <div className="grid md:grid-cols-3 gap-6 max-w-7xl mx-auto">
