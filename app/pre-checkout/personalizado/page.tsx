@@ -16,7 +16,7 @@ function PersonalizadoPreCheckoutContent() {
     observacoes: ''
   });
 
-  const PRECO_BASE = 147;
+  const PRECO_BASE = 89;
   const [coupon, setCoupon] = useState('');
   const [discount, setDiscount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
