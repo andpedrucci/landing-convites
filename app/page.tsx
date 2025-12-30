@@ -402,7 +402,7 @@ export default function Home() {
                 
                 <div className="mt-auto space-y-3">
                   <button 
-                    onClick={() => window.location.href = getWhatsAppLink("Assinatura Mêsversário", "Quero saber mais sobre a assinatura!")}
+                    onClick={() => window.location.href = '/pre-checkout/mesversario'}
                     className="w-full py-3.5 bg-beige-300 text-white rounded-full font-medium hover:bg-beige-400 transition-all"
                   >
                     Saber Mais
