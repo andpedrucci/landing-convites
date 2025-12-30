@@ -1,32 +1,169 @@
+// ============================================
+// 📁 ARQUIVO: /app/api/webhook-mercadopago/route.ts
+// 📝 FUNÇÃO: Receber notificações do Mercado Pago
+// 🎯 AÇÃO: Quando pagamento aprovado, chama API de envio para CRM
+// 🔗 CHAMADO POR: Mercado Pago (automático)
+// ============================================
+
 import { NextRequest, NextResponse } from 'next/server';
-import { MercadoPagoConfig, Payment } from 'mercadopago';
+import { MercadoPagoConfig, Payment, PreApproval } from 'mercadopago';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     
-    // O Mercado Pago envia o ID do pagamento dentro de data.id
-    const paymentId = body.data?.id;
+    console.log('🔔 Webhook recebido:', JSON.stringify(body, null, 2));
 
-    if (body.type === 'payment' && paymentId) {
-      const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN! });
-      const payment = new Payment(client);
-
-      // Busca o status real do pagamento
-      const pData = await payment.get({ id: paymentId });
-
-      if (pData.status === 'approved') {
-        console.log(`✅ SUCESSO: O pagamento ${paymentId} foi aprovado!`);
-        console.log(`🔗 Referência: ${pData.external_reference}`);
-        
-        // AQUI você pode chamar seu outro serviço (Make, enviar e-mail, etc)
-        // fetch('SUA_URL_DO_MAKE', { method: 'POST', body: JSON.stringify(pData) });
-      }
+    // ============================================
+    // 🔍 IDENTIFICAR TIPO DE NOTIFICAÇÃO
+    // ============================================
+    
+    // CASO 1: Notificação de PAGAMENTO (Templates e Personalizado)
+    if (body.type === 'payment' && body.data?.id) {
+      await processarPagamento(body.data.id);
+    }
+    
+    // CASO 2: Notificação de ASSINATURA (Mêsversário)
+    if (body.type === 'subscription_preapproval' && body.data?.id) {
+      await processarAssinatura(body.data.id);
     }
 
     return NextResponse.json({ received: true }, { status: 200 });
+    
   } catch (error: any) {
-    console.error('❌ Erro Webhook:', error.message);
+    console.error('❌ Erro no Webhook:', error.message);
+    // SEMPRE retorna 200 para o MP não ficar reenviando
     return NextResponse.json({ success: false }, { status: 200 });
+  }
+}
+
+// ============================================
+// 💳 PROCESSAR PAGAMENTO (Templates/Personalizado)
+// ============================================
+async function processarPagamento(paymentId: string) {
+  try {
+    const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN! });
+    const payment = new Payment(client);
+
+    // Buscar dados do pagamento
+    const pData = await payment.get({ id: paymentId });
+
+    console.log('💳 Status do pagamento:', pData.status);
+    console.log('🔗 External Reference:', pData.external_reference);
+
+    // ============================================
+    // ✅ SÓ PROCESSA SE APROVADO
+    // ============================================
+    if (pData.status === 'approved') {
+      console.log(`✅ PAGAMENTO APROVADO: ${paymentId}`);
+      
+      const externalRef = pData.external_reference || '';
+      const metadata = pData.metadata || {};
+
+      // ============================================
+      // 🎯 IDENTIFICAR TIPO DE PRODUTO
+      // ============================================
+      
+      // TEMPLATES
+      if (externalRef.startsWith('TEMPLATE-')) {
+        console.log('📦 Produto identificado: TEMPLATES');
+        await chamarAPIEnvio('/api/enviar-templates', {
+          cliente: metadata.cliente || {},
+          templates: metadata.templates || []
+        });
+      }
+      
+      // PERSONALIZADO
+      else if (externalRef.startsWith('PERSONALIZADO-')) {
+        console.log('📦 Produto identificado: PERSONALIZADO');
+        await chamarAPIEnvio('/api/enviar-personalizado', {
+          cliente: metadata.cliente || {}
+        });
+      }
+      
+      else {
+        console.warn('⚠️ External reference não reconhecida:', externalRef);
+      }
+    }
+    
+  } catch (error: any) {
+    console.error('❌ Erro ao processar pagamento:', error.message);
+  }
+}
+
+// ============================================
+// 🔄 PROCESSAR ASSINATURA (Mêsversário)
+// ============================================
+async function processarAssinatura(subscriptionId: string) {
+  try {
+    const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN! });
+    const preApproval = new PreApproval(client);
+
+    // Buscar dados da assinatura
+    const sData = await preApproval.get({ id: subscriptionId });
+
+    console.log('🔄 Status da assinatura:', sData.status);
+    console.log('🔗 External Reference:', sData.external_reference);
+
+    // ============================================
+    // ✅ SÓ PROCESSA SE AUTORIZADA
+    // ============================================
+    if (sData.status === 'authorized') {
+      console.log(`✅ ASSINATURA APROVADA: ${subscriptionId}`);
+      
+      const externalRef = sData.external_reference || '';
+
+      // ============================================
+      // 🎯 MÊSVERSÁRIO
+      // ============================================
+      if (externalRef.startsWith('MESVERSARIO-')) {
+        console.log('📦 Produto identificado: MÊSVERSÁRIO');
+        
+        // ⚠️ PreApproval não tem metadata, então precisamos buscar de outra forma
+        // OPÇÃO 1: Salvar em banco temporário quando criar a preferência
+        // OPÇÃO 2: Extrair do email do payer
+        
+        await chamarAPIEnvio('/api/enviar-mesversario', {
+          cliente: {
+            email: sData.payer_email || '',
+            // Outros dados precisam vir de outro lugar
+          },
+          subscription_id: subscriptionId,
+          external_reference: externalRef
+        });
+      }
+    }
+    
+  } catch (error: any) {
+    console.error('❌ Erro ao processar assinatura:', error.message);
+  }
+}
+
+// ============================================
+// 📤 CHAMAR API DE ENVIO PARA O CRM
+// ============================================
+async function chamarAPIEnvio(endpoint: string, dados: any) {
+  try {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+    const url = `${siteUrl}${endpoint}`;
+    
+    console.log(`📤 Chamando ${endpoint}...`);
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dados)
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log('✅ Dados salvos no CRM:', result);
+    } else {
+      const error = await response.text();
+      console.error('❌ Erro ao salvar no CRM:', error);
+    }
+    
+  } catch (error: any) {
+    console.error('❌ Erro ao chamar API de envio:', error.message);
   }
 }
