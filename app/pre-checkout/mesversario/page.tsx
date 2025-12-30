@@ -239,7 +239,7 @@ function MesversarioPreCheckoutContent() {
                     <p className="text-sm text-gray-400 line-through mb-1">R$ {PRECO_BASE.toFixed(2)}</p>
                   )}
                   <p className="text-3xl font-bold text-brown-700">R$ {precoFinal.toFixed(2)}</p>
-                  <p className="text-xs text-gray-500 mt-1">Assinatura anual - 12 artes</p>
+                  <p className="text-xs text-gray-500 mt-1">Valor Mensal (cancele quando quiser)</p>
                 </div>
 
                 <button
