@@ -18,13 +18,15 @@ function MesversarioPreCheckoutContent() {
     observacoes: ''
   });
 
-  const PRECO_BASE = 47; // Preço para 12 artes
+  const PRECO_MENSAL = 16.42; // 12 artes / 12 meses
+  const PRECO_TOTAL = 197.00; // Total anual
   const [coupon, setCoupon] = useState('');
   const [discount, setDiscount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
   const [loadingPagamento, setLoadingPagamento] = useState(false);
 
-  const precoFinal = Number((PRECO_BASE * (1 - discount / 100)).toFixed(2));
+  const precoMensalFinal = Number((PRECO_MENSAL * (1 - discount / 100)).toFixed(2));
+  const precoTotalFinal = Number((PRECO_TOTAL * (1 - discount / 100)).toFixed(2));
 
   useEffect(() => setMounted(true), []);
 
@@ -236,10 +238,28 @@ function MesversarioPreCheckoutContent() {
 
                 <div className="text-center py-4">
                   {discount > 0 && (
-                    <p className="text-sm text-gray-400 line-through mb-1">R$ {PRECO_BASE.toFixed(2)}</p>
+                    <>
+                      <p className="text-sm text-gray-400 line-through mb-1">
+                        R$ {PRECO_MENSAL.toFixed(2)}/mês
+                      </p>
+                      <p className="text-xs text-gray-400 line-through mb-2">
+                        Total: R$ {PRECO_TOTAL.toFixed(2)}
+                      </p>
+                    </>
                   )}
-                  <p className="text-3xl font-bold text-brown-700">R$ {precoFinal.toFixed(2)}</p>
-                  <p className="text-xs text-gray-500 mt-1">Valor Mensal (cancele quando quiser)</p>
+                  <p className="text-3xl font-bold text-brown-700">
+                    R$ {precoMensalFinal.toFixed(2)}<span className="text-lg font-normal">/mês</span>
+                  </p>
+                  <p className="text-sm text-brown-600 mt-1">
+                    Total: R$ {precoTotalFinal.toFixed(2)} (12 meses)
+                  </p>
+                  <p className="text-xs text-gray-500 mt-2">Cobrança automática mensal</p>
+                </div>
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                  <p className="text-xs text-blue-800">
+                    ℹ️ <strong>Assinatura Recorrente:</strong> Você será cobrado automaticamente R$ {precoMensalFinal.toFixed(2)} todo mês durante 12 meses no cartão de crédito cadastrado.
+                  </p>
                 </div>
 
                 <button
@@ -255,7 +275,7 @@ function MesversarioPreCheckoutContent() {
                   ) : (
                     <>
                       <Send className="w-5 h-5" />
-                      Finalizar Compra
+                      Assinar Agora
                     </>
                   )}
                 </button>
@@ -293,7 +313,10 @@ function MesversarioPreCheckoutContent() {
 
                 <div className="mt-4 pt-4 border-t border-rose-200">
                   <p className="text-xs text-brown-600 leading-relaxed">
-                    💝 <strong>Como funciona:</strong> Você receberá 1 arte personalizada todo mês durante o primeiro ano do bebê, perfeito para celebrar cada mêsversário!
+                    💝 <strong>Como funciona:</strong> Você será cobrado automaticamente todo mês durante 12 meses. Receba 1 arte personalizada a cada mês para celebrar cada mêsversário do bebê!
+                  </p>
+                  <p className="text-xs text-brown-600 mt-2">
+                    🔄 <strong>Pagamento recorrente:</strong> Cobrança automática no cartão de crédito todo mês. Cancele quando quiser.
                   </p>
                 </div>
               </div>
