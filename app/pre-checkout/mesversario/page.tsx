@@ -18,7 +18,7 @@ function MesversarioPreCheckoutContent() {
     observacoes: ''
   });
 
-  const PRECO_BASE = 197; // Preço para 12 artes
+  const PRECO_BASE = 47; // Preço para 12 artes
   const [coupon, setCoupon] = useState('');
   const [discount, setDiscount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
