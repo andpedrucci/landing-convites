@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react';
 import { useEffect, useState } from 'react';
-import { Heart, TicketPercent, CreditCard, Send, Star, Baby } from 'lucide-react';
+import { Heart, Ticket, CreditCard, Send, Star, Baby } from 'lucide-react';
 import { AVAILABLE_COUPONS } from '@/lib/cupons';
 
 function MesversarioPreCheckoutContent() {
@@ -224,7 +224,7 @@ function MesversarioPreCheckoutContent() {
                     onClick={aplicarCupom}
                     className="px-4 py-2 bg-rose-200 hover:bg-rose-300 rounded-lg transition-colors"
                   >
-                    <TicketPercent className="w-5 h-5 text-brown-700" />
+                    <Ticket className="w-5 h-5 text-brown-700" />
                   </button>
                 </div>
 
