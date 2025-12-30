@@ -79,7 +79,7 @@ export default function Home() {
   const secoes = [
     { id: 'hero', nome: 'Início' },
     { id: 'carrossel', nome: 'Temas' },
-    { id: 'beneficios', nome: 'Benefícios' },
+    { id: 'como-funciona', nome: 'Como Funciona' },
     { id: 'produtos', nome: 'Produtos' },
     { id: 'depoimentos', nome: 'Depoimentos' },
     { id: 'faq', nome: 'FAQ' },
@@ -227,6 +227,72 @@ export default function Home() {
               >
                 ›
               </button>
+            </div>
+          </div>
+        </section>
+
+        <section id="como-funciona" className="snap-section snap-start min-h-screen flex items-center px-6 relative bg-gradient-to-b from-beige-50 to-white">
+          <div className="max-w-6xl mx-auto w-full py-20">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-serif text-brown-700 mb-3">
+                Como <span className="text-beige-300 italic">funciona?</span>
+              </h2>
+              <p className="text-brown-600">Simples, rápido e feito com carinho para você</p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              
+              {/* Card 1 - Escolha */}
+              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all text-center">
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-beige-100 rounded-full mb-6">
+                  <svg className="w-10 h-10 text-beige-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-serif text-brown-700 mb-3">1. Escolha seu convite</h3>
+                <p className="text-brown-600 text-sm leading-relaxed">
+                  Navegue por nossos temas exclusivos ou solicite um convite personalizado do zero
+                </p>
+              </div>
+
+              {/* Card 2 - Pagamento */}
+              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all text-center">
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-beige-100 rounded-full mb-6">
+                  <svg className="w-10 h-10 text-beige-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-serif text-brown-700 mb-3">2. Pagamento seguro</h3>
+                <p className="text-brown-600 text-sm leading-relaxed">
+                  Pague com cartão, PIX ou boleto através do Mercado Pago de forma 100% segura
+                </p>
+              </div>
+
+              {/* Card 3 - Receba */}
+              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all text-center">
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-beige-100 rounded-full mb-6">
+                  <svg className="w-10 h-10 text-beige-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-serif text-brown-700 mb-3">3. Receba na hora</h3>
+                <p className="text-brown-600 text-sm leading-relaxed">
+                  Templates prontos chegam instantaneamente. Personalizados em até 48h
+                </p>
+              </div>
+
+            </div>
+
+            {/* Destaque adicional */}
+            <div className="bg-gradient-to-r from-beige-100 to-rose-100 rounded-2xl p-8 text-center">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <Sparkles className="w-6 h-6 text-beige-300" />
+                <h3 className="text-xl font-serif text-brown-700">Edição fácil no Canva</h3>
+                <Sparkles className="w-6 h-6 text-beige-300" />
+              </div>
+              <p className="text-brown-600 max-w-2xl mx-auto">
+                Todos os nossos convites são editáveis no Canva. Você personaliza cores, textos, fotos e muito mais de forma simples e intuitiva, sem precisar ser designer!
+              </p>
             </div>
           </div>
         </section>
