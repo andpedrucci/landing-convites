@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
 
     const result = await preApproval.create({
       body: {
-        reason: 'Assinatura Mêsversário - 12 Artes Personalizadas',
+        reason: 'Assinatura Mêsversário - 1 Arte Personalizada por Mês',
         auto_recurring: {
           frequency: 1,
           frequency_type: 'months',
