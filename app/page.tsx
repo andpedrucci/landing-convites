@@ -507,18 +507,37 @@ export default function Home() {
               </details>
 
             </div>
+          </div>
+        </section>
 
-            {/* CTA Final */}
-            <div className="mt-12 text-center bg-gradient-to-r from-beige-100 to-rose-100 rounded-2xl p-8">
-              <h3 className="text-2xl font-serif text-brown-700 mb-3">Ainda tem dúvidas?</h3>
-              <p className="text-brown-600 mb-6">Estamos aqui para te ajudar! Entre em contato pelo WhatsApp</p>
+        {/* Seção CTA Final - Separada */}
+        <section className="snap-section snap-start min-h-screen flex items-center px-6 py-20 bg-gradient-to-b from-white to-beige-50">
+          <div className="max-w-4xl mx-auto w-full text-center">
+            <div className="bg-gradient-to-r from-beige-100 to-rose-100 rounded-3xl p-12 shadow-2xl">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-white/60 backdrop-blur-sm rounded-full mb-6">
+                <Send className="w-10 h-10 text-beige-300" />
+              </div>
+              <h2 className="text-3xl md:text-4xl font-serif text-brown-700 mb-4">
+                Ainda tem dúvidas?
+              </h2>
+              <p className="text-brown-600 text-lg mb-8 max-w-2xl mx-auto">
+                Estamos aqui para te ajudar! Entre em contato pelo WhatsApp e vamos conversar sobre o convite perfeito para você
+              </p>
               <a 
                 href={getWhatsAppLink("Dúvidas", "Olá! Tenho algumas dúvidas sobre os convites.")}
-                className="inline-flex items-center gap-2 px-8 py-4 bg-beige-300 text-white rounded-full font-medium hover:bg-beige-400 transition-all shadow-lg"
+                className="inline-flex items-center gap-3 px-10 py-5 bg-green-500 text-white rounded-full font-semibold text-lg hover:bg-green-600 transition-all shadow-xl hover:scale-105"
               >
-                <Send className="w-5 h-5" />
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
                 Falar no WhatsApp
               </a>
+              
+              <div className="mt-8 pt-8 border-t border-brown-700/10">
+                <p className="text-brown-600 text-sm">
+                  Ou nos envie um e-mail: <a href="mailto:contato@studioinvitare.com.br" className="text-beige-300 hover:underline">contato@studioinvitare.com.br</a>
+                </p>
+              </div>
             </div>
           </div>
         </section>
@@ -551,7 +570,7 @@ export default function Home() {
 
               {/* Coluna 2 - Links Rápidos */}
               <div>
-                <h3 className="text-xl font-serif mb-4">Links Rápidos</h3>
+                <h3 className="text-lg font-semibold mb-4">Links Rápidos</h3>
                 <ul className="space-y-2 text-sm">
                   <li><button onClick={() => scrollToSection('hero')} className="text-white/80 hover:text-white transition-colors">Início</button></li>
                   <li><button onClick={() => scrollToSection('carrossel')} className="text-white/80 hover:text-white transition-colors">Nossos Temas</button></li>
@@ -563,7 +582,7 @@ export default function Home() {
 
               {/* Coluna 3 - Produtos */}
               <div>
-                <h3 className="text-xl font-serif mb-4">Nossos Produtos</h3>
+                <h3 className="text-lg font-semibold mb-4">Nossos Produtos</h3>
                 <ul className="space-y-2 text-sm">
                   <li><a href="/pre-checkout/template" className="text-white/80 hover:text-white transition-colors">Convites Prontos</a></li>
                   <li><a href="/pre-checkout/personalizado" className="text-white/80 hover:text-white transition-colors">Convite Personalizado</a></li>
@@ -573,26 +592,11 @@ export default function Home() {
 
               {/* Coluna 4 - Contato */}
               <div>
-                <h3 className="text-xl font-serif mb-4">Contato</h3>
-                <ul className="space-y-3 text-sm">
-                  <li className="flex items-start gap-2 text-white/80">
-                    <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    <span>contato@studioinvitare.com.br</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-white/80">
-                    <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                    </svg>
-                    <span>(11) 99508-7592</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-white/80">
-                    <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>Seg - Sex: 9h às 18h</span>
-                  </li>
+                <h3 className="text-lg font-semibold mb-4">Contato</h3>
+                <ul className="space-y-2 text-sm">
+                  <li className="text-white/80">contato@studioinvitare.com.br</li>
+                  <li className="text-white/80">(11) 99508-7592</li>
+                  <li className="text-white/80">Seg - Sex: 9h às 18h</li>
                 </ul>
               </div>
 
@@ -600,27 +604,27 @@ export default function Home() {
 
             {/* Selos de Segurança */}
             <div className="border-t border-white/10 pt-8 mb-8">
-              <div className="flex flex-wrap items-center justify-center gap-6">
-                <div className="flex items-center gap-2 text-white/60 text-sm">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex flex-wrap items-center justify-center gap-8 text-white/60 text-xs">
+                <div className="flex flex-col items-center gap-2">
+                  <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
-                  <span>Compra 100% Segura</span>
+                  <span>Compra Segura</span>
                 </div>
-                <div className="flex items-center gap-2 text-white/60 text-sm">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex flex-col items-center gap-2">
+                  <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
                   <span>Pagamento Protegido</span>
                 </div>
-                <div className="flex items-center gap-2 text-white/60 text-sm">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex flex-col items-center gap-2">
+                  <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
                   </svg>
                   <span>Suporte Dedicado</span>
                 </div>
-                <div className="flex items-center gap-2 text-white/60 text-sm">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex flex-col items-center gap-2">
+                  <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                   <span>Entrega Rápida</span>
@@ -629,9 +633,9 @@ export default function Home() {
             </div>
 
             {/* Copyright */}
-            <div className="border-t border-white/10 pt-8 text-center">
-              <p className="text-white/60 text-sm">
-                © 2024 Studio Invitare - Todos os direitos reservados | CNPJ: 00.000.000/0000-00
+            <div className="border-t border-white/10 pt-8 text-center text-sm">
+              <p className="text-white/60">
+                © 2024 Studio Invitare - Todos os direitos reservados
               </p>
               <p className="text-white/40 text-xs mt-2">
                 Desenvolvido com 💕 para criar momentos inesquecíveis
@@ -639,7 +643,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Botão WhatsApp Flutuante */}
+          {/* Botão Som */}
           {isPlaying && (
             <button 
               onClick={() => audio?.paused ? audio.play() : audio?.pause()} 
