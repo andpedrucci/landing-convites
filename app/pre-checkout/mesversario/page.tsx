@@ -250,7 +250,8 @@ function MesversarioPreCheckoutContent() {
                   <p className="text-3xl font-bold text-brown-700">
                     R$ {precoMensalFinal.toFixed(2)}<span className="text-lg font-normal">/mês</span>
                   </p>
-                  <p className="text-xs text-gray-500 mt-2">Cobrança mensal, não consome limite do cartão</p>
+                  <p className="text-xs text-gray-500 mt-2">Cobrança mensal</p>
+                  <p className="text-xs text-gray-500 mt-2">Não consome limite total do cartão</p>
                 </div>
 
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
