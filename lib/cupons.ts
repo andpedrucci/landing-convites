@@ -1,6 +1,6 @@
 // lib/coupons.ts
 
-export type ProductType = 'TEMPLATE' | 'PERSONALIZADO' | 'ALL';
+export type ProductType = 'TEMPLATE' | 'PERSONALIZADO' | 'MESVERSARIO' | 'ALL';
 
 export interface Coupon {
   code: string;
@@ -17,5 +17,5 @@ export const AVAILABLE_COUPONS: Coupon[] = [
   { code: 'DELUDOVICO20', discountPercentage: 20, isActive: true, allowedProduct: 'PERSONALIZADO' },
   
   // Cupom que funciona em qualquer um
-  { code: 'STUDIO1014528', discountPercentage: 10, isActive: true, allowedProduct: 'ALL' },
+  { code: 'STUDIO1014528', discountPercentage: 10, isActive: true, allowedProduct: 'MESVERSARIO' },
 ];
