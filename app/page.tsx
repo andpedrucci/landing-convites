@@ -145,7 +145,7 @@ export default function Home() {
           <div className="relative max-w-7xl mx-auto w-full py-20 overflow-visible">
             <div className="text-center mb-8">
               <h2 className="text-3xl md:text-4xl font-serif text-brown-700 mb-2">Explore nossos <span className="text-beige-300 italic">temas exclusivos</span></h2>
-              <p className="text-sm text-brown-600 font-light">Escolha o convite perfeito para o seu momento!</p>
+              <p className="text-sm text-brown-600 font-light">Escolha o estilo perfeito para o seu momento</p>
             </div>
             <div className="flex flex-wrap justify-center gap-3 mb-12">
               {[
@@ -237,7 +237,7 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-serif text-brown-700 mb-3">
                 Como <span className="text-beige-300 italic">funciona?</span>
               </h2>
-              <Sparkles className="w-6 h-6 text-beige-300" /> <p className="text-brown-600">Convites prontos! Simples, rápido e feito com carinho para você</p> <Sparkles className="w-6 h-6 text-beige-300" />
+              <p className="text-brown-600">Simples, rápido e feito com carinho para você</p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-8 mb-12">
@@ -251,7 +251,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-serif text-brown-700 mb-3">1. Escolha seu convite</h3>
                 <p className="text-brown-600 text-sm leading-relaxed">
-                  Na próxima página ao clicar em "Escolher convites", você irá selecionar seus 2 convites preferidos e preencherá as informações do convite, como nome da criança, idade, endereço e observações.
+                  Navegue por nossos temas exclusivos ou solicite um convite personalizado do zero
                 </p>
               </div>
 
@@ -264,7 +264,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-serif text-brown-700 mb-3">2. Pagamento seguro</h3>
                 <p className="text-brown-600 text-sm leading-relaxed">
-                  Ao clicar em comprar, você sera redirecionada para o Mercado Pago, onde poderá pagar com cartão, PIX ou boleto de forma 100% segura.
+                  Pague com cartão, PIX ou boleto através do Mercado Pago de forma 100% segura
                 </p>
               </div>
 
@@ -275,9 +275,9 @@ export default function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-serif text-brown-700 mb-3">3. Entrega do Convite</h3>
+                <h3 className="text-xl font-serif text-brown-700 mb-3">3. Receba na hora</h3>
                 <p className="text-brown-600 text-sm leading-relaxed">
-                  Após a confirmação do pagamento, nossa equipe já começa a transformar seus 2 convites preferidos com as informações da sua festa. Mas fique tranquila, antes de entregar a versão finalizada, entraremos em contato para verificar se está tudo certo conforme você planejou!
+                  Templates prontos chegam instantaneamente. Personalizados em até 48h
                 </p>
               </div>
 
@@ -286,12 +286,12 @@ export default function Home() {
             {/* Destaque adicional */}
             <div className="bg-gradient-to-r from-beige-100 to-rose-100 rounded-2xl p-8 text-center">
               <div className="flex items-center justify-center gap-2 mb-3">
-                <Heart className="w-8 h-8 text-white" />
-                <h3 className="text-xl font-serif text-brown-700">Convite Personalizado</h3>
-                <Heart className="w-8 h-8 text-white" />
+                <Sparkles className="w-6 h-6 text-beige-300" />
+                <h3 className="text-xl font-serif text-brown-700">Edição fácil no Canva</h3>
+                <Sparkles className="w-6 h-6 text-beige-300" />
               </div>
               <p className="text-brown-600 max-w-2xl mx-auto">
-               Aqui é onde a sua imaginação ganha espaço! Selecionando o convite personalizado, voce será direcionada para uma página onde pode nos dizer com suas palavras como é o convite perfeito para você. Defina cores, elementos, imagens, texto e muito mais! E mais uma vez, para que você fique tranquila e tenha certeza que ficará perfeito, nossa equipe fará duas revisões com você para garantir que cada detalhe esteja perfeito!
+                Todos os nossos convites são editáveis no Canva. Você personaliza cores, textos, fotos e muito mais de forma simples e intuitiva, sem precisar ser designer!
               </p>
             </div>
           </div>
@@ -314,22 +314,22 @@ export default function Home() {
                   <div className="inline-flex items-center justify-center w-16 h-16 bg-beige-100 rounded-full mb-4">
                     <Sparkles className="w-8 h-8 text-beige-300" />
                   </div>
-                  <h3 className="text-2xl font-serif text-brown-700 mb-2">Convites Prontos</h3>
+                  <h3 className="text-2xl font-serif text-brown-700 mb-2">Templates Digitais</h3>
                   <p className="text-brown-600 text-sm">Escolha 2 convites do mesmo tema</p>
                 </div>
                 
                 <ul className="space-y-3 mb-8">
                   <li className="flex items-center gap-2 text-brown-600">
                     <CheckCircle2 className="w-5 h-5 text-green-500" />
-                    <span>Preencha as informações do evento</span>
+                    <span>2 templates editáveis</span>
                   </li>
                   <li className="flex items-center gap-2 text-brown-600">
                     <CheckCircle2 className="w-5 h-5 text-green-500" />
-                    <span>Nossa equipe faz uma revisão/span>
+                    <span>Entrega imediata</span>
                   </li>
                   <li className="flex items-center gap-2 text-brown-600">
                     <CheckCircle2 className="w-5 h-5 text-green-500" />
-                    <span>Pronto! te entregamos uma imagem de alta qualidade do convite e um arquivo configurado para impressão</span>
+                    <span>Edição fácil no Canva</span>
                   </li>
                 </ul>
                 
