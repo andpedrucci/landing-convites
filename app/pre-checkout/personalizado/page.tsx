@@ -2,23 +2,21 @@
 
 import { Suspense } from 'react';
 import { useEffect, useState } from 'react';
-import { Heart, TicketPercent, CreditCard, Send, Star, Baby } from 'lucide-react';
+import { Heart, Ticket, CreditCard, Send, Sparkles } from 'lucide-react';
 import { AVAILABLE_COUPONS } from '@/lib/cupons';
 
-function MesversarioPreCheckoutContent() {
+function PersonalizadoPreCheckoutContent() {
   const [mounted, setMounted] = useState(false);
 
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
     whatsapp: '',
-    nomeBebe: '',
-    dataNascimento: '',
-    tema: '',
+    tipoEvento: '',
     observacoes: ''
   });
 
-  const PRECO_BASE = 197; // Preço para 12 artes
+  const PRECO_BASE = 147;
   const [coupon, setCoupon] = useState('');
   const [discount, setDiscount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
@@ -31,7 +29,7 @@ function MesversarioPreCheckoutContent() {
   const aplicarCupom = () => {
     const found = AVAILABLE_COUPONS.find(
       c => c.code === coupon.toUpperCase() && c.isActive &&
-      (c.allowedProduct === 'MESVERSARIO' || c.allowedProduct === 'ALL')
+      (c.allowedProduct === 'PERSONALIZADO' || c.allowedProduct === 'ALL')
     );
 
     if (!found) {
@@ -47,15 +45,15 @@ function MesversarioPreCheckoutContent() {
   };
 
   const handleIrParaPagamento = async () => {
-    if (!formData.nome || !formData.whatsapp || !formData.nomeBebe) {
-      alert('Por favor, preencha Nome, WhatsApp e Nome do Bebê!');
+    if (!formData.nome || !formData.whatsapp) {
+      alert('Por favor, preencha Nome e WhatsApp!');
       return;
     }
 
     setLoadingPagamento(true);
 
     try {
-      const response = await fetch('/api/create-preference-mesversario', {
+      const response = await fetch('/api/create-preference-personalizado', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -80,39 +78,36 @@ function MesversarioPreCheckoutContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-rose-50 via-beige-50 to-rose-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-beige-50 via-beige-100 to-beige-50 py-12 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-rose-200 rounded-full mb-4">
-            <Star className="w-10 h-10 text-rose-400" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-beige-200 rounded-full mb-4">
+            <Sparkles className="w-10 h-10 text-beige-300" />
           </div>
           
           <h1 className="text-3xl md:text-4xl font-serif text-brown-700 mb-3">
-            Assinatura Mêsversário
+            Convite Personalizado
           </h1>
           
           <p className="text-lg text-brown-600">
-            12 artes personalizadas para o primeiro ano do bebê
+            Preencha o formulário e finalize sua compra
           </p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-xl p-8">
-              <h3 className="font-serif text-xl text-brown-700 mb-6 flex items-center gap-2">
-                <Baby className="w-6 h-6 text-rose-400" />
-                Informações da Assinatura
-              </h3>
+              <h3 className="font-serif text-xl text-brown-700 mb-6">Conte-nos sobre seu evento</h3>
               
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-semibold text-brown-700 mb-2">Seu nome completo *</label>
+                  <label className="block text-sm font-semibold text-brown-700 mb-2">Nome completo *</label>
                   <input
                     type="text"
                     value={formData.nome}
                     onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
                     placeholder="Seu nome"
-                    className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-rose-300 focus:outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-beige-300 focus:outline-none transition-all"
                   />
                 </div>
 
@@ -123,7 +118,7 @@ function MesversarioPreCheckoutContent() {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="seu@email.com"
-                    className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-rose-300 focus:outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-beige-300 focus:outline-none transition-all"
                   />
                 </div>
 
@@ -134,66 +129,40 @@ function MesversarioPreCheckoutContent() {
                     value={formData.whatsapp}
                     onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
                     placeholder="(11) 99999-9999"
-                    className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-rose-300 focus:outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-beige-300 focus:outline-none transition-all"
                   />
                 </div>
 
-                <div className="border-t pt-6">
-                  <h4 className="font-semibold text-brown-700 mb-4">Sobre o bebê</h4>
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-semibold text-brown-700 mb-2">Nome do bebê *</label>
-                      <input
-                        type="text"
-                        value={formData.nomeBebe}
-                        onChange={(e) => setFormData({ ...formData, nomeBebe: e.target.value })}
-                        placeholder="Nome do bebê"
-                        className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-rose-300 focus:outline-none transition-all"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-semibold text-brown-700 mb-2">Data de nascimento</label>
-                      <input
-                        type="date"
-                        value={formData.dataNascimento}
-                        onChange={(e) => setFormData({ ...formData, dataNascimento: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-rose-300 focus:outline-none transition-all"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-semibold text-brown-700 mb-2">Tema preferido (opcional)</label>
-                      <select
-                        value={formData.tema}
-                        onChange={(e) => setFormData({ ...formData, tema: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-rose-300 focus:outline-none transition-all bg-white"
-                      >
-                        <option value="">Selecione um tema</option>
-                        <option value="Ursinhos">Ursinhos</option>
-                        <option value="Safári">Safári</option>
-                        <option value="Espaço">Espaço</option>
-                        <option value="Fundo do Mar">Fundo do Mar</option>
-                        <option value="Flores">Flores</option>
-                        <option value="Arco-íris">Arco-íris</option>
-                        <option value="Minimalista">Minimalista</option>
-                        <option value="Outro">Outro</option>
-                      </select>
-                    </div>
-                  </div>
+                <div>
+                  <label className="block text-sm font-semibold text-brown-700 mb-2">Tipo de evento</label>
+                  <select
+                    value={formData.tipoEvento}
+                    onChange={(e) => setFormData({ ...formData, tipoEvento: e.target.value })}
+                    className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-beige-300 focus:outline-none transition-all bg-white"
+                  >
+                    <option value="">Selecione o tipo de evento</option>
+                    <option value="Aniversário">Aniversário</option>
+                    <option value="Casamento">Casamento</option>
+                    <option value="Chá de Bebê">Chá de Bebê</option>
+                    <option value="Chá Revelação">Chá Revelação</option>
+                    <option value="Batizado">Batizado</option>
+                    <option value="Mesversário">Mesversário</option>
+                    <option value="Formatura">Formatura</option>
+                    <option value="Bodas">Bodas</option>
+                    <option value="Outro">Outro</option>
+                  </select>
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-brown-700 mb-2">
-                    Observações ou preferências ✨
+                    Conte-nos como você imagina o seu convite ✨
                   </label>
                   <textarea
                     value={formData.observacoes}
                     onChange={(e) => setFormData({ ...formData, observacoes: e.target.value })}
-                    placeholder="Conte-nos sobre preferências de cores, estilos, elementos especiais..."
-                    rows={4}
-                    className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-rose-300 focus:outline-none transition-all resize-none"
+                    placeholder="Descreva como você imagina seu convite: cores, estilo, tema, elementos especiais..."
+                    rows={6}
+                    className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-beige-300 focus:outline-none transition-all resize-none"
                   />
                 </div>
 
@@ -218,13 +187,13 @@ function MesversarioPreCheckoutContent() {
                       setCouponApplied(false);
                       setDiscount(0);
                     }}
-                    className="flex-1 px-4 py-2 border border-beige-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-300"
+                    className="flex-1 px-4 py-2 border border-beige-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-beige-300"
                   />
                   <button
                     onClick={aplicarCupom}
-                    className="px-4 py-2 bg-rose-200 hover:bg-rose-300 rounded-lg transition-colors"
+                    className="px-4 py-2 bg-beige-200 hover:bg-beige-300 rounded-lg transition-colors"
                   >
-                    <TicketPercent className="w-5 h-5 text-brown-700" />
+                    <Ticket className="w-5 h-5 text-brown-700" />
                   </button>
                 </div>
 
@@ -239,13 +208,13 @@ function MesversarioPreCheckoutContent() {
                     <p className="text-sm text-gray-400 line-through mb-1">R$ {PRECO_BASE.toFixed(2)}</p>
                   )}
                   <p className="text-3xl font-bold text-brown-700">R$ {precoFinal.toFixed(2)}</p>
-                  <p className="text-xs text-gray-500 mt-1">Assinatura anual - 12 artes</p>
+                  <p className="text-xs text-gray-500 mt-1">Convite personalizado</p>
                 </div>
 
                 <button
                   onClick={handleIrParaPagamento}
                   disabled={loadingPagamento}
-                  className="w-full bg-rose-400 hover:bg-rose-500 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg"
+                  className="w-full bg-beige-300 hover:bg-beige-400 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg"
                 >
                   {loadingPagamento ? (
                     <>
@@ -263,46 +232,36 @@ function MesversarioPreCheckoutContent() {
                 <p className="text-xs text-center text-brown-600/60">Pagamento seguro via Mercado Pago</p>
               </div>
 
-              <div className="bg-gradient-to-br from-rose-50 to-beige-50 rounded-2xl p-6">
+              <div className="bg-beige-50 rounded-2xl p-6">
                 <h4 className="font-semibold text-brown-700 mb-3 flex items-center gap-2">
-                  <Heart className="w-5 h-5 text-rose-400" />
+                  <Heart className="w-5 h-5 text-beige-300" />
                   O que está incluso
                 </h4>
                 <ul className="space-y-2 text-sm text-brown-600">
                   <li className="flex items-start gap-2">
                     <span className="text-green-500 mt-0.5">✓</span>
-                    <span>12 artes exclusivas (1 por mês)</span>
+                    <span>Design 100% exclusivo</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500 mt-0.5">✓</span>
-                    <span>Design personalizado e consistente</span>
+                    <span>Criado especialmente para você</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500 mt-0.5">✓</span>
-                    <span>Perfeito para redes sociais</span>
+                    <span>Atendimento personalizado</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-green-500 mt-0.5">✓</span>
-                    <span>Alta resolução para impressão</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-500 mt-0.5">✓</span>
-                    <span>Entrega mensal automática</span>
+                    <span>2 revisões incluídas</span>
                   </li>
                 </ul>
-
-                <div className="mt-4 pt-4 border-t border-rose-200">
-                  <p className="text-xs text-brown-600 leading-relaxed">
-                    💝 <strong>Como funciona:</strong> Você receberá 1 arte personalizada todo mês durante o primeiro ano do bebê, perfeito para celebrar cada mêsversário!
-                  </p>
-                </div>
               </div>
             </div>
           </div>
         </div>
 
         <div className="text-center mt-8 flex items-center justify-center gap-2 text-brown-600">
-          <Heart className="w-4 h-4 fill-current text-rose-400" />
+          <Heart className="w-4 h-4 fill-current text-beige-300" />
           <span className="text-sm">Feito com amor pela Studio Invitare</span>
         </div>
       </div>
@@ -310,14 +269,14 @@ function MesversarioPreCheckoutContent() {
   );
 }
 
-export default function MesversarioPreCheckout() {
+export default function PersonalizadoPreCheckout() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-b from-rose-50 via-beige-50 to-rose-50 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-rose-400 border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-gradient-to-b from-beige-50 via-beige-100 to-beige-50 flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-beige-300 border-t-transparent rounded-full animate-spin" />
       </div>
     }>
-      <MesversarioPreCheckoutContent />
+      <PersonalizadoPreCheckoutContent />
     </Suspense>
   );
 }
