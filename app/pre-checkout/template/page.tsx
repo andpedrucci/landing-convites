@@ -29,7 +29,7 @@ function TemplatePreCheckoutContent() {
     observacoes: ''
   });
 
-  const PRECO_BASE = 47;
+  const PRECO_BASE = 20;
   const [coupon, setCoupon] = useState('');
   const [discount, setDiscount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
