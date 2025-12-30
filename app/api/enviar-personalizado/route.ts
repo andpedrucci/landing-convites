@@ -1,3 +1,10 @@
+// ============================================
+// 📁 ARQUIVO: /app/api/enviar-personalizado/route.ts
+// 📝 FUNÇÃO: Salvar dados de PERSONALIZADO no CRM
+// 🎯 CHAMADO POR: Webhook do Mercado Pago
+// 💾 SALVA EM: Supabase (empresa_leads, contato_leads, projetos)
+// ============================================
+
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
@@ -96,7 +103,7 @@ export async function POST(request: Request) {
 ${observacoes || 'Nenhuma observação.'}
 
 🎨 PRODUTO: Convite Digital Personalizado
-💰 VALOR: A ser cotado (R$ 147,00)
+💰 VALOR: R$ 89,00
     `.trim();
 
     const { data: projeto, error: erroProjeto } = await supabase
@@ -109,7 +116,7 @@ ${observacoes || 'Nenhuma observação.'}
         etapa: ETAPA_INICIAL,
         status: 'ativo',
         origem: 'Landing Page - Studio Invitare',
-        valor: null // Será definido após cotação
+        valor: 89.00
       })
       .select()
       .single();
@@ -122,40 +129,11 @@ ${observacoes || 'Nenhuma observação.'}
     console.log('✅ Projeto criado:', projeto.id);
 
     // ============================================
-    // 4️⃣ CHAMAR API DO MAKE (ENVIAR EMAIL)
-    // ============================================
-    try {
-      await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/enviar-email-make`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          produto: 'Personalizado',
-          preco: 147.00,
-          cliente: {
-            nome,
-            email: email || '',
-            whatsapp
-          },
-          detalhes: observacoes || 'Sem observações',
-          tipoEvento: tipoEvento || 'Não informado',
-          datamind: {
-            empresa_lead_id: empresaLead.id,
-            contato_id: contato?.id,
-            projeto_id: projeto.id
-          }
-        }),
-      });
-      console.log('✅ Email enviado via Make');
-    } catch (erroMake) {
-      console.warn('⚠️ Falha ao enviar email (não crítico):', erroMake);
-    }
-
-    // ============================================
     // ✅ RESPOSTA DE SUCESSO
     // ============================================
     return NextResponse.json({
       success: true,
-      message: 'Projeto personalizado criado com sucesso!',
+      message: 'Projeto personalizado criado com sucesso no CRM!',
       data: {
         empresa_lead_id: empresaLead.id,
         contato_id: contato?.id,
