@@ -141,13 +141,13 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="carrossel" className="snap-section snap-start py-8 px-6 relative overflow-hidden pt-6 pb-10 flex items-start bg-gradient-to-b from-beige-50 via-white to-beige-50">
-          <div className="relative max-w-7xl mx-auto w-full">
-            <div className="text-center mb-4">
+        <section id="carrossel" className="snap-section snap-start min-h-screen flex items-center px-6 relative overflow-hidden bg-gradient-to-b from-beige-50 via-white to-beige-50">
+          <div className="relative max-w-7xl mx-auto w-full py-20">
+            <div className="text-center mb-8">
               <h2 className="text-3xl md:text-4xl font-serif text-brown-700 mb-2">Explore nossos <span className="text-beige-300 italic">temas exclusivos</span></h2>
               <p className="text-sm text-brown-600 font-light">Escolha o estilo perfeito para o seu momento</p>
             </div>
-            <div className="flex flex-wrap justify-center gap-3 mb-6">
+            <div className="flex flex-wrap justify-center gap-3 mb-12">
               {[
                 { id: 'aniversario', label: 'Aniversário', emoji: '🎂' },
                 { id: 'batizado', label: 'Batizado', emoji: '✨' },
@@ -166,18 +166,67 @@ export default function Home() {
                 </button>
               ))}
             </div>
-            <div className="relative h-[420px] flex items-start justify-center mb-2">
-              <div className="relative w-full h-full" style={{ perspective: '2200px' }}>
+            <div className="relative h-[450px] flex items-center justify-center mb-8">
+              <div className="relative w-full h-full preserve-3d" style={{ perspective: '2200px' }}>
                 {getImagensTema(temaAtivo).map((imagem, index) => {
+                  const totalImagens = getImagensTema(temaAtivo).length;
                   const diff = index - imagemDestaque;
+                  const anglePerImage = 360 / totalImagens;
+                  const angle = diff * anglePerImage;
+                  const radius = 350;
+                  
                   return (
-                    <div key={index} className="absolute left-1/2 top-0 w-72 h-96 cursor-pointer"
-                      style={{ transform: `translateX(-50%)`, display: index === imagemDestaque ? 'block' : 'none' }}>
-                      <img src={imagem.imagem} alt={imagem.nome} className="w-full h-full object-cover rounded-xl shadow-2xl" />
+                    <div 
+                      key={index} 
+                      className="absolute left-1/2 top-1/2 w-72 h-96 cursor-pointer carousel-card transition-all duration-700"
+                      style={{ 
+                        transform: `translateX(-50%) translateY(-50%) rotateY(${angle}deg) translateZ(${radius}px)`,
+                        opacity: Math.abs(diff) <= 2 ? 1 : 0.3,
+                        zIndex: diff === 0 ? 10 : 5 - Math.abs(diff)
+                      }}
+                      onClick={() => setImagemDestaque(index)}
+                    >
+                      <img 
+                        src={imagem.imagem} 
+                        alt={imagem.nome} 
+                        className="w-full h-full object-cover rounded-xl shadow-2xl"
+                      />
+                      {diff === 0 && (
+                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 rounded-b-xl">
+                          <p className="text-white font-medium text-center">{imagem.nome}</p>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
               </div>
+            </div>
+            
+            {/* Controles do Carrossel */}
+            <div className="flex items-center justify-center gap-4">
+              <button
+                onClick={() => setImagemDestaque((prev) => (prev - 1 + getImagensTema(temaAtivo).length) % getImagensTema(temaAtivo).length)}
+                className="w-12 h-12 rounded-full bg-white border-2 border-beige-300 text-beige-300 hover:bg-beige-300 hover:text-white transition-all shadow-lg flex items-center justify-center text-2xl font-bold"
+              >
+                ‹
+              </button>
+              <div className="flex gap-2">
+                {getImagensTema(temaAtivo).map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setImagemDestaque(index)}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      index === imagemDestaque ? 'bg-beige-300 w-8' : 'bg-beige-300/30'
+                    }`}
+                  />
+                ))}
+              </div>
+              <button
+                onClick={() => setImagemDestaque((prev) => (prev + 1) % getImagensTema(temaAtivo).length)}
+                className="w-12 h-12 rounded-full bg-white border-2 border-beige-300 text-beige-300 hover:bg-beige-300 hover:text-white transition-all shadow-lg flex items-center justify-center text-2xl font-bold"
+              >
+                ›
+              </button>
             </div>
           </div>
         </section>
