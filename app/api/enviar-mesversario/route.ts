@@ -19,7 +19,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 // 📌 IDS FIXOS DO STUDIO INVITARE NA DATAMIND
 // ============================================
 const EMPRESA_ID = '4cc6753d-0002-4ae8-90ad-6c3bc418f015';
-const FUNIL_MESVERSARIO = 'COLE_AQUI_O_ID_DO_FUNIL_MESVERSARIO'; // ⚠️ VOCÊ PRECISA CRIAR ESSE FUNIL!
+const FUNIL_MESVERSARIO = '35b840eb-5ccd-4334-b4b6-68a706e771de'; // ⚠️ VOCÊ PRECISA CRIAR ESSE FUNIL!
 const ETAPA_INICIAL = 'Projeto iniciado';
 
 export async function POST(request: Request) {
