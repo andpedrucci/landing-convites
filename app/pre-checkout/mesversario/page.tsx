@@ -166,21 +166,20 @@ function MesversarioPreCheckoutContent() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-brown-700 mb-2">Tema preferido (opcional)</label>
+                      <label className="block text-sm font-semibold text-brown-700 mb-2">Tema preferido para inspiração(opcional)</label>
                       <select
                         value={formData.tema}
                         onChange={(e) => setFormData({ ...formData, tema: e.target.value })}
                         className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-rose-300 focus:outline-none transition-all bg-white"
                       >
                         <option value="">Selecione um tema</option>
-                        <option value="Ursinhos">Ursinhos</option>
-                        <option value="Safári">Safári</option>
-                        <option value="Espaço">Espaço</option>
-                        <option value="Fundo do Mar">Fundo do Mar</option>
-                        <option value="Flores">Flores</option>
-                        <option value="Arco-íris">Arco-íris</option>
-                        <option value="Minimalista">Minimalista</option>
-                        <option value="Outro">Outro</option>
+                        <option value="Ursinhos">Aniversário</option>
+                        <option value="Safári">Batizado</option>
+                        <option value="Espaço">Chá Revelação</option>
+                        <option value="Fundo do Mar">Chá de Bebê</option>
+                        <option value="Flores">Fundo do Mar</option>
+                        <option value="Arco-íris">Princesas</option>
+                        <option value="Minimalista">Diversos</option>
                       </select>
                     </div>
                   </div>
