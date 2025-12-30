@@ -182,7 +182,7 @@ export default function Home() {
                       style={{ 
                         transform: `translateX(-50%) translateY(-50%) rotateY(${angle}deg) translateZ(${radius}px)`,
                         opacity: Math.abs(diff) <= 2 ? 1 : 0.3,
-                        zIndex: diff === 0 ? 10 : 5 - Math.abs(diff)
+                        zIndex: diff === 0 ? 100 : 50 - Math.abs(diff)
                       }}
                       onClick={() => setImagemDestaque(index)}
                     >
