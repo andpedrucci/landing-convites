@@ -18,8 +18,8 @@ function MesversarioPreCheckoutContent() {
     observacoes: ''
   });
 
-  const PRECO_MENSAL = 16.42; // 12 artes / 12 meses
-  const PRECO_TOTAL = 197.00; // Total anual
+  const PRECO_MENSAL = 47.00; // 12 artes / 12 meses
+  const PRECO_TOTAL = 564.00; // Total anual
   const [coupon, setCoupon] = useState('');
   const [discount, setDiscount] = useState(0);
   const [couponApplied, setCouponApplied] = useState(false);
