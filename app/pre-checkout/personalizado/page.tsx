@@ -140,22 +140,21 @@ function PersonalizadoPreCheckoutContent() {
                     onChange={(e) => setFormData({ ...formData, tipoEvento: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl border-2 border-beige-200 focus:border-beige-300 focus:outline-none transition-all bg-white"
                   >
-                    <option value="">Selecione o tipo de evento</option>
+                    <option value="">Selecione um tema como inspiração</option>
                     <option value="Aniversário">Aniversário</option>
-                    <option value="Casamento">Casamento</option>
-                    <option value="Chá de Bebê">Chá de Bebê</option>
-                    <option value="Chá Revelação">Chá Revelação</option>
                     <option value="Batizado">Batizado</option>
-                    <option value="Mesversário">Mesversário</option>
-                    <option value="Formatura">Formatura</option>
-                    <option value="Bodas">Bodas</option>
-                    <option value="Outro">Outro</option>
+                    <option value="Chá Revelação">Chá Revelação</option>                    
+                    <option value="Chá de Bebê">Chá de Bebê</option>
+                    <option value="Mesversário">Fundo Do Mar</option>
+                    <option value="Formatura">Princesas</option>
+                    <option value="Bodas">Diversos</option>
+                    <option value="Outro">MêsVersário</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-brown-700 mb-2">
-                    Conte-nos como você imagina o seu convite ✨
+                    Conte-nos como você imagina o seu convite perfeito ✨
                   </label>
                   <textarea
                     value={formData.observacoes}
