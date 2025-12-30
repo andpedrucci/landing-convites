@@ -180,9 +180,9 @@ export default function Home() {
                       key={index} 
                       className="absolute left-1/2 top-1/2 w-72 h-96 cursor-pointer carousel-card transition-all duration-700"
                       style={{ 
-                        transform: `translateX(-50%) translateY(-50%) rotateY(${angle}deg) translateZ(${radius}px)`,
+                        transform: `translateX(-50%) translateY(-50%) rotateY(${angle}deg) translateZ(${diff === 0 ? radius + 50 : radius}px)`,
                         opacity: Math.abs(diff) <= 2 ? 1 : 0.3,
-                        zIndex: diff === 0 ? 100 : 50 - Math.abs(diff)
+                        transformStyle: 'preserve-3d'
                       }}
                       onClick={() => setImagemDestaque(index)}
                     >
