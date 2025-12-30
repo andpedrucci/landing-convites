@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react';
 import { useEffect, useState } from 'react';
-import { Sparkles, Heart, X, Check, AlertCircle, CreditCard, TicketPercent, Send } from 'lucide-react';
+import { Sparkles, Heart, X, Check, AlertCircle, CreditCard, Ticket, Send } from 'lucide-react';
 import { imagensPorTema } from '@/lib/templates-data';
 import { AVAILABLE_COUPONS } from '@/lib/cupons';
 
@@ -330,7 +330,7 @@ function TemplatePreCheckoutContent() {
                   onClick={aplicarCupom}
                   className="px-4 py-2 bg-beige-200 hover:bg-beige-300 rounded-lg transition-colors"
                 >
-                  <TicketPercent className="w-5 h-5 text-brown-700" />
+                  <Ticket className="w-5 h-5 text-brown-700" />
                 </button>
               </div>
 
