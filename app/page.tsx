@@ -437,7 +437,7 @@ export default function Home() {
                   <span className="text-beige-300 text-2xl group-open:rotate-45 transition-transform">+</span>
                 </summary>
                 <p className="mt-4 text-brown-600 leading-relaxed">
-                  Após a confirmação do pagamento, você receberá seus 2 convites personalizados em até 48h úteis. Nossa equipe fará uma revisão com você antes da entrega final para garantir que tudo esteja perfeito!
+                  Após a confirmação do pagamento, você receberá uma prévia dos seus 2 convites personalizados favoritos em até 48h úteis. Nossa equipe fará uma revisão com você antes da entrega final para garantir que tudo esteja perfeito!
                 </p>
               </details>
 
@@ -447,7 +447,7 @@ export default function Home() {
                   <span className="text-beige-300 text-2xl group-open:rotate-45 transition-transform">+</span>
                 </summary>
                 <p className="mt-4 text-brown-600 leading-relaxed">
-                  Os convites são entregues em formato de imagem de alta qualidade (PNG/JPG) e PDF para impressão. Se precisar fazer alterações, entre em contato conosco que faremos os ajustes sem custo adicional!
+                  Os convites são entregues em formato de imagem de alta qualidade (PNG/JPG) e PDF para impressão. Se precisar fazer alterações, entre em contato conosco que faremos os ajustes (R$9,90 por edição adicional)!
                 </p>
               </details>
 
@@ -457,7 +457,7 @@ export default function Home() {
                   <span className="text-beige-300 text-2xl group-open:rotate-45 transition-transform">+</span>
                 </summary>
                 <p className="mt-4 text-brown-600 leading-relaxed">
-                  Nos <strong>Convites Prontos</strong>, você escolhe 2 templates da nossa galeria e nós personalizamos com seus dados. No <strong>Personalizado</strong>, criamos um design exclusivo do zero baseado nas suas ideias, com 2 revisões incluídas!
+                  Nos <strong>Convites Prontos</strong>, você escolhe 2 templates da nossa galeria e nós personalizamos com seus dados para que voce escolha 1 que goste mais. No <strong>Personalizado</strong>, criamos um design exclusivo do zero baseado nas suas ideias, com 2 revisões incluídas!
                 </p>
               </details>
 
@@ -467,7 +467,7 @@ export default function Home() {
                   <span className="text-beige-300 text-2xl group-open:rotate-45 transition-transform">+</span>
                 </summary>
                 <p className="mt-4 text-brown-600 leading-relaxed">
-                  Você recebe 12 artes personalizadas (uma para cada mês do primeiro ano do bebê) para compartilhar nas redes sociais. Perfeito para marcar o crescimento e criar memórias lindas!
+                  Na assinatura do Mêsversário todo mês voce pode personalizar 1 convite / 1 arte de comemoração para celebrar mais um mês de vida do(a) seu(sua) pequeno(a). A cobrança ocorre mensalmente e não consome limite no cartão (assim como o Netflix). Cancele quando quiser.
                 </p>
               </details>
 
@@ -477,7 +477,7 @@ export default function Home() {
                   <span className="text-beige-300 text-2xl group-open:rotate-45 transition-transform">+</span>
                 </summary>
                 <p className="mt-4 text-brown-600 leading-relaxed">
-                  Sim! Entregamos os arquivos em alta resolução (300 DPI) e no formato ideal para impressão. Você pode imprimir em qualquer gráfica ou em casa mesmo!
+                  Sim! Entregamos os arquivos em imagem em alta resolução e no formato ideal para impressão. Você pode imprimir em qualquer gráfica ou em casa mesmo!
                 </p>
               </details>
 
