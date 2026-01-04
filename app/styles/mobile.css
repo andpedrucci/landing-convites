@@ -1,0 +1,152 @@
+/* ============================================
+   MOBILE FIXES - Aplica APENAS em telas < 768px
+   ============================================ */
+
+@media (max-width: 767px) {
+  
+  /* ===== SCROLL SNAP - DESABILITAR NO MOBILE ===== */
+  .snap-y {
+    scroll-snap-type: none !important;
+  }
+  
+  .snap-section {
+    scroll-snap-align: none !important;
+    min-height: auto !important;
+    padding: 2rem 1rem;
+  }
+
+  /* ===== HERO SECTION ===== */
+  #hero h1 {
+    font-size: 2.5rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 1.5rem !important;
+  }
+  
+  #hero p {
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+  }
+
+  /* Backgrounds decorativos menores */
+  #hero .absolute {
+    width: 200px !important;
+    height: 200px !important;
+  }
+
+  /* ===== CARROSSEL - TRANSFORMAR EM GALERIA SIMPLES ===== */
+  #carrossel .relative.h-\[450px\] {
+    height: auto !important;
+  }
+  
+  /* Desativa o 3D e transforma em lista vertical */
+  #carrossel [style*="perspective"] {
+    perspective: none !important;
+  }
+  
+  #carrossel .carousel-card {
+    position: relative !important;
+    transform: none !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    max-width: 280px !important;
+    height: auto !important;
+    margin: 0 auto 1rem !important;
+    left: auto !important;
+    top: auto !important;
+  }
+
+  /* Mostra apenas 3 cards por vez no mobile */
+  #carrossel .carousel-card {
+    display: block;
+  }
+
+  /* ===== BOTÕES DE TEMA ===== */
+  #carrossel .flex-wrap button {
+    font-size: 0.75rem !important;
+    padding: 0.5rem 0.75rem !important;
+  }
+
+  /* ===== COMO FUNCIONA ===== */
+  #como-funciona .grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+
+  #como-funciona h2 {
+    font-size: 1.75rem !important;
+  }
+
+  /* ===== PRODUTOS ===== */
+  #produtos .grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+
+  #produtos h2 {
+    font-size: 1.75rem !important;
+  }
+
+  /* Cards de produto com altura automática */
+  #produtos > div > div > div {
+    height: auto !important;
+    min-height: 500px;
+  }
+
+  /* ===== FAQ ===== */
+  #faq details {
+    padding: 1rem !important;
+  }
+
+  #faq summary {
+    font-size: 0.9rem !important;
+  }
+
+  /* ===== FOOTER ===== */
+  footer .grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+    text-align: center;
+  }
+
+  footer .flex.gap-2 {
+    justify-content: center;
+  }
+
+  /* ===== BOTÕES FLUTUANTES ===== */
+  .fixed.bottom-8.right-8 {
+    bottom: 1rem !important;
+    right: 1rem !important;
+    padding: 0.75rem !important;
+  }
+
+  .fixed.bottom-8.right-8 svg {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+  }
+
+  .fixed.bottom-24.right-8 {
+    bottom: 5rem !important;
+    right: 1rem !important;
+    padding: 0.5rem !important;
+    font-size: 8px !important;
+  }
+
+  /* ===== CONTROLES DO CARROSSEL ===== */
+  #carrossel .flex.items-center.justify-center.gap-4 {
+    gap: 1rem !important;
+  }
+
+  #carrossel .flex.items-center.justify-center.gap-4 button {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+  }
+
+  #carrossel .flex.gap-2 button {
+    width: 6px !important;
+    height: 6px !important;
+  }
+
+  #carrossel .flex.gap-2 button.w-8 {
+    width: 20px !important;
+  }
+}
