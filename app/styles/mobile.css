@@ -42,7 +42,7 @@
     overflow-y: hidden !important;
     -webkit-overflow-scrolling: touch !important;
     scroll-snap-type: x mandatory !important;
-    scrollbar-width: none !important; /* Firefox */
+    scrollbar-width: none !important;
   }
   
   /* Esconde scrollbar */
@@ -87,24 +87,24 @@
     padding: 0.5rem 0.75rem !important;
   }
 
-  /* ===== CONTROLES DO CARROSSEL ===== */
+  /* ===== CONTROLES DO CARROSSEL - APENAS SETAS ===== */
+  
+  /* Esconder os bullets (bolinhas de navegação) */
+  #carrossel .flex.items-center.justify-center.gap-4 .flex.gap-2 {
+    display: none !important;
+  }
+  
+  /* Ajustar espaçamento das setas */
   #carrossel .flex.items-center.justify-center.gap-4 {
-    gap: 1rem !important;
+    gap: 3rem !important;
     margin-top: 1.5rem !important;
   }
 
-  #carrossel .flex.items-center.justify-center.gap-4 button {
-    width: 2.5rem !important;
-    height: 2.5rem !important;
-  }
-
-  #carrossel .flex.gap-2 button {
-    width: 6px !important;
-    height: 6px !important;
-  }
-
-  #carrossel .flex.gap-2 button.w-8 {
-    width: 20px !important;
+  /* Botões de navegação (setas) */
+  #carrossel .flex.items-center.justify-center.gap-4 > button {
+    width: 3rem !important;
+    height: 3rem !important;
+    font-size: 1.5rem !important;
   }
 
   /* ===== COMO FUNCIONA ===== */
