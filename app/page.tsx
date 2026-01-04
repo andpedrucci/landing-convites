@@ -628,7 +628,7 @@ export default function Home() {
   </button>
 )}
 
-
+<a
   href={getWhatsAppLink("Olá!", "Gostaria de fazer um pedido")}
   target="_blank"
   rel="noopener noreferrer"
