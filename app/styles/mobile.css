@@ -33,64 +33,52 @@
     height: 200px !important;
   }
 
-  /* ===== CARROSSEL - HORIZONTAL COM SCROLL SUAVE ===== */
+  /* ===== CARROSSEL - UM CONVITE POR VEZ ===== */
   
-  /* Container do carrossel */
+  /* Container do carrossel - BLOQUEAR SCROLL */
   #carrossel .relative.h-\[450px\] {
-    height: 420px !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    -webkit-overflow-scrolling: touch !important;
-    scroll-snap-type: x mandatory !important;
-    scrollbar-width: none !important;
-    scroll-behavior: smooth !important;
+    height: 450px !important;
+    overflow: hidden !important;
+    position: relative !important;
   }
   
-  /* Esconde scrollbar */
-  #carrossel .relative.h-\[450px\]::-webkit-scrollbar {
-    display: none !important;
-  }
-  
-  /* Container interno - layout horizontal */
+  /* Container interno - empilhados no mesmo lugar */
   #carrossel [style*="perspective"] {
     perspective: none !important;
-    display: flex !important;
-    flex-direction: row !important;
-    gap: 1.5rem !important;
-    padding: 1rem 1.5rem !important;
-    width: max-content !important;
-    height: 100% !important;
-  }
-  
-  /* Cards do carrossel - lado a lado, centralizados */
-  #carrossel .carousel-card {
     position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  /* Todos os cards no mesmo lugar, apenas o ativo visível */
+  #carrossel .carousel-card {
+    position: absolute !important;
     transform: none !important;
-    opacity: 1 !important;
-    width: 75vw !important;
-    max-width: 300px !important;
-    height: 380px !important;
-    margin: 0 !important;
-    left: auto !important;
-    top: auto !important;
-    flex-shrink: 0 !important;
-    scroll-snap-align: center !important;
-    scroll-snap-stop: always !important;
+    opacity: 0 !important;
+    width: 85% !important;
+    max-width: 320px !important;
+    height: 400px !important;
+    margin: 0 auto !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    pointer-events: none !important;
+    transition: opacity 0.3s ease !important;
   }
   
-  /* Primeiro e último card com padding para centralizar */
+  /* Apenas o primeiro card visível (será controlado pelo JS do componente) */
   #carrossel .carousel-card:first-child {
-    margin-left: calc(50vw - 37.5vw) !important;
-  }
-  
-  #carrossel .carousel-card:last-child {
-    margin-right: calc(50vw - 37.5vw) !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
   }
   
   /* Imagens dos cards */
   #carrossel .carousel-card img {
     border-radius: 1rem !important;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2) !important;
   }
 
   /* ===== BOTÕES DE TEMA ===== */
@@ -114,9 +102,9 @@
 
   /* Botões de navegação (setas) */
   #carrossel .flex.items-center.justify-center.gap-4 > button {
-    width: 3rem !important;
-    height: 3rem !important;
-    font-size: 1.5rem !important;
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+    font-size: 2rem !important;
   }
 
   /* ===== COMO FUNCIONA ===== */
