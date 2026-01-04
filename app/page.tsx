@@ -532,7 +532,7 @@ export default function Home() {
             </div>
           </div>
 
-          <footer className="bg-brown-700 text-white rounded-t-3xl w-full">
+       <footer className="bg-brown-700 text-white rounded-t-3xl w-full">
             <div className="max-w-7xl mx-auto px-6 py-10">
               <div className="grid md:grid-cols-4 gap-6 mb-6">
                 
