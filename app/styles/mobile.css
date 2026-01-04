@@ -43,6 +43,7 @@
     -webkit-overflow-scrolling: touch !important;
     scroll-snap-type: x mandatory !important;
     scrollbar-width: none !important;
+    scroll-behavior: smooth !important;
   }
   
   /* Esconde scrollbar */
@@ -55,24 +56,35 @@
     perspective: none !important;
     display: flex !important;
     flex-direction: row !important;
-    gap: 1rem !important;
-    padding: 1rem !important;
+    gap: 1.5rem !important;
+    padding: 1rem 1.5rem !important;
     width: max-content !important;
     height: 100% !important;
   }
   
-  /* Cards do carrossel - lado a lado */
+  /* Cards do carrossel - lado a lado, centralizados */
   #carrossel .carousel-card {
     position: relative !important;
     transform: none !important;
     opacity: 1 !important;
-    width: 280px !important;
+    width: 75vw !important;
+    max-width: 300px !important;
     height: 380px !important;
     margin: 0 !important;
     left: auto !important;
     top: auto !important;
     flex-shrink: 0 !important;
     scroll-snap-align: center !important;
+    scroll-snap-stop: always !important;
+  }
+  
+  /* Primeiro e último card com padding para centralizar */
+  #carrossel .carousel-card:first-child {
+    margin-left: calc(50vw - 37.5vw) !important;
+  }
+  
+  #carrossel .carousel-card:last-child {
+    margin-right: calc(50vw - 37.5vw) !important;
   }
   
   /* Imagens dos cards */
