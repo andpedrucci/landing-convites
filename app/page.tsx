@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Heart, Sparkles, Clock, CheckCircle2, Star, Send } from 'lucide-react';
+import { Heart, Sparkles, CheckCircle2, Star, Send } from 'lucide-react';
 import { imagensPorTema } from '@/lib/templates-data';
 
 export default function Home() {
@@ -11,6 +11,7 @@ export default function Home() {
   const [secaoAtual, setSecaoAtual] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const music = new Audio('/sunshine.mp3');
@@ -34,6 +35,14 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true);
+    
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   useEffect(() => {
@@ -75,16 +84,6 @@ export default function Home() {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
-
-  const secoes = [
-    { id: 'hero', nome: 'Início' },
-    { id: 'carrossel', nome: 'Temas' },
-    { id: 'como-funciona', nome: 'Como Funciona' },
-    { id: 'produtos', nome: 'Produtos' },
-    { id: 'depoimentos', nome: 'Depoimentos' },
-    { id: 'faq', nome: 'FAQ' },
-    { id: 'cta', nome: 'Contato' },
-  ];
 
   return (
     <>
@@ -148,6 +147,12 @@ export default function Home() {
                 {getImagensTema(temaAtivo).map((imagem, index) => {
                   const totalImagens = getImagensTema(temaAtivo).length;
                   const diff = index - imagemDestaque;
+                  
+                  // No mobile, mostra apenas 3 cards (atual + 1 antes + 1 depois)
+                  if (isMobile && Math.abs(diff) > 1) {
+                    return null;
+                  }
+                  
                   const anglePerImage = 360 / totalImagens;
                   const angle = diff * anglePerImage;
                   const radius = 450;
@@ -624,7 +629,7 @@ export default function Home() {
               </button>
             )}
             
-            <a
+            
               href={getWhatsAppLink("Olá!", "Gostaria de fazer um pedido")}
               target="_blank"
               rel="noopener noreferrer"
