@@ -33,37 +33,78 @@
     height: 200px !important;
   }
 
-  /* ===== CARROSSEL - TRANSFORMAR EM GALERIA SIMPLES ===== */
+  /* ===== CARROSSEL - HORIZONTAL COM SCROLL SUAVE ===== */
+  
+  /* Container do carrossel */
   #carrossel .relative.h-\[450px\] {
-    height: auto !important;
+    height: 420px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-snap-type: x mandatory !important;
+    scrollbar-width: none !important; /* Firefox */
   }
   
-  /* Desativa o 3D e transforma em lista vertical */
+  /* Esconde scrollbar */
+  #carrossel .relative.h-\[450px\]::-webkit-scrollbar {
+    display: none !important;
+  }
+  
+  /* Container interno - layout horizontal */
   #carrossel [style*="perspective"] {
     perspective: none !important;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 1rem !important;
+    padding: 1rem !important;
+    width: max-content !important;
+    height: 100% !important;
   }
   
+  /* Cards do carrossel - lado a lado */
   #carrossel .carousel-card {
     position: relative !important;
     transform: none !important;
     opacity: 1 !important;
-    width: 100% !important;
-    max-width: 280px !important;
-    height: auto !important;
-    margin: 0 auto 1rem !important;
+    width: 280px !important;
+    height: 380px !important;
+    margin: 0 !important;
     left: auto !important;
     top: auto !important;
+    flex-shrink: 0 !important;
+    scroll-snap-align: center !important;
   }
-
-  /* Mostra apenas 3 cards por vez no mobile */
-  #carrossel .carousel-card {
-    display: block;
+  
+  /* Imagens dos cards */
+  #carrossel .carousel-card img {
+    border-radius: 1rem !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important;
   }
 
   /* ===== BOTÕES DE TEMA ===== */
   #carrossel .flex-wrap button {
     font-size: 0.75rem !important;
     padding: 0.5rem 0.75rem !important;
+  }
+
+  /* ===== CONTROLES DO CARROSSEL ===== */
+  #carrossel .flex.items-center.justify-center.gap-4 {
+    gap: 1rem !important;
+    margin-top: 1.5rem !important;
+  }
+
+  #carrossel .flex.items-center.justify-center.gap-4 button {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+  }
+
+  #carrossel .flex.gap-2 button {
+    width: 6px !important;
+    height: 6px !important;
+  }
+
+  #carrossel .flex.gap-2 button.w-8 {
+    width: 20px !important;
   }
 
   /* ===== COMO FUNCIONA ===== */
@@ -129,24 +170,5 @@
     right: 1rem !important;
     padding: 0.5rem !important;
     font-size: 8px !important;
-  }
-
-  /* ===== CONTROLES DO CARROSSEL ===== */
-  #carrossel .flex.items-center.justify-center.gap-4 {
-    gap: 1rem !important;
-  }
-
-  #carrossel .flex.items-center.justify-center.gap-4 button {
-    width: 2.5rem !important;
-    height: 2.5rem !important;
-  }
-
-  #carrossel .flex.gap-2 button {
-    width: 6px !important;
-    height: 6px !important;
-  }
-
-  #carrossel .flex.gap-2 button.w-8 {
-    width: 20px !important;
   }
 }
