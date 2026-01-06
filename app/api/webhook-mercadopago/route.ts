@@ -3,6 +3,7 @@
 // 📝 FUNÇÃO: Receber notificações do Mercado Pago
 // 🎯 AÇÃO: Quando pagamento aprovado, chama API de envio para CRM
 // 🔗 CHAMADO POR: Mercado Pago (automático)
+// ✨ ATUALIZADO: Passa metadata flat corretamente
 // ============================================
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -52,6 +53,13 @@ async function processarPagamento(paymentId: string) {
     console.log('🔗 External Reference:', pData.external_reference);
 
     // ============================================
+    // 🔍 LOGS DE DEBUG DO METADATA
+    // ============================================
+    console.log('📦 METADATA RETORNADO PELO MP:', JSON.stringify(pData.metadata, null, 2));
+    console.log('📦 TIPO DO METADATA:', typeof pData.metadata);
+    console.log('📦 KEYS DO METADATA:', Object.keys(pData.metadata || {}));
+
+    // ============================================
     // ✅ SÓ PROCESSA SE APROVADO
     // ============================================
     if (pData.status === 'approved') {
@@ -67,17 +75,19 @@ async function processarPagamento(paymentId: string) {
       // TEMPLATES
       if (externalRef.startsWith('TEMPLATE-')) {
         console.log('📦 Produto identificado: TEMPLATES');
-        await chamarAPIEnvio('/api/enviar-templates', {
-          cliente: metadata.cliente || {},
-          templates: metadata.templates || []
-        });
+        console.log('📤 Enviando metadata FLAT para /api/enviar-templates...');
+        
+        // 🔥 PASSA O METADATA FLAT DIRETO (sem aninhar em "cliente" e "templates")
+        await chamarAPIEnvio('/api/enviar-templates', metadata);
       }
       
       // PERSONALIZADO
       else if (externalRef.startsWith('PERSONALIZADO-')) {
         console.log('📦 Produto identificado: PERSONALIZADO');
+        
+        // Para personalizado, mantém compatibilidade
         await chamarAPIEnvio('/api/enviar-personalizado', {
-          cliente: metadata.cliente || {}
+          cliente: metadata.cliente || metadata || {}
         });
       }
       
@@ -148,6 +158,7 @@ async function chamarAPIEnvio(endpoint: string, dados: any) {
     const url = `${siteUrl}${endpoint}`;
     
     console.log(`📤 Chamando ${endpoint}...`);
+    console.log('📦 Dados sendo enviados:', JSON.stringify(dados, null, 2));
     
     const response = await fetch(url, {
       method: 'POST',
