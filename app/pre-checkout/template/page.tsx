@@ -21,9 +21,11 @@ function TemplatePreCheckoutContent() {
   const [temaEscolhido, setTemaEscolhido] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
+    nomeMae: '',
     nomeCrianca: '',
     idadeConvite: '',
     dataEvento: '',
+    horarioEvento: '',
     endereco: '',
     whatsapp: '',
     observacoes: ''
@@ -105,7 +107,7 @@ function TemplatePreCheckoutContent() {
     }
 
     if (!formData.nomeCrianca || !formData.whatsapp || !formData.dataEvento) {
-      alert('Preencha todos os campos obrigatórios (Nome, WhatsApp e Data do Evento).');
+      alert('Preencha todos os campos obrigatórios (Nome da Criança, WhatsApp e Data do Evento).');
       return;
     }
 
@@ -119,7 +121,7 @@ function TemplatePreCheckoutContent() {
           couponCode: coupon || null,
           metadata: {
             cliente: formData,
-            templates: templatesSelecionados
+            templates: templatesSelecionados.map(t => t.linkCanva) // ENVIANDO SÓ OS LINKS
           }
         })
       });
@@ -259,6 +261,16 @@ function TemplatePreCheckoutContent() {
               <h3 className="font-serif text-xl text-brown-700 mb-4">Dados do Evento</h3>
 
               <div>
+                <label className="block text-sm font-medium text-brown-700 mb-1">Nome da Mãe *</label>
+                <input
+                  placeholder="Ana Paula"
+                  value={formData.nomeMae}
+                  onChange={e => setFormData({ ...formData, nomeMae: e.target.value })}
+                  className="w-full px-4 py-2 border border-beige-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-beige-300"
+                />
+              </div>
+
+              <div>
                 <label className="block text-sm font-medium text-brown-700 mb-1">Nome da Criança *</label>
                 <input
                   placeholder="Maria"
@@ -284,6 +296,16 @@ function TemplatePreCheckoutContent() {
                   type="date"
                   value={formData.dataEvento}
                   onChange={e => setFormData({ ...formData, dataEvento: e.target.value })}
+                  className="w-full px-4 py-2 border border-beige-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-beige-300"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-brown-700 mb-1">Horário do Evento</label>
+                <input
+                  type="time"
+                  value={formData.horarioEvento}
+                  onChange={e => setFormData({ ...formData, horarioEvento: e.target.value })}
                   className="w-full px-4 py-2 border border-beige-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-beige-300"
                 />
               </div>
