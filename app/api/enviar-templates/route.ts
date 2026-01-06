@@ -3,6 +3,7 @@
 // 📝 FUNÇÃO: Salvar dados de TEMPLATES no CRM
 // 🎯 CHAMADO POR: Webhook do Mercado Pago
 // 💾 SALVA EM: Supabase (empresa_leads, contato_leads, projetos, projeto_templates)
+// ✨ ATUALIZADO: Recebe metadata flat + novos campos
 // ============================================
 
 import { NextResponse } from 'next/server';
@@ -25,28 +26,80 @@ const ETAPA_INICIAL = 'Projeto iniciado';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { cliente, templates } = body;
+
+    console.log('📨 Dados recebidos do webhook:', JSON.stringify(body, null, 2));
 
     // ============================================
-    // 🔍 VALIDAÇÃO DOS DADOS
+    // 🔍 DETECTAR FORMATO DOS DADOS
     // ============================================
-    if (!cliente || !templates || templates.length !== 2) {
-      return NextResponse.json(
-        { error: 'Dados inválidos. Envie cliente e exatamente 2 templates.' },
-        { status: 400 }
-      );
+    
+    // FORMATO NOVO (flat): { nomeMae, nomeCrianca, template1, template2, ... }
+    // FORMATO ANTIGO (aninhado): { cliente: {...}, templates: [...] }
+    
+    const isFormatoNovo = body.nomeCrianca !== undefined;
+    
+    let nomeMae, nomeCrianca, idadeCrianca, dataEvento, horarioEvento, endereco, whatsapp, observacoes;
+    let template1Link, template2Link;
+
+    if (isFormatoNovo) {
+      // ✨ FORMATO NOVO (FLAT)
+      nomeMae = body.nomeMae || '';
+      nomeCrianca = body.nomeCrianca || '';
+      idadeCrianca = body.idadeCrianca || '';
+      dataEvento = body.dataEvento || '';
+      horarioEvento = body.horarioEvento || '';
+      endereco = body.endereco || '';
+      whatsapp = body.whatsapp || '';
+      observacoes = body.observacoes || '';
+      template1Link = body.template1 || '';
+      template2Link = body.template2 || '';
+
+      console.log('✅ Formato NOVO detectado (metadata flat)');
+    } else {
+      // 📦 FORMATO ANTIGO (COMPATIBILIDADE)
+      const { cliente, templates } = body;
+
+      if (!cliente || !templates || templates.length !== 2) {
+        return NextResponse.json(
+          { error: 'Dados inválidos. Envie cliente e exatamente 2 templates.' },
+          { status: 400 }
+        );
+      }
+
+      nomeMae = cliente.nomeMae || '';
+      nomeCrianca = cliente.nomeCrianca || '';
+      idadeCrianca = cliente.idadeConvite || '';
+      dataEvento = cliente.dataEvento || '';
+      horarioEvento = cliente.horarioEvento || '';
+      endereco = cliente.endereco || '';
+      whatsapp = cliente.whatsapp || '';
+      observacoes = cliente.observacoes || '';
+      template1Link = templates[0]?.linkCanva || templates[0] || '';
+      template2Link = templates[1]?.linkCanva || templates[1] || '';
+
+      console.log('⚠️ Formato ANTIGO detectado (compatibilidade)');
     }
 
-    const { nomeCrianca, idadeConvite, dataEvento, endereco, whatsapp, observacoes } = cliente;
-
+    // ============================================
+    // 🔍 VALIDAÇÃO DOS DADOS OBRIGATÓRIOS
+    // ============================================
     if (!nomeCrianca || !whatsapp || !dataEvento) {
+      console.error('❌ Validação falhou:', { nomeCrianca, whatsapp, dataEvento });
       return NextResponse.json(
         { error: 'Nome da Criança, WhatsApp e Data do Evento são obrigatórios.' },
         { status: 400 }
       );
     }
 
-    console.log('📨 Dados recebidos (Templates):', JSON.stringify(body, null, 2));
+    if (!template1Link || !template2Link) {
+      console.error('❌ Templates ausentes:', { template1Link, template2Link });
+      return NextResponse.json(
+        { error: 'Os 2 templates são obrigatórios.' },
+        { status: 400 }
+      );
+    }
+
+    console.log('✅ Validação OK');
 
     // ============================================
     // 1️⃣ CRIAR EMPRESA_LEAD
@@ -96,22 +149,20 @@ export async function POST(request: Request) {
     // 3️⃣ CRIAR PROJETO
     // ============================================
     
-    // Montar descrição com os templates
-    const templatesTexto = templates
-      .map((t: any) => `${t.ordem}. ${t.nome} (${t.tema}) - ${t.linkCanva}`)
-      .join('\n');
-
-    // Formatar data para exibição
+    // Formatar data e horário
     const dataFormatada = new Date(dataEvento).toLocaleDateString('pt-BR');
+    const horarioTexto = horarioEvento ? `às ${horarioEvento}` : '';
 
     const descricaoProjeto = `
+👤 NOME DA MÃE: ${nomeMae || 'Não informado'}
 👶 NOME DA CRIANÇA: ${nomeCrianca}
-🎂 IDADE: ${idadeConvite || 'Não informado'}
-📅 DATA DO EVENTO: ${dataFormatada}
+🎂 IDADE: ${idadeCrianca || 'Não informado'}
+📅 DATA DO EVENTO: ${dataFormatada} ${horarioTexto}
 📍 ENDEREÇO: ${endereco || 'Não informado'}
 
-🎨 TEMPLATES SELECIONADOS (${templates.length}):
-${templatesTexto}
+🎨 TEMPLATES SELECIONADOS (2):
+1. ${template1Link}
+2. ${template2Link}
 
 💬 OBSERVAÇÕES DO CLIENTE:
 ${observacoes || 'Nenhuma observação.'}
@@ -143,13 +194,22 @@ ${observacoes || 'Nenhuma observação.'}
     // 4️⃣ SALVAR OS 2 TEMPLATES NA TABELA projeto_templates
     // ============================================
     
-    const templatesParaSalvar = templates.map((t: any) => ({
-      projeto_id: projeto.id,
-      ordem: t.ordem,
-      nome: t.nome,
-      tema: t.tema,
-      link_canva: t.linkCanva
-    }));
+    const templatesParaSalvar = [
+      {
+        projeto_id: projeto.id,
+        ordem: 1,
+        nome: 'Template 1',
+        tema: 'Selecionado pelo cliente',
+        link_canva: template1Link
+      },
+      {
+        projeto_id: projeto.id,
+        ordem: 2,
+        nome: 'Template 2',
+        tema: 'Selecionado pelo cliente',
+        link_canva: template2Link
+      }
+    ];
 
     const { error: erroTemplates } = await supabase
       .from('projeto_templates')
