@@ -261,7 +261,7 @@ function TemplatePreCheckoutContent() {
               <h3 className="font-serif text-xl text-brown-700 mb-4">Dados do Evento</h3>
 
               <div>
-                <label className="block text-sm font-medium text-brown-700 mb-1">Nome da Mãe *</label>
+                <label className="block text-sm font-medium text-brown-700 mb-1">Seu Nome *</label>
                 <input
                   placeholder="Ana Paula"
                   value={formData.nomeMae}
