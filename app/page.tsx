@@ -266,9 +266,8 @@ export default function HomeInstitucional() {
             <a className="si-card" href="https://convites.studioinvitare.com.br" style={{ background: 'white', border: '1px solid #E8DCC8' }}>
               {convitesReady ? <CarrosselInfinito images={CAROUSEL_CONVITES} /> : <Spinner />}
               <div style={{ padding: '1.1rem 1.25rem 1.4rem', textAlign: 'left' }}>
-                <span style={{ fontSize: '9px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#8B7355', opacity: 0.6 }}>Linha 01</span>
                 <p style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.4rem', fontWeight: 600, color: '#5C4A3F', margin: '4px 0' }}>Convites Digitais</p>
-                <p style={{ fontSize: '0.8rem', fontWeight: 300, color: '#8B7355', lineHeight: 1.5, marginBottom: '12px' }}>Prontos ou personalizados do zero para a festa do seu filho</p>
+                <p style={{ fontSize: '0.8rem', fontWeight: 300, color: '#8B7355', lineHeight: 1.5, marginBottom: '12px' }}>Mais de 100 convites prontos ou personalizados do zero para a festa do seu filho</p>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#D4A574', color: 'white', padding: '9px 20px', borderRadius: '100px', fontSize: '0.8rem', fontWeight: 500 }}>
                   Ver convites →
                 </span>
@@ -279,9 +278,8 @@ export default function HomeInstitucional() {
             <a className="si-card" href="https://ensaios.studioinvitare.com.br" style={{ background: 'linear-gradient(135deg, #D4A574, #C09464)' }}>
               <AnimacaoIA />
               <div style={{ padding: '1.1rem 1.25rem 1.4rem', textAlign: 'left' }}>
-                <span style={{ fontSize: '9px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)' }}>Linha 02 · Novo</span>
                 <p style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.4rem', fontWeight: 600, color: 'white', margin: '4px 0' }}>Ensaios com IA</p>
-                <p style={{ fontSize: '0.8rem', fontWeight: 300, color: 'rgba(255,255,255,0.85)', lineHeight: 1.5, marginBottom: '12px' }}>Transforme a foto do seu filho em um ensaio profissional temático</p>
+                <p style={{ fontSize: '0.8rem', fontWeight: 300, color: 'rgba(255,255,255,0.85)', lineHeight: 1.5, marginBottom: '12px' }}>Transforme a foto do seu filho em um ensaio profissional temático (natalino, páscoa ou qualquer outra idéia que você tiver!)</p>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'white', color: '#D4A574', padding: '9px 20px', borderRadius: '100px', fontSize: '0.8rem', fontWeight: 500 }}>
                   Ver ensaios →
                 </span>
