@@ -17,160 +17,155 @@ const CAROUSEL_IMAGES = [
   '/templates/diversos/INV-DIV-M-01.png',
 ];
 
-const FOTO_ORIGINAL = '/selina-original.jpg';
-const FOTO_IA       = '/selina-ia.jpg';
+const FOTO_ORIGINAL = '/selina-original.png';
+const FOTO_IA_01    = '/selina-ia-01.png';
+const FOTO_IA_02    = '/selina-ia-02.png';
 
-type AnimState = 'idle' | 'dragging' | 'fadeout' | 'loading' | 'particles' | 'result';
+type AnimState = 'idle' | 'dragging' | 'fadeout' | 'glitch' | 'result';
 
-// ── pré-carrega imagens e resolve quando todas estiverem prontas ──
 function preloadImages(srcs: string[]): Promise<void> {
   return Promise.all(
-    srcs.map(
-      src =>
-        new Promise<void>(resolve => {
-          const img = new Image();
-          img.onload = () => resolve();
-          img.onerror = () => resolve(); // não bloqueia se falhar
-          img.src = src;
-        })
-    )
+    srcs.map(src => new Promise<void>(resolve => {
+      const img = new Image();
+      img.onload = () => resolve();
+      img.onerror = () => resolve();
+      img.src = src;
+    }))
   ).then(() => undefined);
 }
 
 export default function HomeInstitucional() {
-  const canvasRef    = useRef<HTMLCanvasElement>(null);
   const stageRef     = useRef<HTMLDivElement>(null);
+  const glitchRef    = useRef<HTMLCanvasElement>(null);
   const trackRef     = useRef<HTMLDivElement>(null);
-  const animFrameRef = useRef<number>(0);
   const rafCarousel  = useRef<number>(0);
+  const rafGlitch    = useRef<number>(0);
+  const hasRun       = useRef(false);
 
-  const [animState, setAnimState]   = useState<AnimState>('idle');
-  const [labelText, setLabelText]   = useState('foto original');
-  const [showReplay, setShowReplay] = useState(false);
+  const [animState, setAnimState]         = useState<AnimState>('idle');
+  const [labelText, setLabelText]         = useState('foto original');
+  const [showReplay, setShowReplay]       = useState(false);
   const [carouselReady, setCarouselReady] = useState(false);
-  const hasRun = useRef(false);
 
-  // ── pré-carrega imagens do carrossel ──────────────────────
+  // ── pré-carrega imagens ──────────────────────────────────
   useEffect(() => {
     preloadImages(CAROUSEL_IMAGES).then(() => setCarouselReady(true));
+    preloadImages([FOTO_ORIGINAL, FOTO_IA_01, FOTO_IA_02]);
   }, []);
 
-  // ── carrossel JS infinito sem break ───────────────────────
+  // ── carrossel JS infinito ────────────────────────────────
   useEffect(() => {
     if (!carouselReady) return;
     const track = trackRef.current;
     if (!track) return;
-
-    // largura de um "set" completo de imagens (sem duplicatas)
-    const ITEM_W  = 110; // 100px + 10px gap
-    const SET_W   = CAROUSEL_IMAGES.length * ITEM_W;
-    const SPEED   = 0.6; // px por frame
-
+    const ITEM_W = 110;
+    const SET_W  = CAROUSEL_IMAGES.length * ITEM_W;
+    const SPEED  = 0.6;
     let x = 0;
-
     function step() {
       x -= SPEED;
-      if (Math.abs(x) >= SET_W) x = 0; // reset invisível
+      if (Math.abs(x) >= SET_W) x = 0;
       track!.style.transform = `translateX(${x}px)`;
       rafCarousel.current = requestAnimationFrame(step);
     }
-
     rafCarousel.current = requestAnimationFrame(step);
     return () => cancelAnimationFrame(rafCarousel.current);
   }, [carouselReady]);
 
-  // ── partículas ────────────────────────────────────────────
-  function createParticles(canvas: HTMLCanvasElement) {
-    const ctx    = canvas.getContext('2d')!;
-    const cx     = canvas.width / 2;
-    const cy     = canvas.height / 2;
-    const colors = ['#D4A574', '#E8DCC8', '#ffffff', '#F9E8EA', '#C09464'];
+  // ── glitch scanline ──────────────────────────────────────
+  function startGlitch(onDone: () => void) {
+    const canvas = glitchRef.current;
+    if (!canvas) { onDone(); return; }
+    const ctx = canvas.getContext('2d')!;
+    const stage = stageRef.current!;
+    canvas.width  = stage.offsetWidth;
+    canvas.height = stage.offsetHeight;
 
-    const particles = Array.from({ length: 120 }, () => {
-      const angle = Math.random() * Math.PI * 2;
-      const speed = 1.5 + Math.random() * 3.5;
-      return {
-        x: cx, y: cy,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        size: 1.5 + Math.random() * 3,
-        alpha: 1,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        decay: 0.015 + Math.random() * 0.02,
-      };
-    });
+    const W = canvas.width;
+    const H = canvas.height;
+    let frame = 0;
+    const TOTAL = 55; // ~0.9s a 60fps
 
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      let alive = false;
-      particles.forEach(p => {
-        if (p.alpha <= 0) return;
-        alive   = true;
-        p.x    += p.vx;
-        p.y    += p.vy;
-        p.vy   += 0.06;
-        p.alpha -= p.decay;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle =
-          p.color + Math.floor(p.alpha * 255).toString(16).padStart(2, '0');
-        ctx.fill();
-      });
-      if (alive) animFrameRef.current = requestAnimationFrame(draw);
-      else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function drawFrame() {
+      ctx.clearRect(0, 0, W, H);
+
+      // scanline verde/ciano estilo "processando"
+      const scanY = (frame / TOTAL) * H;
+      const grad = ctx.createLinearGradient(0, scanY - 40, 0, scanY + 4);
+      grad.addColorStop(0, 'rgba(100,220,180,0)');
+      grad.addColorStop(0.7, 'rgba(100,220,180,0.18)');
+      grad.addColorStop(1, 'rgba(100,220,180,0.55)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, scanY - 40, W, 44);
+
+      // linha brilhante
+      ctx.strokeStyle = 'rgba(180,255,230,0.7)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(0, scanY);
+      ctx.lineTo(W, scanY);
+      ctx.stroke();
+
+      // glitch horizontal aleatório
+      if (frame % 4 === 0) {
+        for (let i = 0; i < 3; i++) {
+          const gy = Math.random() * H;
+          const gh = 2 + Math.random() * 4;
+          const gx = (Math.random() - 0.5) * 12;
+          ctx.fillStyle = `rgba(100,220,180,${0.08 + Math.random() * 0.12})`;
+          ctx.fillRect(gx, gy, W, gh);
+        }
+      }
+
+      // overlay escuro diminuindo
+      ctx.fillStyle = `rgba(20,12,8,${0.45 * (1 - frame / TOTAL)})`;
+      ctx.fillRect(0, 0, W, H);
+
+      frame++;
+      if (frame < TOTAL) {
+        rafGlitch.current = requestAnimationFrame(drawFrame);
+      } else {
+        ctx.clearRect(0, 0, W, H);
+        onDone();
+      }
     }
 
-    animFrameRef.current = requestAnimationFrame(draw);
+    rafGlitch.current = requestAnimationFrame(drawFrame);
   }
 
-  // ── animação IA ───────────────────────────────────────────
+  // ── animação principal ───────────────────────────────────
   function runAnimation() {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    cancelAnimationFrame(animFrameRef.current);
-    const ctx = canvas.getContext('2d')!;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const stage = stageRef.current;
-    if (stage) {
-      canvas.width  = stage.offsetWidth;
-      canvas.height = stage.offsetHeight;
-    }
+    cancelAnimationFrame(rafGlitch.current);
+    const canvas = glitchRef.current;
+    if (canvas) canvas.getContext('2d')!.clearRect(0, 0, canvas.width, canvas.height);
 
     setAnimState('idle');
     setLabelText('foto original');
     setShowReplay(false);
 
     setTimeout(() => { setAnimState('dragging'); setLabelText('foto original'); }, 400);
-    setTimeout(() => { setAnimState('fadeout');  setLabelText(''); }, 1800);
-    setTimeout(() => { setAnimState('loading');  setLabelText('gerando IA...'); }, 2400);
+    setTimeout(() => { setAnimState('fadeout');  setLabelText('processando...'); }, 1800);
     setTimeout(() => {
-      setAnimState('particles');
-      setLabelText('');
-      if (canvas) createParticles(canvas);
-    }, 4200);
-    setTimeout(() => {
-      setAnimState('result');
-      setLabelText('ensaio com IA ✨');
-      setShowReplay(true);
-    }, 4800);
+      setAnimState('glitch');
+      startGlitch(() => {
+        setAnimState('result');
+        setLabelText('ensaio com IA ✨');
+        setShowReplay(true);
+      });
+    }, 2400);
   }
 
   useEffect(() => {
     const el = stageRef.current;
     if (!el) return;
-    const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting && !hasRun.current) {
-            hasRun.current = true;
-            setTimeout(runAnimation, 800);
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !hasRun.current) {
+          hasRun.current = true;
+          setTimeout(runAnimation, 800);
+        }
+      });
+    }, { threshold: 0.5 });
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
@@ -183,42 +178,47 @@ export default function HomeInstitucional() {
     hasRun.current = true;
   }
 
-  // ── estilos dinâmicos ──────────────────────────────────────
+  // ── estilos dinâmicos ────────────────────────────────────
   const originalStyle: React.CSSProperties = {
     position: 'absolute', inset: 0,
     borderRadius: '12px', overflow: 'hidden',
-    transition: 'all 0.5s ease',
-    ...(animState === 'idle'                                      && { opacity: 0, transform: 'translateY(30px)' }),
-    ...(animState === 'dragging'                                  && { opacity: 1, transform: 'translateY(0)' }),
-    ...(animState === 'fadeout'                                   && { opacity: 0, transform: 'scale(0.9)' }),
-    ...(['loading', 'particles', 'result'].includes(animState)   && { opacity: 0 }),
+    transition: 'opacity 0.5s ease, transform 0.5s ease',
+    opacity:   ['idle'].includes(animState) ? 0
+             : ['dragging'].includes(animState) ? 1
+             : 0,
+    transform: animState === 'idle' ? 'translateY(20px)' : 'translateY(0)',
+    zIndex: 1,
   };
 
-  const resultStyle: React.CSSProperties = {
+  const result01Style: React.CSSProperties = {
     position: 'absolute', inset: 0,
     borderRadius: '12px', overflow: 'hidden',
-    transition: 'opacity 0.8s ease, transform 0.8s ease',
+    transition: 'opacity 0.6s ease, transform 0.6s ease',
     opacity:   animState === 'result' ? 1 : 0,
-    transform: animState === 'result' ? 'scale(1)' : 'scale(0.95)',
+    transform: animState === 'result' ? 'translateX(0)' : 'translateX(-10px)',
+    zIndex: 2,
   };
 
-  const loaderStyle: React.CSSProperties = {
-    position: 'absolute', inset: 0,
-    display: 'flex', flexDirection: 'column',
-    alignItems: 'center', justifyContent: 'center', gap: '6px',
-    transition: 'opacity 0.3s',
-    opacity: animState === 'loading' ? 1 : 0,
-    pointerEvents: 'none',
+  const result02Style: React.CSSProperties = {
+    position: 'absolute',
+    top: '8px', right: '-28px',
+    width: '80px', height: '104px',
+    borderRadius: '10px', overflow: 'hidden',
+    boxShadow: '0 8px 24px rgba(0,0,0,0.35)',
+    transition: 'opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s',
+    opacity:   animState === 'result' ? 1 : 0,
+    transform: animState === 'result' ? 'translateX(0) rotate(3deg)' : 'translateX(10px) rotate(3deg)',
+    zIndex: 3,
   };
 
-  const canvasStyle: React.CSSProperties = {
+  const glitchCanvasStyle: React.CSSProperties = {
     position: 'absolute', inset: 0,
     pointerEvents: 'none',
-    opacity: animState === 'particles' ? 1 : 0,
+    zIndex: 10,
+    opacity: ['glitch'].includes(animState) ? 1 : 0,
     transition: 'opacity 0.1s',
   };
 
-  // triplicamos as imagens para o loop JS não ter break visível
   const loopImages = [...CAROUSEL_IMAGES, ...CAROUSEL_IMAGES, ...CAROUSEL_IMAGES];
 
   return (
@@ -228,53 +228,40 @@ export default function HomeInstitucional() {
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Raleway:wght@300;400;500&display=swap');
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .si-section {
-          max-width: 900px;
+        .si-wrap {
+          max-width: 960px;
           margin: 0 auto;
-          padding: 4rem 1.5rem 2rem;
+          padding: 4rem 1.5rem 3rem;
           text-align: center;
         }
-
         .si-cards {
           display: flex;
           flex-direction: column;
           gap: 16px;
           width: 100%;
         }
+        .si-card { flex: 1; border-radius: 20px; overflow: hidden; text-decoration: none; display: block; }
 
-        /* desktop: cards lado a lado */
         @media (min-width: 768px) {
-          .si-section {
-            padding: 5rem 2rem 3rem;
-          }
-          .si-cards {
-            flex-direction: row;
-            align-items: stretch;
-          }
-          .si-card {
-            flex: 1;
-          }
-          .si-h1 {
-            font-size: 4rem !important;
-          }
-          .si-about {
-            max-width: 600px !important;
-          }
+          .si-wrap { padding: 6rem 2.5rem 4rem; }
+          .si-h1   { font-size: 4.5rem !important; }
+          .si-cards { flex-direction: row; align-items: stretch; }
+          .si-about { max-width: 560px !important; font-size: 1rem !important; }
         }
       `}</style>
 
-      {/* ── HERO ── */}
       <section style={{ position: 'relative', overflow: 'hidden' }}>
-        {/* blobs */}
-        <div style={{ position: 'absolute', top: '-60px', right: '-80px', width: '350px', height: '350px', background: '#E8B4BC', opacity: 0.2, borderRadius: '50%', filter: 'blur(100px)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: '-40px', left: '-60px', width: '280px', height: '280px', background: '#D4A574', opacity: 0.15, borderRadius: '50%', filter: 'blur(80px)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '-80px', right: '-100px', width: '400px', height: '400px', background: '#E8B4BC', opacity: 0.18, borderRadius: '50%', filter: 'blur(110px)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: '-60px', left: '-80px', width: '320px', height: '320px', background: '#D4A574', opacity: 0.14, borderRadius: '50%', filter: 'blur(90px)', pointerEvents: 'none' }} />
 
-        <div className="si-section">
+        <div className="si-wrap">
+
           {/* badge */}
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(8px)', border: '1px solid rgba(212,165,116,0.3)', borderRadius: '100px', padding: '6px 18px', fontSize: '11px', fontWeight: 500, color: '#8B7355', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '1.75rem' }}>
             ✦ Studio Invitare
           </div>
 
+          {/* headline */}
           <h1 className="si-h1" style={{ fontFamily: "'Playfair Display', serif", fontSize: '2.8rem', lineHeight: 1.1, color: '#5C4A3F', marginBottom: '0.75rem' }}>
             Momentos que<br />
             <em style={{ color: '#D4A574', fontStyle: 'italic', fontWeight: 400 }}>ficam para sempre</em>
@@ -284,30 +271,28 @@ export default function HomeInstitucional() {
             Escolha sua linha de produto e crie algo inesquecível para quem você ama.
           </p>
 
-          {/* ── QUEM SOMOS ── */}
-          <div className="si-about" style={{ maxWidth: '440px', margin: '0 auto 3rem', background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(6px)', borderRadius: '16px', padding: '1.5rem 1.75rem', border: '1px solid rgba(212,165,116,0.2)', textAlign: 'left' }}>
-            <p style={{ fontFamily: "'Playfair Display', serif", fontSize: '1rem', color: '#5C4A3F', fontWeight: 600, marginBottom: '0.5rem' }}>
-              Quem somos
-            </p>
-            <p style={{ fontSize: '0.875rem', color: '#8B7355', fontWeight: 300, lineHeight: 1.8, margin: 0 }}>
-              Somos um estúdio digital especializado em criar memórias afetivas para famílias brasileiras. Desde convites personalizados para festas até ensaios fotográficos gerados com inteligência artificial — tudo feito com cuidado, agilidade e sem você sair de casa.
-            </p>
-          </div>
+          {/* quem somos — sem título, com emoção */}
+          <p className="si-about" style={{
+            maxWidth: '440px', margin: '0 auto 3rem',
+            fontSize: '0.93rem', color: '#8B7355', fontWeight: 300,
+            lineHeight: 1.85, fontStyle: 'italic',
+            borderLeft: '2px solid #D4A574', paddingLeft: '1.25rem',
+            textAlign: 'left',
+          }}>
+            Sabemos que você tem mil coisas para cuidar — e ainda assim quer registrar cada momento especial do seu filho com toda a beleza que ele merece. Por isso criamos o Studio Invitare: para transformar uma simples foto ou ideia em algo lindo, rápido e acessível. Sem sair de casa. Sem complicação. Com todo o carinho.
+          </p>
 
-          {/* ── CARDS ── */}
+          {/* cards */}
           <div className="si-cards">
 
             {/* CARD CONVITES */}
-            <a className="si-card" href="https://convites.studioinvitare.com.br" style={{ borderRadius: '20px', overflow: 'hidden', textDecoration: 'none', display: 'block', background: 'white', border: '1px solid #E8DCC8' }}>
-
-              {/* carrossel */}
+            <a className="si-card" href="https://convites.studioinvitare.com.br" style={{ background: 'white', border: '1px solid #E8DCC8' }}>
               <div style={{ width: '100%', height: '160px', overflow: 'hidden', position: 'relative' }}>
-                {!carouselReady && (
+                {!carouselReady ? (
                   <div style={{ width: '100%', height: '100%', background: '#F5EDE3', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div style={{ width: '24px', height: '24px', border: '2px solid #E8DCC8', borderTop: '2px solid #D4A574', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
                   </div>
-                )}
-                {carouselReady && (
+                ) : (
                   <div ref={trackRef} style={{ display: 'flex', gap: '10px', padding: '10px 16px', height: '160px', alignItems: 'center', willChange: 'transform' }}>
                     {loopImages.map((src, i) => (
                       <div key={i} style={{ flexShrink: 0, width: '100px', height: '140px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 4px 16px rgba(0,0,0,0.1)' }}>
@@ -317,7 +302,6 @@ export default function HomeInstitucional() {
                   </div>
                 )}
               </div>
-
               <div style={{ padding: '1.1rem 1.25rem 1.4rem', textAlign: 'left' }}>
                 <span style={{ fontSize: '9px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#8B7355', opacity: 0.6 }}>Linha 01</span>
                 <p style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.4rem', fontWeight: 600, color: '#5C4A3F', margin: '4px 0' }}>Convites Digitais</p>
@@ -329,53 +313,40 @@ export default function HomeInstitucional() {
             </a>
 
             {/* CARD ENSAIO */}
-            <a className="si-card" href="https://ensaios.studioinvitare.com.br" style={{ borderRadius: '20px', overflow: 'hidden', textDecoration: 'none', display: 'block', background: 'linear-gradient(135deg, #D4A574, #C09464)' }}>
+            <a className="si-card" href="https://ensaios.studioinvitare.com.br" style={{ background: 'linear-gradient(135deg, #D4A574, #C09464)' }}>
+              <div ref={stageRef} style={{ width: '100%', height: '160px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', background: 'rgba(0,0,0,0.1)', overflow: 'hidden' }}>
 
-              {/* animação IA */}
-              <div ref={stageRef} style={{ width: '100%', height: '160px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', background: 'rgba(0,0,0,0.08)' }}>
-                <canvas ref={canvasRef} style={canvasStyle} />
+                <canvas ref={glitchRef} style={glitchCanvasStyle} />
 
-                <div style={{ position: 'relative', width: '110px', height: '140px' }}>
+                {/* stage das fotos — empilhadas, com foto02 saindo pela direita */}
+                <div style={{ position: 'relative', width: '110px', height: '136px' }}>
 
-                  {/* foto original */}
+                  {/* original */}
                   <div style={originalStyle}>
-                    <img src={FOTO_ORIGINAL} alt="Foto original" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-                    <div style={{ position: 'absolute', inset: 0, background: '#E8DCC8', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '4px', zIndex: -1 }}>
-                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                        <circle cx="16" cy="12" r="6" fill="rgba(212,165,116,0.5)" />
-                        <path d="M4 28c0-6.6 5.4-12 12-12s12 5.4 12 12" fill="rgba(212,165,116,0.3)" />
-                      </svg>
-                      <span style={{ fontSize: '8px', color: '#8B7355', opacity: 0.6 }}>foto real</span>
-                    </div>
+                    <img src={FOTO_ORIGINAL} alt="Foto original" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </div>
 
-                  {/* foto IA */}
-                  <div style={resultStyle}>
-                    <img src={FOTO_IA} alt="Ensaio com IA" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg,#2d1a0e,#4a2c1a)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '4px', zIndex: -1 }}>
-                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                        <circle cx="16" cy="12" r="6" fill="rgba(255,255,255,0.4)" />
-                        <path d="M4 28c0-6.6 5.4-12 12-12s12 5.4 12 12" fill="rgba(255,255,255,0.2)" />
-                      </svg>
-                      <span style={{ fontSize: '8px', color: 'rgba(255,255,255,0.8)' }}>ensaio IA</span>
-                    </div>
+                  {/* resultado 01 — foto principal */}
+                  <div style={result01Style}>
+                    <img src={FOTO_IA_01} alt="Ensaio IA 1" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </div>
 
-                  {/* loader */}
-                  <div style={loaderStyle}>
-                    <div style={{ width: '36px', height: '36px', border: '2px solid rgba(255,255,255,0.2)', borderTop: '2px solid white', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-                    <span style={{ fontSize: '8px', color: 'rgba(255,255,255,0.8)', letterSpacing: '0.1em' }}>gerando IA...</span>
+                  {/* resultado 02 — foto menor saindo pela direita */}
+                  <div style={result02Style}>
+                    <img src={FOTO_IA_02} alt="Ensaio IA 2" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </div>
                 </div>
 
+                {/* label */}
                 {labelText && (
-                  <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontSize: '9px', color: 'rgba(255,255,255,0.75)', whiteSpace: 'nowrap', letterSpacing: '0.08em' }}>
+                  <span style={{ position: 'absolute', bottom: '8px', left: '50%', transform: 'translateX(-50%)', fontSize: '9px', color: 'rgba(255,255,255,0.8)', whiteSpace: 'nowrap', letterSpacing: '0.08em', zIndex: 5 }}>
                     {labelText}
                   </span>
                 )}
 
+                {/* replay */}
                 {showReplay && (
-                  <button onClick={handleReplay} style={{ position: 'absolute', top: '8px', right: '8px', background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: '100px', padding: '4px 10px', fontSize: '9px', color: 'white', cursor: 'pointer', fontFamily: "'Raleway', sans-serif" }}>
+                  <button onClick={handleReplay} style={{ position: 'absolute', top: '8px', right: '8px', background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: '100px', padding: '4px 10px', fontSize: '9px', color: 'white', cursor: 'pointer', fontFamily: "'Raleway', sans-serif", zIndex: 5 }}>
                     ↺ repetir
                   </button>
                 )}
@@ -395,10 +366,9 @@ export default function HomeInstitucional() {
         </div>
       </section>
 
-      <div style={{ textAlign: 'center', padding: '1.5rem', fontSize: '11px', color: '#8B7355', opacity: 0.45 }}>
+      <div style={{ textAlign: 'center', padding: '1.5rem', fontSize: '11px', color: '#8B7355', opacity: 0.4 }}>
         Studio Invitare · Feito com amor 💕
       </div>
-
     </main>
   );
 }
