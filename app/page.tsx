@@ -29,7 +29,7 @@ const ENSAIO_FOTOS = [
   '/selina-ia-04.png',
 ];
 
-const FOTO_ORIGINAL = '/selina-original.png';
+const FOTO_ORIGINAL = '/selina-original.jpeg';
 
 // ── carrossel com loop infinito via rAF, isolado em componente próprio ──
 function CarrosselInfinito({ images, dark = false }: { images: string[]; dark?: boolean }) {
