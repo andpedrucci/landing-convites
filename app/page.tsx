@@ -14,12 +14,7 @@ const CAROUSEL_CONVITES = [
   '/templates/aniversario/INV-ANI-H-06.png',
   '/templates/aniversario/INV-ANI-U-11.png',
   '/templates/aniversario/INV-ANI-U-12.png',
-  '/templates/aniversario/batizado/INV-BAT-M-01.png',
-  '/templates/aniversario/cha/INV-CHA-M-01.png',
-  '/templates/aniversario/rev/INV-REV-M-01.png',
-  '/templates/aniversario/pri/INV-PRI-M-01.png',
-  '/templates/aniversario/mar/INV-MAR-M-01.png',
-  '/templates/aniversario/div/INV-DIV-M-01.png',
+
 ];
 
 const ENSAIO_FOTOS = [
