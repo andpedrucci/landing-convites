@@ -29,7 +29,7 @@ const ENSAIO_FOTOS = [
   '/selina-ia-04.png',
 ];
 
-const FOTO_ORIGINAL = '/selina-original.jpeg';
+const FOTO_ORIGINAL = '/selina-original.png';
 
 // ── carrossel com loop infinito via rAF, isolado em componente próprio ──
 function CarrosselInfinito({ images, dark = false }: { images: string[]; dark?: boolean }) {
@@ -71,25 +71,20 @@ function CarrosselInfinito({ images, dark = false }: { images: string[]; dark?: 
   );
 }
 
-// ── animação IA: original → glitch → loop de 4 fotos ──
+// ── animação IA: foto original → glitch → carrossel infinito das IAs ──
 function AnimacaoIA() {
   const stageRef  = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rafGlitch = useRef<number>(0);
-  const rafLoop   = useRef<number>(0);
   const hasRun    = useRef(false);
 
-  type Phase = 'original' | 'glitch' | 'loop';
-  const [phase, setPhase]         = useState<Phase>('original');
-  const [loopIndex, setLoopIndex] = useState(0);
+  type Phase = 'original' | 'glitch' | 'carrossel';
+  const [phase, setPhase]           = useState<Phase>('original');
   const [showReplay, setShowReplay] = useState(false);
-  const [label, setLabel]         = useState('foto original');
-  const [visible, setVisible]     = useState(false); // controla fade-in da foto original
+  const [label, setLabel]           = useState('foto original');
+  const [visible, setVisible]       = useState(false);
 
-  // fade-in da foto original ao montar
-  useEffect(() => {
-    setTimeout(() => setVisible(true), 400);
-  }, []);
+  useEffect(() => { setTimeout(() => setVisible(true), 400); }, []);
 
   function startGlitch(onDone: () => void) {
     const canvas = canvasRef.current;
@@ -101,7 +96,6 @@ function AnimacaoIA() {
     const W = canvas.width, H = canvas.height;
     let frame = 0;
     const TOTAL = 55;
-
     function draw() {
       ctx.clearRect(0, 0, W, H);
       const scanY = (frame / TOTAL) * H;
@@ -129,42 +123,24 @@ function AnimacaoIA() {
     rafGlitch.current = requestAnimationFrame(draw);
   }
 
-  // loop das fotos de IA — troca a cada 1.8s
-  function startLoop() {
-    let idx = 0;
-    setLoopIndex(idx);
-
-    function next() {
-      idx = (idx + 1) % ENSAIO_FOTOS.length;
-      setLoopIndex(idx);
-      rafLoop.current = window.setTimeout(next, 1800);
-    }
-    rafLoop.current = window.setTimeout(next, 1800);
-  }
-
   function runAnimation() {
     cancelAnimationFrame(rafGlitch.current);
-    clearTimeout(rafLoop.current);
     setPhase('original');
     setLabel('foto original');
     setShowReplay(false);
     setVisible(false);
     setTimeout(() => setVisible(true), 300);
-
-    setTimeout(() => { setLabel('processando...'); }, 1600);
+    setTimeout(() => setLabel('processando...'), 1600);
     setTimeout(() => {
       setPhase('glitch');
-      setLabel('processando...');
       startGlitch(() => {
-        setPhase('loop');
+        setPhase('carrossel');
         setLabel('ensaio com IA ✨');
         setShowReplay(true);
-        startLoop();
       });
     }, 2200);
   }
 
-  // dispara automático quando entra na tela
   useEffect(() => {
     const el = stageRef.current;
     if (!el) return;
@@ -177,45 +153,35 @@ function AnimacaoIA() {
       });
     }, { threshold: 0.5 });
     obs.observe(el);
-    return () => { obs.disconnect(); clearTimeout(rafLoop.current); };
+    return () => obs.disconnect();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleReplay(e: React.MouseEvent) {
     e.preventDefault();
     e.stopPropagation();
-    clearTimeout(rafLoop.current);
     hasRun.current = false;
     runAnimation();
     hasRun.current = true;
   }
 
   return (
-    <div ref={stageRef} style={{ width: '100%', height: '160px', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.1)' }}>
+    <div ref={stageRef} style={{ width: '100%', height: '160px', position: 'relative', overflow: 'hidden', background: 'rgba(0,0,0,0.1)' }}>
 
-      {/* glitch canvas — sempre por cima */}
+      {/* glitch canvas */}
       <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 10, opacity: phase === 'glitch' ? 1 : 0, transition: 'opacity 0.1s' }} />
 
-      {/* foto original */}
-      {phase === 'original' && (
+      {/* fase original — foto centralizada */}
+      <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: phase === 'original' ? 1 : 0, transition: 'opacity 0.4s', pointerEvents: 'none' }}>
         <div style={{ width: '110px', height: '136px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 8px 24px rgba(0,0,0,0.3)', transition: 'opacity 0.5s, transform 0.5s', opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(20px)' }}>
           <img src={FOTO_ORIGINAL} alt="Foto original" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
         </div>
-      )}
+      </div>
 
-      {/* glitch placeholder — mantém espaço durante transição */}
-      {phase === 'glitch' && (
-        <div style={{ width: '110px', height: '136px', borderRadius: '12px', background: 'rgba(0,0,0,0.2)' }} />
-      )}
-
-      {/* loop de fotos IA */}
-      {phase === 'loop' && (
-        <div style={{ width: '110px', height: '136px', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.35)' }}>
-          {ENSAIO_FOTOS.map((src, i) => (
-            <img key={i} src={src} alt={`Ensaio IA ${i + 1}`} style={{ position: 'absolute', inset: 0, width: '110px', height: '136px', objectFit: 'cover', display: 'block', borderRadius: '12px', transition: 'opacity 0.6s ease', opacity: loopIndex === i ? 1 : 0 }} />
-          ))}
-        </div>
-      )}
+      {/* fase carrossel — igual ao de convites, aparece após glitch */}
+      <div style={{ position: 'absolute', inset: 0, opacity: phase === 'carrossel' ? 1 : 0, transition: 'opacity 0.5s', pointerEvents: phase === 'carrossel' ? 'auto' : 'none' }}>
+        {phase === 'carrossel' && <CarrosselInfinito images={ENSAIO_FOTOS} dark />}
+      </div>
 
       {/* label */}
       {label && (
